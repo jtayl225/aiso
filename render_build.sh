@@ -1,21 +1,14 @@
 #!/bin/bash
 set -o errexit
 
-# Install Flutter if needed (Render uses cached builds, but this ensures a clean install)
-# git clone https://github.com/flutter/flutter.git -b stable
+FLUTTER_ROOT="$HOME/flutter"
 
-# Check if Flutter is already cloned (cached between builds)
-if [ ! -d "$HOME/flutter" ]; then
-  git clone https://github.com/flutter/flutter.git -b stable "$HOME/flutter"
+if [ ! -d "$FLUTTER_ROOT" ]; then
+  git clone https://github.com/flutter/flutter.git -b stable "$FLUTTER_ROOT"
 fi
 
-export PATH="$PATH:`pwd`/flutter/bin"
+export PATH="$FLUTTER_ROOT/bin:$PATH"
 
-# Enable web
 flutter config --enable-web
-
-# Get dependencies
 flutter pub get
-
-# Build the web app
 flutter build web
