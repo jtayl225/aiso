@@ -159,11 +159,11 @@ def call_chatgpt(user_prompt: str, search_target: SearchTarget):
 # Endpoint
 ####################
 
-# @app.get("/")
+@app.get("/")
 def health_check():
     return {"message": "API is alive!"}
 
-# @app.post("/ai-search", response_model=SearchResponse)
+@app.post("/ai-search", response_model=SearchResponse)
 def ai_search(request: SearchRequest):
     results = []
     target = request.searchTarget
