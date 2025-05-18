@@ -63,3 +63,77 @@ CREATE TABLE search_target (
   updated_at timestamp with time zone DEFAULT now(),
   deleted_at timestamp with time zone
 );
+
+-- Create report_runs table
+CREATE TABLE report_runs (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  report_id uuid NOT NULL REFERENCES reports(id) ON DELETE CASCADE,
+  started_at timestamp with time zone NOT NULL DEFAULT now(),
+  finished_at timestamp with time zone,
+  status text NOT NULL CHECK (status IN ('pending', 'running', 'completed', 'failed')),
+  error_message text,
+  created_at timestamp with time zone DEFAULT now(),
+  updated_at timestamp with time zone DEFAULT now()
+);
+
+CREATE INDEX idx_report_runs_report_id_status ON report_runs(report_id, status);
+
+
+
+-- create report_results table
+CREATE TYPE llm AS ENUM ('chatgpt', 'gemini');
+
+CREATE TABLE report_results (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  run_id uuid REFERENCES public.report_runs(id) ON DELETE CASCADE,
+  report_id uuid REFERENCES public.reports(id) ON DELETE CASCADE,
+  prompt_id uuid REFERENCES public.prompts(id) ON DELETE CASCADE,
+  llm llm NOT NULL,
+  result_json jsonb,
+  search_target_found BOOL NOT NULL,
+  created_at timestamp with time zone DEFAULT now(),
+  updated_at timestamp with time zone DEFAULT now(),
+  deleted_at timestamp with time zone,
+  UNIQUE (run_id, report_id, prompt_id, llm)
+);
+
+CREATE OR REPLACE VIEW report_results_summary_vw AS
+SELECT
+  a.report_id,
+  a.prompt_id,
+  b.formatted_prompt,
+  a.llm,
+  SUM(CASE WHEN a.search_target_found THEN 1 ELSE 0 END) AS alpha,
+  COUNT(*) AS n
+FROM report_results AS a
+INNER JOIN prompts AS b
+  ON a.report_id = b.report_id
+  AND a.prompt_id = b.id
+WHERE a.deleted_at IS NULL
+GROUP BY a.report_id, a.prompt_id, b.formatted_prompt, a.llm;
+
+
+
+
+-- function to get reports to run
+CREATE OR REPLACE FUNCTION get_due_reports(current_time timestamp with time zone)
+RETURNS SETOF reports AS $$
+BEGIN
+  RETURN QUERY
+  SELECT * FROM reports
+  WHERE deleted_at IS NULL
+  AND (
+    last_run_at IS NULL
+    OR
+    (cadence = 'hour' AND last_run_at <= current_time - interval '1 hour')
+    OR
+    (cadence = 'day' AND last_run_at <= current_time - interval '1 day')
+    OR
+    (cadence = 'week' AND last_run_at <= current_time - interval '7 days')
+    OR
+    (cadence = 'month' AND last_run_at <= current_time - interval '1 month')
+  );
+END;
+$$ LANGUAGE plpgsql STABLE;
+
+

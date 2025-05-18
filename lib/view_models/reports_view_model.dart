@@ -93,6 +93,29 @@ class ReportViewModel extends ChangeNotifier {
     }
   }
 
+  Future<bool> fetchReportResults(String reportId) async {
+    isLoading = true;
+    notifyListeners();
+    try {
+      final reportResults = await _reportService.fetchReportResults(reportId);
+
+      final report = reports.firstWhere(
+        (r) => r.id == reportId,
+        orElse: () => throw Exception('Report not found'),
+      );
+
+      report.results = reportResults;
+      _upsertReport(report);
+      return true;
+    } catch (e) {
+      _handleError(e as Exception);
+      return false;
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
+
 
 
 
