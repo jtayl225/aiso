@@ -4,9 +4,7 @@ class Prompt {
   final String id;
   final String templateId;
   final String reportId;
-  final String rawPrompt;
-  final String subject;
-  final String context;
+  final String prompt;
   final DbTimestamps dbTimestamps; // createdAt, updatedAt, deletedAt
   final DateTime? lastRunAt;
 
@@ -14,28 +12,17 @@ class Prompt {
     required this.id,
     required this.templateId, 
     required this.reportId, 
-    required this.rawPrompt, 
-    required this.subject, 
-    required this.context, 
+    required this.prompt, 
     required this.dbTimestamps,
     this.lastRunAt
     });
-
-  /// Returns the rawPrompt with {subject} and {context} replaced
-  String get formattedPrompt {
-    return rawPrompt
-      .replaceAll('{subject}', subject)
-      .replaceAll('{context}', context);
-  }
 
   factory Prompt.fromJson(Map<String, dynamic> json) {
     return Prompt(
       id: json['id'] as String,
       templateId: json['template_id'] as String,
       reportId: json['report_id'] as String,
-      rawPrompt: json['raw_prompt'] as String,
-      subject: json['subject'] as String,
-      context: json['context'] as String,
+      prompt: json['prompt'] as String,
       dbTimestamps: DbTimestamps(
         createdAt: DateTime.parse(json['created_at']),
         updatedAt: DateTime.parse(json['updated_at']),
@@ -50,10 +37,7 @@ class Prompt {
       // 'id': id, // handled by supabase
       'template_id': templateId,
       'report_id': reportId,
-      'raw_prompt': rawPrompt,
-      'formatted_prompt': formattedPrompt,
-      'subject': subject,
-      'context': context
+      'prompt': prompt,
     };
   }
 
@@ -61,9 +45,7 @@ class Prompt {
     String? id,
     String? templateId,
     String? reportId,
-    String? rawPrompt,
-    String? subject,
-    String? context,
+    String? prompt,
     DbTimestamps? dbTimestamps,
     DateTime? lastRunAt,
   }) {
@@ -71,9 +53,7 @@ class Prompt {
       id: id ?? this.id,
       templateId: templateId ?? this.templateId,
       reportId: reportId ?? this.reportId,
-      rawPrompt: rawPrompt ?? this.rawPrompt,
-      subject: subject ?? this.subject,
-      context: context ?? this.context,
+      prompt: prompt ?? this.prompt,
       dbTimestamps: dbTimestamps ?? this.dbTimestamps,
       lastRunAt: lastRunAt ?? this.lastRunAt,
     );

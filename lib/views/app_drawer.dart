@@ -1,5 +1,6 @@
 import 'package:aiso/view_models/auth_view_model.dart';
 import 'package:aiso/views/auth/auth_checker_screen.dart';
+import 'package:aiso/views/reports/reports_home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -15,10 +16,13 @@ class AppDrawer extends StatelessWidget {
           DrawerHeader(child: Text('Menu')),
 
           ListTile(
-            leading: Icon(Icons.report),
+            leading: Icon(Icons.description),
             title: Text('Reports'),
             onTap: () {
-              Navigator.pushReplacementNamed(context, '/adminHub');
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => ReportsHomeScreen()),
+              );
             },
           ),
           

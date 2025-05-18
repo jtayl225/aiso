@@ -30,13 +30,14 @@ class _ReportEditorScreenState extends State<ReportEditorScreen> {
   late TextEditingController _targetNameController;
   late TextEditingController _targetDescriptionController;
   late TextEditingController _targetUrlController;
+  late TextEditingController _manualPromptController;
 
   @override
   void initState() {
     super.initState();
     
     if (widget.report != null) {
-      _report = widget.report!;
+      _report = widget.report!.copyWith();
       _isEditMode = true;
     } else {
       final authViewModel = context.read<AuthViewModel>();
@@ -52,6 +53,7 @@ class _ReportEditorScreenState extends State<ReportEditorScreen> {
     _targetNameController = TextEditingController(text: _report.searchTarget?.name ?? '');
     _targetDescriptionController = TextEditingController(text: _report.searchTarget?.description ?? '');
     _targetUrlController = TextEditingController(text: _report.searchTarget?.url ?? '');
+    _manualPromptController = TextEditingController(text: '');
 
   }
 
@@ -261,15 +263,90 @@ class _ReportEditorScreenState extends State<ReportEditorScreen> {
 
                 // PROMPTS
 
-                Row(
+                // Row(
+                //   children: [
+                //     Expanded(
+                //       child: Text(
+                //         'Prompts',
+                //         style: Theme.of(context).textTheme.titleMedium,
+                //       ),
+                //     ),
+                //     const SizedBox(width: 10),
+                //     ElevatedButton.icon(
+                //       onPressed: () async {
+                //         final List<Prompt>? newPrompts = await Navigator.push(
+                //           context,
+                //           MaterialPageRoute(
+                //             builder: (context) => PromptBuilderScreen(),
+                //           ),
+                //         );
+
+                //         if (newPrompts != null && newPrompts.isNotEmpty) {
+                //           // Handle the new prompts, e.g., add to report or update state
+                //           setState(() {
+                //             _report.prompts = [...?_report.prompts, ...newPrompts];
+                //           });
+                //         }
+                //       },
+
+                //       icon: const Icon(Icons.add),
+                //       label: const Text('New Prompt'),
+                //     ),
+                //   ],
+                // ),
+
+                // PROMPTS SECTION
+
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(
-                      child: Text(
-                        'Prompts',
-                        style: Theme.of(context).textTheme.titleMedium,
-                      ),
+                    Text(
+                      'Prompts',
+                      style: Theme.of(context).textTheme.titleMedium,
                     ),
-                    const SizedBox(width: 10),
+                    const SizedBox(height: 10),
+
+                    // Free text input for adding a single prompt manually
+                    Row(
+                      children: [
+                        Expanded(
+                          child: TextField(
+                            controller: _manualPromptController,
+                            decoration: const InputDecoration(
+                              labelText: 'Add a prompt manually',
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        ElevatedButton(
+                          onPressed: () {
+                            final text = _manualPromptController.text.trim();
+                            if (text.isNotEmpty) {
+                              setState(() {
+                                _report.prompts = [
+                                  ...?_report.prompts,
+                                  Prompt(
+                                    id: '',
+                                    templateId: '',
+                                    reportId: '',
+                                    prompt: text,
+                                    dbTimestamps: DbTimestamps.now(),
+                                    lastRunAt: null,
+                                  ),
+                                ];
+                                _manualPromptController.clear();
+                              });
+                            }
+                          },
+                          child: const Text('Add'),
+                        ),
+                      ],
+                    ),
+
+                    const SizedBox(height: 16),
+
+                    // PromptBuilder tool
                     ElevatedButton.icon(
                       onPressed: () async {
                         final List<Prompt>? newPrompts = await Navigator.push(
@@ -280,18 +357,39 @@ class _ReportEditorScreenState extends State<ReportEditorScreen> {
                         );
 
                         if (newPrompts != null && newPrompts.isNotEmpty) {
-                          // Handle the new prompts, e.g., add to report or update state
                           setState(() {
                             _report.prompts = [...?_report.prompts, ...newPrompts];
                           });
                         }
                       },
-
                       icon: const Icon(Icons.add),
-                      label: const Text('New Prompt'),
+                      label: const Text('Use Prompt Builder'),
                     ),
+
+                    // const SizedBox(height: 16),
+
+                    // // Display current prompts
+                    // if (_report.prompts != null && _report.prompts!.isNotEmpty)
+                    //   ..._report.prompts!.asMap().entries.map((entry) {
+                    //     final index = entry.key;
+                    //     final prompt = entry.value;
+
+                    //     return ListTile(
+                    //       contentPadding: EdgeInsets.zero,
+                    //       title: Text(prompt.prompt ?? '[No prompt text]'),
+                    //       trailing: IconButton(
+                    //         icon: const Icon(Icons.delete),
+                    //         onPressed: () {
+                    //           setState(() {
+                    //             _report.prompts!.removeAt(index);
+                    //           });
+                    //         },
+                    //       ),
+                    //     );
+                    //   }).toList(),
                   ],
                 ),
+
 
                 SizedBox(height: 8),
 
@@ -303,7 +401,7 @@ class _ReportEditorScreenState extends State<ReportEditorScreen> {
 
                   return Card(
                     child: ListTile(
-                      title: Text(prompt.formattedPrompt),
+                      title: Text(prompt.prompt),
                       // subtitle: Text('Subject: ${prompt.subject}, Context: ${prompt.context}'),
                       trailing: IconButton(
                         icon: const Icon(Icons.delete),

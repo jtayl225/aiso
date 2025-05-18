@@ -44,4 +44,24 @@ class PromptTemplate {
       'context': context,
     };
   }
+
+  PromptTemplate copyWith({
+    String? id,
+    String? rawPrompt,
+    String? subject,
+    String? context,
+    DbTimestamps? dbTimestamps,
+    DateTime? lastRunAt,
+  }) {
+    return PromptTemplate(
+      id: id ?? this.id,
+      rawPrompt: rawPrompt ?? this.rawPrompt,
+      subject: subject ?? this.subject,
+      context: context ?? this.context,
+      dbTimestamps: dbTimestamps ?? this.dbTimestamps,
+    );
+  }
+
+
+
 }

@@ -25,7 +25,7 @@ class ReportResult {
     return ReportResult(
       reportId: json['report_id'] as String,
       promptId: json['prompt_id'] as String,
-      prompt: json['formatted_prompt'] as String,
+      prompt: json['prompt'] as String,
       llm: LLMParsing.fromString(json['llm'] as String),
       alpha: json['alpha'] as int,
       n: json['n'] as int,

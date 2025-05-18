@@ -35,14 +35,25 @@ VALUES
  ;
 
 -- create prompts table
+-- CREATE TABLE prompts (
+--   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+--   report_id uuid REFERENCES public.reports(id) ON DELETE CASCADE,
+--   template_id uuid REFERENCES public.prompt_templates(id) ON DELETE SET NULL,
+--   raw_prompt text, -- could be NULL if a template was not used,
+--   formatted_prompt text NOT NULL,
+--   subject text NOT NULL,
+--   context text NOT NULL,
+--   created_at timestamp with time zone DEFAULT now(),
+--   updated_at timestamp with time zone DEFAULT now(),
+--   deleted_at timestamp with time zone,
+--   last_run_at timestamp with time zone
+-- );
+
 CREATE TABLE prompts (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  report_id uuid REFERENCES public.reports(id),
+  report_id uuid REFERENCES public.reports(id) ON DELETE CASCADE,
   template_id uuid REFERENCES public.prompt_templates(id) ON DELETE SET NULL,
-  raw_prompt text, -- could be NULL if a template was not used,
-  formatted_prompt text NOT NULL,
-  subject text NOT NULL,
-  context text NOT NULL,
+  prompt text NOT NULL,
   created_at timestamp with time zone DEFAULT now(),
   updated_at timestamp with time zone DEFAULT now(),
   deleted_at timestamp with time zone,
@@ -101,7 +112,7 @@ CREATE OR REPLACE VIEW report_results_summary_vw AS
 SELECT
   a.report_id,
   a.prompt_id,
-  b.formatted_prompt,
+  b.prompt,
   a.llm,
   SUM(CASE WHEN a.search_target_found THEN 1 ELSE 0 END) AS alpha,
   COUNT(*) AS n
@@ -110,7 +121,7 @@ INNER JOIN prompts AS b
   ON a.report_id = b.report_id
   AND a.prompt_id = b.id
 WHERE a.deleted_at IS NULL
-GROUP BY a.report_id, a.prompt_id, b.formatted_prompt, a.llm;
+GROUP BY a.report_id, a.prompt_id, b.prompt, a.llm;
 
 
 

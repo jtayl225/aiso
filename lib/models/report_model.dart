@@ -24,6 +24,7 @@ class Report {
     required this.cadence,
     this.prompts,
     this.searchTarget,
+    this.results,
     required this.dbTimestamps,
     this.lastRunAt
     });
@@ -38,7 +39,9 @@ class Report {
       prompts: (json['prompts'] as List<dynamic>?)
         ?.map((item) => Prompt.fromJson(item))
         .toList() ?? [],
-      // searchTarget: ,// TODO
+      searchTarget: (json['search_targets'] as List<dynamic>?)?.isNotEmpty == true
+        ? SearchTarget.fromJson(json['search_targets'][0])
+        : null,
       dbTimestamps: DbTimestamps(
         createdAt: DateTime.parse(json['created_at']),
         updatedAt: DateTime.parse(json['updated_at']),
@@ -56,6 +59,33 @@ class Report {
       'description': description,
       'cadence': cadence.toJson()
     };
+  }
+
+  Report copyWith({
+    String? id,
+    String? userId,
+    String? title,
+    String? description,
+    Cadence? cadence,
+    List<Prompt>? prompts,
+    SearchTarget? searchTarget,
+    List<ReportResult>? results,
+    DbTimestamps? dbTimestamps,
+    DateTime? lastRunAt,
+  }) {
+    return Report(
+      id: id ?? this.id,
+      userId: userId ?? this.userId,
+      title: title ?? this.title,
+      description: description ?? this.description,
+      cadence: cadence ?? this.cadence,
+      // Clone the list if provided, else clone current if not null, else null
+      prompts: prompts ?? (this.prompts != null ? List<Prompt>.from(this.prompts!) : null),
+      searchTarget: searchTarget ?? this.searchTarget,
+      results: results ?? (this.results != null ? List<ReportResult>.from(this.results!) : null),
+      dbTimestamps: dbTimestamps ?? this.dbTimestamps,
+      lastRunAt: lastRunAt ?? this.lastRunAt,
+    );
   }
 
 }

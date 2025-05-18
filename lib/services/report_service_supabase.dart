@@ -31,18 +31,33 @@ class ReportServiceSupabase {
     debugPrint('DEBUG: Service is fetching all reports for userId: $userId');
     final response = await _supabase
       .from('reports')
-      .select('*, prompts(*)')
+      .select('*, prompts(*), search_targets(*)')
       .eq('user_id', userId)
       .isFilter('deleted_at', null);
 
-    // // Inspect the response to see its structure
-    // debugPrint('Response: $response');
+    // Inspect the response to see its structure
+    debugPrint('Response: $response');
 
     final List<Report> reports = (response as List).map((item) {
       return Report.fromJson(item);
     }).toList();
 
     return reports;
+  }
+
+  Future<Report> fetchReport(String reportId) async {
+    debugPrint('DEBUG: Service is fetching report with ID: $reportId');
+    final response = await _supabase
+      .from('reports')
+      .select('*, prompts(*), search_targets(*)')
+      .eq('id', reportId)
+      .isFilter('deleted_at', null)
+      .isFilter('prompts.deleted_at', null)
+      .isFilter('search_targets.deleted_at', null)
+      .single();
+
+    final Report report = Report.fromJson(response);
+    return report;
   }
 
   Future<Report> updateReport(Report report) async {
@@ -81,6 +96,19 @@ class ReportServiceSupabase {
     return reports;
   }
 
+  Future<SearchTarget> fetchSearchTarget(String reportId) async {
+    debugPrint('DEBUG: Service is fetching the search target for reportId: $reportId');
+    final response = await _supabase
+      .from('search_targets')
+      .select()
+      .eq('report_id', reportId)
+      .select()
+      .single();
+    // debugPrint('DEBUG: report results response: $response');
+    final SearchTarget searchTarget = SearchTarget.fromJson(response);
+    return searchTarget;
+  }
+
   Future<void> runReport(String reportId) async {
     final supabase = Supabase.instance.client;
     // final session = supabase.auth.currentSession;
@@ -116,6 +144,34 @@ class ReportServiceSupabase {
     final SearchTarget insertedSearchTarget = SearchTarget.fromJson(response);
     debugPrint('DEBUG: inserted search target ID: ${insertedSearchTarget.id}');
     return insertedSearchTarget;
+  }
+
+  Future<void> softDeleteSearchTarget(SearchTarget searchTarget) async {
+    debugPrint('DEBUG: Service is soft deleting a SearchTarget.');
+    final response = await _supabase
+      .from('search_targets')
+      .update({
+        'deleted_at': DateTime.now().toUtc().toIso8601String(),
+        'updated_at': DateTime.now().toUtc().toIso8601String(),
+      })
+      .eq('id', searchTarget.id)
+      .eq('report_id', searchTarget.reportId);
+    if (response.error != null) {
+      throw Exception('Failed to soft delete SearchTarget: ${response.error!.message}');
+    }
+  }
+
+  Future<void> updateSearchTarget(SearchTarget searchTarget) async {
+    debugPrint('DEBUG: Service is updating a SearchTarget.');
+    final response = await _supabase
+      .from('search_targets')
+      .update(searchTarget.toJson())
+      .eq('id', searchTarget.id)
+      .eq('report_id', searchTarget.reportId);
+
+    if (response.error != null) {
+      throw Exception('Failed to update SearchTarget: ${response.error!.message}');
+    }
   }
 
 
@@ -168,6 +224,20 @@ class ReportServiceSupabase {
     }).toList();
 
     return promptTemplates;
+  }
+
+  Future<void> softDeletePrompt(Prompt prompt) async {
+    debugPrint('DEBUG: Service is soft deleting a prompt.');
+    final response = await _supabase
+      .from('prompts')
+      .update({
+        'deleted_at': DateTime.now().toUtc().toIso8601String(),
+        'updated_at': DateTime.now().toUtc().toIso8601String(),
+      })
+      .eq('id', prompt.id);
+    if (response.error != null) {
+      throw Exception('Failed to soft delete prompt: ${response.error!.message}');
+    }
   }
 
 

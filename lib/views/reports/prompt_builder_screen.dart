@@ -17,12 +17,6 @@ class _PromptBuilderScreenState extends State<PromptBuilderScreen> {
   List<Prompt> _createdPrompts = [];
   List<String> _subjects = [];
   List<String> _contexts = [];
-  // final List<PromptTemplate> _templates = [
-  //   PromptTemplate(id: '0', rawPrompt: 'Top {subject} in {context}.', subject: 'Real Estate Agency', context: 'Frankston', dbTimestamps: DbTimestamps.now()),
-  //   PromptTemplate(id: '1', rawPrompt: 'Best {subject} for {context}.', subject: 'Sports Bra', context: 'Netball', dbTimestamps: DbTimestamps.now()),
-  //   ];
-  
-
   PromptTemplate? _selectedTemplate;
   TextEditingController _subjectController = TextEditingController();
   TextEditingController _contextController = TextEditingController();
@@ -73,9 +67,8 @@ class _PromptBuilderScreenState extends State<PromptBuilderScreen> {
   }
 
   void _createPrompts() {
-    final rawPrompt = _selectedTemplate?.rawPrompt;
 
-    if (rawPrompt == null || _subjects.isEmpty || _contexts.isEmpty) {
+    if (_selectedTemplate == null || _subjects.isEmpty || _contexts.isEmpty) {
       // Optional: show a snackbar or dialog for feedback
       debugPrint("Cannot create prompts: Missing template, subject, or contexts.");
       return;
@@ -85,14 +78,13 @@ class _PromptBuilderScreenState extends State<PromptBuilderScreen> {
 
     for (var subject in _subjects) {
       for (var context in _contexts) {
+        PromptTemplate newPrompt = _selectedTemplate!.copyWith(subject: subject, context: context);
         createdPrompts.add(
           Prompt(
             id: '',
             templateId: _selectedTemplate!.id,
             reportId: '',
-            rawPrompt: rawPrompt,
-            subject: subject,
-            context: context,
+            prompt: newPrompt.formattedPrompt,
             dbTimestamps: DbTimestamps.now(),
             lastRunAt: null,
           ),
