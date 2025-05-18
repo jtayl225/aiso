@@ -1,6 +1,7 @@
 import 'package:aiso/models/cadence_enum.dart';
 import 'package:aiso/models/db_timestamps_model.dart';
 import 'package:aiso/models/prompt_model.dart';
+import 'package:aiso/models/search_target_model.dart';
 
 class Report {
   final String id;
@@ -9,6 +10,7 @@ class Report {
   final String description;
   final Cadence cadence;
   List<Prompt>? prompts;
+  SearchTarget? searchTarget;
   final DbTimestamps dbTimestamps;
   final DateTime? lastRunAt;
 
@@ -19,6 +21,7 @@ class Report {
     required this.description,
     required this.cadence,
     this.prompts,
+    this.searchTarget,
     required this.dbTimestamps,
     this.lastRunAt
     });
@@ -33,6 +36,7 @@ class Report {
       prompts: (json['prompts'] as List<dynamic>?)
         ?.map((item) => Prompt.fromJson(item))
         .toList() ?? [],
+      // searchTarget: ,// TODO
       dbTimestamps: DbTimestamps(
         createdAt: DateTime.parse(json['created_at']),
         updatedAt: DateTime.parse(json['updated_at']),

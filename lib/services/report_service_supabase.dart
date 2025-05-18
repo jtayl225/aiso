@@ -1,6 +1,7 @@
 import 'package:aiso/models/prompt_model.dart';
 import 'package:aiso/models/prompt_template_model.dart';
 import 'package:aiso/models/report_model.dart';
+import 'package:aiso/models/search_target_model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter/foundation.dart';
 
@@ -60,6 +61,20 @@ class ReportServiceSupabase {
       debugPrint('ERROR: Failed to update report: $e');
       rethrow; // or throw a custom exception
     }
+  }
+
+
+  // SEARCH TARGET //
+  Future<SearchTarget> createSearchTarget(SearchTarget newSearchTarget) async {
+    debugPrint('DEBUG: Service is creating a new search target.');
+    final response = await _supabase
+      .from('search_targets')
+      .insert(newSearchTarget.toJson())
+      .select()
+      .single();
+    final SearchTarget insertedSearchTarget = SearchTarget.fromJson(response);
+    debugPrint('DEBUG: inserted search target ID: ${insertedSearchTarget.id}');
+    return insertedSearchTarget;
   }
 
 

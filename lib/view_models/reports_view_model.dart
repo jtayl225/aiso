@@ -32,6 +32,12 @@ class ReportViewModel extends ChangeNotifier {
         report.prompts = reportPrompts;
       }
 
+      if (newReport.searchTarget != null) {
+        final updatedSearchTarget = newReport.searchTarget!.copyWith(reportId: report.id);
+        final reportSearchTarget = await _reportService.createSearchTarget(updatedSearchTarget);
+        report.searchTarget = reportSearchTarget;
+      }
+
       reports.add(report);
       return true;
     } catch (e) {

@@ -48,3 +48,18 @@ CREATE TABLE prompts (
   deleted_at timestamp with time zone,
   last_run_at timestamp with time zone
 );
+
+-- create search_target table
+CREATE TYPE search_target_type AS ENUM ('product', 'service', 'business', 'person');
+
+CREATE TABLE search_target (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  report_id uuid REFERENCES public.reports(id) ON DELETE CASCADE,
+  type search_target_type, -- 👈 enum column
+  name text NOT NULL,
+  description text NOT NULL,
+  url text,
+  created_at timestamp with time zone DEFAULT now(),
+  updated_at timestamp with time zone DEFAULT now(),
+  deleted_at timestamp with time zone
+);
