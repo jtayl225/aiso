@@ -1,6 +1,7 @@
 import 'package:aiso/models/cadence_enum.dart';
 import 'package:aiso/models/db_timestamps_model.dart';
 import 'package:aiso/models/prompt_model.dart';
+import 'package:aiso/models/report_results.dart';
 import 'package:aiso/models/search_target_model.dart';
 
 class Report {
@@ -11,6 +12,7 @@ class Report {
   final Cadence cadence;
   List<Prompt>? prompts;
   SearchTarget? searchTarget;
+  List<ReportResult>? results;
   final DbTimestamps dbTimestamps;
   final DateTime? lastRunAt;
 

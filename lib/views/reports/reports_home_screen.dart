@@ -1,7 +1,7 @@
 import 'package:aiso/view_models/reports_view_model.dart';
 import 'package:aiso/views/app_drawer.dart';
+import 'package:aiso/views/reports/report_results_screen.dart';
 import 'package:aiso/views/reports/reports_editor_screen.dart';
-import 'package:aiso/views/todo_placeholder_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -59,7 +59,7 @@ class _ReportsHomeScreenState extends State<ReportsHomeScreen> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => ReportEditorScreen(report: currentReport), // WorkspaceDetailsScreen(workspaceId: currentWorkspace.id),
+                      builder: (context) => ReportResultsScreen(reportId: currentReport.id),
                     ),
                   );
 

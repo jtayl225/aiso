@@ -98,6 +98,7 @@ class ReportViewModel extends ChangeNotifier {
     notifyListeners();
     try {
       final reportResults = await _reportService.fetchReportResults(reportId);
+      debugPrint('DEBUG: report results: $reportResults');
 
       final report = reports.firstWhere(
         (r) => r.id == reportId,
@@ -115,6 +116,35 @@ class ReportViewModel extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  // Returns a Report object by reportId, or null if not found
+  Report? getReportById(String reportId) {
+    try {
+      return reports.firstWhere((report) => report.id == reportId);
+    } catch (e) {
+      return null; // Report not found
+    }
+  }
+
+  Future<bool> runReport(String reportId) async {
+    isLoading = true;
+    notifyListeners();
+    try {
+      debugPrint('DEBUG: view model about to call run-report edge function');
+      await _reportService.runReport(reportId);
+      return true;
+    } catch (e) {
+      _handleError(e as Exception);
+      return false;
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  
+
+  
 
 
 

@@ -1,6 +1,7 @@
 import 'package:aiso/models/prompt_model.dart';
 import 'package:aiso/models/prompt_template_model.dart';
 import 'package:aiso/models/report_model.dart';
+import 'package:aiso/models/report_results.dart';
 import 'package:aiso/models/search_target_model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter/foundation.dart';
@@ -60,6 +61,46 @@ class ReportServiceSupabase {
     } catch (e) {
       debugPrint('ERROR: Failed to update report: $e');
       rethrow; // or throw a custom exception
+    }
+  }
+
+  // REPORT RESULTS //
+  Future<List<ReportResult>> fetchReportResults(String reportId) async {
+    debugPrint('DEBUG: Service is fetching all report results For reportId: $reportId');
+    final response = await _supabase
+      .from('report_results_summary_vw')
+      .select()
+      .eq('report_id', reportId);
+
+    debugPrint('DEBUG: report results response: $response');
+
+    final List<ReportResult> reports = (response as List).map((item) {
+      return ReportResult.fromJson(item);
+    }).toList();
+
+    return reports;
+  }
+
+  Future<void> runReport(String reportId) async {
+    final supabase = Supabase.instance.client;
+    // final session = supabase.auth.currentSession;
+
+    final response = await supabase.functions.invoke(
+      'run-report',
+      method: HttpMethod.post,
+      // headers: {
+      //   'Authorization': 'Bearer ${session?.accessToken}',
+      //   'Content-Type': 'application/json',
+      // },
+      // body: {'name': 'Functions'}
+      body: {'reportId': reportId, 'name': 'Functions'}
+      );
+
+    if (response.status == 200) {
+      final data = response.data;
+      debugPrint('DEBUG: Function response: $data');
+    } else {
+      debugPrint('DEBUG: Function error (${response.status}): ${response.data}');
     }
   }
 
