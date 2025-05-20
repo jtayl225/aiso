@@ -6,6 +6,31 @@ class AuthServiceSupabase {
 
   final SupabaseClient _supabase = Supabase.instance.client;
 
+  bool get isAnonymous {
+    debugPrint('DEBUG: serivce is checking if anon.');
+    final user = _supabase.auth.currentUser;
+    return user != null &&
+          (user.email == null || user.email!.isEmpty) &&
+          (user.identities == null || user.identities!.isEmpty);
+  }
+
+  Future<UserModel?> anonSignin() async {
+    try {
+      final response = await _supabase.auth.signInAnonymously();
+      final user = response.user;
+      if (user == null) return null;
+      return UserModel(
+          id: user.id,
+          email: '',
+          username: '',
+          displayName: '',
+        );
+    } catch (e) {
+      debugPrint('Error signing in: $e');
+      return null;
+    }
+  }
+
   // Create a new user with email and password
   Future<UserModel?> signUp(String email, String password, {String? username, String? displayName}) async {
     try {
@@ -65,7 +90,7 @@ class AuthServiceSupabase {
       if (user == null) return null;
       return UserModel(
           id: user.id,
-          email: user.email!,
+          email: user.email ?? '',
           username: user.userMetadata?['username'] ?? '',
           displayName: user.userMetadata?['displayName'] ?? '',
         );

@@ -16,6 +16,10 @@ class AuthViewModel extends ChangeNotifier {
   UserModel? _currentUser;
   UserModel? get currentUser => _currentUser;
 
+  bool _isAnonymous = false;
+  bool get isAnonymous => _isAnonymous;
+
+
   String? _errorMessage;
   String? get errorMessage => _errorMessage;
 
@@ -28,16 +32,29 @@ class AuthViewModel extends ChangeNotifier {
     _authState = AuthState.loading;
     notifyListeners();
 
-    // _currentUser = await _authService.getCurrentUser();
+    // Use local session
+    final UserModel? currentUser = await _authService.getCurrentUser(); 
+    if (currentUser != null) {
+      _currentUser = currentUser;
+      _isAnonymous = _authService.isAnonymous;
+      _authState = AuthState.authenticated;
+      notifyListeners();
+      return;
+    }
+
+    // If no session, sign in anonymously
+    _currentUser = await _authService.anonSignin();
+    _isAnonymous = _authService.isAnonymous;
 
     if (_currentUser != null) {
-      _authState = AuthState.authenticated;
+      _authState = AuthState.anon;
     } else {
       _authState = AuthState.unauthenticated;
     }
 
     notifyListeners();
   }
+
 
   // Sign up
   Future<bool> signUp(String email, String password) async {
@@ -78,6 +95,7 @@ class AuthViewModel extends ChangeNotifier {
 
       if (_currentUser != null) {
         _authState = AuthState.authenticated;
+        _isAnonymous = _authService.isAnonymous;
         return _currentUser!.id;
       } else {
         _authState = AuthState.unauthenticated;

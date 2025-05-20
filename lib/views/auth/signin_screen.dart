@@ -4,6 +4,7 @@ import 'package:aiso/constants/string_constants.dart';
 import 'package:aiso/models/auth_state_enum.dart';
 import 'package:aiso/view_models/auth_view_model.dart';
 import 'package:aiso/view_models/reports_view_model.dart';
+import 'package:aiso/views/auth/auth_checker_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'dart:math';
@@ -56,6 +57,11 @@ class _SignInScreenState extends State<SignInScreen> {
       }
 
       authViewModel.setAuthScreenState(AuthScreenState.welcome);
+
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => AuthChecker()),
+        (route) => false,
+      );
 
     } catch (e, stackTrace) {
       debugPrint('Sign-in error: $e\n$stackTrace');

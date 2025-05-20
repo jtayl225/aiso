@@ -42,13 +42,13 @@ class _ReportEditorScreenState extends State<ReportEditorScreen> {
     } else {
       final authViewModel = context.read<AuthViewModel>();
       final creatorUserId = authViewModel.currentUser?.id ?? '';
-      _report = Report(id: '', userId: creatorUserId, title: '', description: '', cadence: Cadence.day, dbTimestamps: DbTimestamps.now());
+      _report = Report(id: '', userId: creatorUserId, title: '', description: '', cadence: Cadence.month, dbTimestamps: DbTimestamps.now());
       _isEditMode = false;
     }
 
     _titleController = TextEditingController(text: _report.title);
     _descriptionController = TextEditingController(text: _report.description);
-    _cadence = Cadence.day;
+    _cadence = _report.cadence;
     _searchTargetType = _report.searchTarget?.type ?? SearchTargetType.business;
     _targetNameController = TextEditingController(text: _report.searchTarget?.name ?? '');
     _targetDescriptionController = TextEditingController(text: _report.searchTarget?.description ?? '');
@@ -74,6 +74,7 @@ class _ReportEditorScreenState extends State<ReportEditorScreen> {
       name: _targetNameController.text.trim(),
       type: _searchTargetType,
       description: _targetDescriptionController.text.trim(),
+      url: _targetUrlController.text.trim(),
       dbTimestamps: _isEditMode && _report.searchTarget != null
         ? _report.searchTarget!.dbTimestamps.copyWith(updatedAt: DateTime.now())
         : DbTimestamps.now(),
@@ -166,36 +167,36 @@ class _ReportEditorScreenState extends State<ReportEditorScreen> {
                   ),
                 ),
         
-                SizedBox(height: 8),
+                // SizedBox(height: 8),
 
-                TextField(
-                  controller: _descriptionController,
-                  decoration: InputDecoration(
-                    labelText: 'Description',
-                    border: OutlineInputBorder(),
-                  ),
-                ),
+                // TextField(
+                //   controller: _descriptionController,
+                //   decoration: InputDecoration(
+                //     labelText: 'Description',
+                //     border: OutlineInputBorder(),
+                //   ),
+                // ),
 
-                SizedBox(height: 8),
+                // SizedBox(height: 8),
 
-                DropdownButtonFormField<Cadence>(
-                  value: _cadence,
-                  decoration: const InputDecoration(
-                    labelText: 'Cadence',
-                    border: OutlineInputBorder(),
-                  ),
-                  items: Cadence.values.map((cadence) {
-                    return DropdownMenuItem<Cadence>(
-                      value: cadence,
-                      child: Text(cadence.label),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      _cadence = value!;
-                    });
-                  },
-                ),
+                // DropdownButtonFormField<Cadence>(
+                //   value: _cadence,
+                //   decoration: const InputDecoration(
+                //     labelText: 'Cadence',
+                //     border: OutlineInputBorder(),
+                //   ),
+                //   items: Cadence.values.map((cadence) {
+                //     return DropdownMenuItem<Cadence>(
+                //       value: cadence,
+                //       child: Text(cadence.label),
+                //     );
+                //   }).toList(),
+                //   onChanged: (value) {
+                //     setState(() {
+                //       _cadence = value!;
+                //     });
+                //   },
+                // ),
 
                 SizedBox(height: 16),
 
@@ -208,26 +209,26 @@ class _ReportEditorScreenState extends State<ReportEditorScreen> {
                   ),
                 ),
 
-                SizedBox(height: 8),
+                // SizedBox(height: 8),
 
-                DropdownButtonFormField<SearchTargetType>(
-                  value: _searchTargetType,
-                  decoration: const InputDecoration(
-                    labelText: 'Type',
-                    border: OutlineInputBorder(),
-                  ),
-                  items: SearchTargetType.values.map((cadence) {
-                    return DropdownMenuItem<SearchTargetType>(
-                      value: cadence,
-                      child: Text(cadence.label),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      _searchTargetType = value!;
-                    });
-                  },
-                ),
+                // DropdownButtonFormField<SearchTargetType>(
+                //   value: _searchTargetType,
+                //   decoration: const InputDecoration(
+                //     labelText: 'Type',
+                //     border: OutlineInputBorder(),
+                //   ),
+                //   items: SearchTargetType.values.map((cadence) {
+                //     return DropdownMenuItem<SearchTargetType>(
+                //       value: cadence,
+                //       child: Text(cadence.label),
+                //     );
+                //   }).toList(),
+                //   onChanged: (value) {
+                //     setState(() {
+                //       _searchTargetType = value!;
+                //     });
+                //   },
+                // ),
 
                 SizedBox(height: 8),
 
@@ -328,7 +329,7 @@ class _ReportEditorScreenState extends State<ReportEditorScreen> {
                                   ...?_report.prompts,
                                   Prompt(
                                     id: '',
-                                    templateId: '',
+                                    // templateId: '',
                                     reportId: '',
                                     prompt: text,
                                     dbTimestamps: DbTimestamps.now(),

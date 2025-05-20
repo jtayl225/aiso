@@ -82,7 +82,7 @@ class _PromptBuilderScreenState extends State<PromptBuilderScreen> {
         createdPrompts.add(
           Prompt(
             id: '',
-            templateId: _selectedTemplate!.id,
+            // templateId: _selectedTemplate!.id,
             reportId: '',
             prompt: newPrompt.formattedPrompt,
             dbTimestamps: DbTimestamps.now(),

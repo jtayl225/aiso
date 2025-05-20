@@ -73,8 +73,8 @@ class ReportViewModel extends ChangeNotifier {
       debugPrint(newReport.prompts?.map((p) => 'Prompt(id: ${p.id}, title: ${p.prompt})').toList().toString());
 
       final reportDidChange = _reportChanged(originalReport, newReport);
-      final promptsDidChange = _promptsChanged(originalReport?.prompts ?? [], newReport.prompts ?? []);
-      final searchTargetDidChange = _searchTargetChanged(originalReport?.searchTarget, newReport.searchTarget);
+      final promptsDidChange = _promptsChanged(originalReport.prompts ?? [], newReport.prompts ?? []);
+      final searchTargetDidChange = _searchTargetChanged(originalReport.searchTarget, newReport.searchTarget);
 
       if (reportDidChange) {
         Report _ = await _reportService.updateReport(newReport);
@@ -86,13 +86,13 @@ class ReportViewModel extends ChangeNotifier {
         final updatedPrompts = newReport.prompts
           ?.map((prompt) => prompt.copyWith(reportId: newReport.id))
           .toList();
-        await _syncPrompts(oldPrompts: originalReport?.prompts, newPrompts: updatedPrompts);
+        await _syncPrompts(oldPrompts: originalReport.prompts, newPrompts: updatedPrompts);
       }
 
       // 🧠 Search Target logic
       if (searchTargetDidChange) {
         final SearchTarget updatedSearchTarget = newReport.searchTarget!.copyWith(reportId: newReport.id);
-        await _syncSearchTarget(oldSearchTarget: originalReport?.searchTarget, newSearchTarget: updatedSearchTarget);
+        await _syncSearchTarget(oldSearchTarget: originalReport.searchTarget, newSearchTarget: updatedSearchTarget);
       }
 
       Report updatedReport = await _reportService.fetchReport(newReport.id);
@@ -155,6 +155,7 @@ class ReportViewModel extends ChangeNotifier {
     final maybeUpdated = updated.where((p) => existingIds.contains(p.id));
 
     for (final prompt in deleted) {
+      debugPrint('DEBUG: deleting new prompts');
       await _reportService.softDeletePrompt(prompt);
     }
 
@@ -166,7 +167,7 @@ class ReportViewModel extends ChangeNotifier {
     for (final prompt in maybeUpdated) {
       // final existingPrompt = existing.firstWhere((p) => p.id == prompt.id);
       // if (prompt != existingPrompt) {
-      //   await _reportService.updatePrompt(prompt.copyWith(reportId: reportId));
+      //   await _reportService.updatePrompt(prompt);
       // }
     }
   }
@@ -189,15 +190,6 @@ class ReportViewModel extends ChangeNotifier {
       }
     }
   }
-
-
-
-
-
-
-
-
-
 
   bool _searchTargetChanged(SearchTarget? oldTarget, SearchTarget? newTarget) {
     if (oldTarget == null && newTarget == null) return false;

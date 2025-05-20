@@ -1,3 +1,4 @@
+import 'package:aiso/view_models/report_results_view_model.dart';
 import 'package:aiso/view_models/reports_view_model.dart';
 import 'package:aiso/views/app_drawer.dart';
 import 'package:aiso/views/reports/report_results_screen.dart';
@@ -56,12 +57,23 @@ class _ReportsHomeScreenState extends State<ReportsHomeScreen> {
                 trailing: const Icon(Icons.arrow_forward_ios, size: 16),
                 onTap: () {
 
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (context) => ReportResultsScreen(reportId: currentReport.id),
+                  //   ),
+                  // );
+
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => ReportResultsScreen(reportId: currentReport.id),
+                      builder: (_) => ChangeNotifierProvider(
+                        create: (_) => ReportResultsViewModel(currentReport.id),
+                        child: ReportResultsScreen(reportId: currentReport.id),
+                      ),
                     ),
                   );
+
 
                 }
 

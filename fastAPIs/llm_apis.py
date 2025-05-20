@@ -12,6 +12,7 @@ from openai import OpenAI
 from enum import Enum
 from typing import List, Optional
 import os
+import random
 
 app = FastAPI()
 
@@ -48,8 +49,11 @@ class LLM(str, Enum):
 
 class SearchPromptResult(BaseModel):
     promptId: str
+    epoch: int
     llm: LLM
+    temperature: float
     search_target_found: bool
+    search_target_rank: Optional[int] = None
 
 class SearchResponse(BaseModel):
     reportId: str
@@ -106,12 +110,24 @@ def call_chatgpt_01(user_prompt: str, temp: float = 0.5) -> SearchResults_01:
 
 class SearchTargetResult(BaseModel):
     search_target_found: bool
+    search_target_rank: Optional[int] = None
 
-def call_chatgpt_02(search_target: SearchTarget, results: List[SearchResult_01], temp: float = 0.3) -> SearchTargetResult:
+def call_chatgpt_02(search_target: SearchTarget, results: List[SearchResult_01], temp: float = 0.0) -> SearchTargetResult:
 
     system_prompt = """
-    You are a precise assistant who answers TRUE or FALSE questions strictly.
+    You are a precise assistant who answers the following in **strict JSON format**:
+
+    {
+      "search_target_found": true | false,
+      "rank": integer | null
+    }
+
+    Rules:
+    - If the target is found, set "search_target_found" to true and "rank" to the integer rank where it appears.
+    - If not found, set "search_target_found" to false and "rank" to null.
+    Do not add any extra text.
     """
+
 
     # Compose a user prompt summarizing the results and asking if the search target is present
     results_summary = "\n".join([
@@ -130,8 +146,6 @@ def call_chatgpt_02(search_target: SearchTarget, results: List[SearchResult_01],
     name: {search_target.name}
     description: {search_target.description}
     url: {search_target.url or "N/A"}
-
-    Please respond with only TRUE or FALSE.
     """
     
     response = client.responses.parse(
@@ -150,8 +164,8 @@ def call_chatgpt_02(search_target: SearchTarget, results: List[SearchResult_01],
 ####################
 # Functions
 ####################
-def call_chatgpt(user_prompt: str, search_target: SearchTarget):
-    result_01 = call_chatgpt_01(user_prompt = user_prompt)
+def call_chatgpt(user_prompt: str, search_target: SearchTarget, temp: float = 0.5):
+    result_01 = call_chatgpt_01(user_prompt = user_prompt, temp = temp)
     result_02 = call_chatgpt_02(search_target = search_target, results = result_01.results)
     return result_02
 
@@ -167,14 +181,27 @@ def health_check():
 def ai_search(request: SearchRequest):
     results = []
     target = request.searchTarget
+    temp_range = (0.5, 0.75)  # Reasonable range
+    epochs = 10
 
-    # chatgpt
-    for prompt in request.prompts:
-        response = call_chatgpt(user_prompt = prompt.prompt, search_target = target)
-        result = SearchPromptResult(promptId = prompt.promptId, llm = LLM.chatgpt, search_target_found = response.search_target_found)
-        results.append(result)
+    for epoch in range(epochs):
 
-    # gemini
-    # TODO
+        temp = round(random.uniform(*temp_range), 2)  # e.g. 0.42, 0.78
+
+        # chatgpt
+        for prompt in request.prompts:
+            response = call_chatgpt(user_prompt = prompt.prompt, search_target = target, temp = temp)
+            result = SearchPromptResult(
+                promptId = prompt.promptId,
+                epoch = epoch,
+                llm = LLM.chatgpt, 
+                temperature = temp, 
+                search_target_found = response.search_target_found,
+                search_target_rank = response.search_target_rank
+                )
+            results.append(result)
+
+            # gemini
+            # TODO
 
     return SearchResponse(reportId = request.reportId, searchResults = results)

@@ -18,6 +18,8 @@ class AuthChecker extends StatelessWidget {
         return const Scaffold(body: Center(child: CircularProgressIndicator()));
       case AuthState.loading:
         return const Scaffold(body: Center(child: CircularProgressIndicator()));
+      case AuthState.anon:
+        return const ReportsHomeScreen();
       case AuthState.error:
         return const Scaffold(body: Center(child: Text('An error occurred')));
       case AuthState.authenticated:

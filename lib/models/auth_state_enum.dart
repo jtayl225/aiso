@@ -1,6 +1,7 @@
 enum AuthState {
   initial,
   loading,
+  anon,
   authenticated,
   unauthenticated,
   error,

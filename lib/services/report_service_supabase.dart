@@ -33,10 +33,12 @@ class ReportServiceSupabase {
       .from('reports')
       .select('*, prompts(*), search_targets(*)')
       .eq('user_id', userId)
-      .isFilter('deleted_at', null);
+      .isFilter('deleted_at', null)
+      .isFilter('prompts.deleted_at', null)
+      .isFilter('search_targets.deleted_at', null);
 
     // Inspect the response to see its structure
-    debugPrint('Response: $response');
+    // debugPrint('Response: $response');
 
     final List<Report> reports = (response as List).map((item) {
       return Report.fromJson(item);
@@ -87,7 +89,7 @@ class ReportServiceSupabase {
       .select()
       .eq('report_id', reportId);
 
-    debugPrint('DEBUG: report results response: $response');
+    // debugPrint('DEBUG: report results response: $response');
 
     final List<ReportResult> reports = (response as List).map((item) {
       return ReportResult.fromJson(item);
@@ -182,7 +184,7 @@ class ReportServiceSupabase {
 
   // PROMPTS //
   Future<Prompt> createPrompt(Prompt newPrompt) async {
-    debugPrint('DEBUG: Service is creating a new prompt.');
+    debugPrint('DEBUG: Service is creating a new prompt: ${newPrompt.toJson()}');
     final response = await _supabase
       .from('prompts')
       .insert(newPrompt.toJson())
@@ -228,16 +230,13 @@ class ReportServiceSupabase {
 
   Future<void> softDeletePrompt(Prompt prompt) async {
     debugPrint('DEBUG: Service is soft deleting a prompt.');
-    final response = await _supabase
+    await _supabase
       .from('prompts')
       .update({
         'deleted_at': DateTime.now().toUtc().toIso8601String(),
         'updated_at': DateTime.now().toUtc().toIso8601String(),
       })
       .eq('id', prompt.id);
-    if (response.error != null) {
-      throw Exception('Failed to soft delete prompt: ${response.error!.message}');
-    }
   }
 
 

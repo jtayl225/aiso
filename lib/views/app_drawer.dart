@@ -1,5 +1,8 @@
+import 'package:aiso/models/auth_state_enum.dart';
 import 'package:aiso/view_models/auth_view_model.dart';
 import 'package:aiso/views/auth/auth_checker_screen.dart';
+import 'package:aiso/views/auth/auth_screen.dart';
+import 'package:aiso/views/auth/signin_screen.dart';
 import 'package:aiso/views/reports/reports_home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -9,6 +12,8 @@ class AppDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final authViewModel = context.watch<AuthViewModel>();
+    final isAnon = authViewModel.isAnonymous;
     return Drawer(
       child: ListView(
         children: [
@@ -43,20 +48,27 @@ class AppDrawer extends StatelessWidget {
           ),
 
           ListTile(
-            leading: Icon(Icons.logout),
-            title: Text('Logout'),
+            leading: Icon(isAnon ? Icons.login : Icons.logout),
+            title: Text(isAnon ? 'Sign in' : 'Sign out'),
             onTap: () async {
-              final authViewModel = context.read<AuthViewModel>();
-              final navigator = Navigator.of(context); // store before async gap
-              await authViewModel.signOut();
-              navigator.pushAndRemoveUntil(
-                MaterialPageRoute(builder: (context) => AuthChecker()),
-                (route) => false,
-              );
+              final navigator = Navigator.of(context); // save before await
+
+              if (isAnon) {
+                // Navigate to SignIn screen
+                // authViewModel.setAuthScreenState(AuthScreenState.signIn);
+                navigator.push(
+                  MaterialPageRoute(builder: (context) => SignInScreen()),
+                );
+              } else {
+                // Sign out and reset navigation
+                await authViewModel.signOut();
+                navigator.pushAndRemoveUntil(
+                  MaterialPageRoute(builder: (context) => AuthChecker()),
+                  (route) => false,
+                );
+              }
             },
           ),
-
-
         ],
       ),
     );

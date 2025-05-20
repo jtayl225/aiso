@@ -6,7 +6,7 @@ CREATE TABLE reports (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id uuid REFERENCES auth.users(id),
   title text NOT NULL,
-  description text,
+  -- description text,
   cadence cadence, -- 👈 enum column
   created_at timestamp with time zone DEFAULT now(),
   updated_at timestamp with time zone DEFAULT now(),
@@ -52,7 +52,7 @@ VALUES
 CREATE TABLE prompts (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   report_id uuid REFERENCES public.reports(id) ON DELETE CASCADE,
-  template_id uuid REFERENCES public.prompt_templates(id) ON DELETE SET NULL,
+  -- template_id uuid REFERENCES public.prompt_templates(id) ON DELETE SET NULL,
   prompt text NOT NULL,
   created_at timestamp with time zone DEFAULT now(),
   updated_at timestamp with time zone DEFAULT now(),
@@ -92,20 +92,35 @@ CREATE INDEX idx_report_runs_report_id_status ON report_runs(report_id, status);
 
 
 -- create report_results table
-CREATE TYPE llm AS ENUM ('chatgpt', 'gemini');
+CREATE TYPE llm AS ENUM (
+  'chatgpt',         -- OpenAI (GPT-3.5, GPT-4, GPT-4o)
+  'gemini',          -- Google (Gemini 1.5, formerly Bard)
+  'claude',          -- Anthropic (Claude 2, Claude 3)
+  'mistral',         -- Mistral (Mistral 7B, Mixtral)
+  'llama'            -- Meta (LLaMA 2, LLaMA 3)
+  -- 'groq',            -- Groq (LLaMA 3 8B on Groq hardware)
+  -- 'command-r',       -- Cohere (Command R+ for RAG)
+  -- 'xgen',            -- Salesforce (XGen models)
+  -- 'jurassic',        -- AI21 Labs (Jurassic-2)
+  -- 'palm'             -- Older Google models (PaLM, PaLM 2)
+);
+
 
 CREATE TABLE report_results (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   run_id uuid REFERENCES public.report_runs(id) ON DELETE CASCADE,
   report_id uuid REFERENCES public.reports(id) ON DELETE CASCADE,
   prompt_id uuid REFERENCES public.prompts(id) ON DELETE CASCADE,
+  epoch INT NOT NULL,
+  temperature DOUBLE PRECISION NOT NULL,
   llm llm NOT NULL,
   result_json jsonb,
   search_target_found BOOL NOT NULL,
+  search_target_rank INT,
   created_at timestamp with time zone DEFAULT now(),
   updated_at timestamp with time zone DEFAULT now(),
   deleted_at timestamp with time zone,
-  UNIQUE (run_id, report_id, prompt_id, llm)
+  UNIQUE (run_id, report_id, prompt_id, epoch, llm)
 );
 
 CREATE OR REPLACE VIEW report_results_summary_vw AS
@@ -120,7 +135,9 @@ FROM report_results AS a
 INNER JOIN prompts AS b
   ON a.report_id = b.report_id
   AND a.prompt_id = b.id
-WHERE a.deleted_at IS NULL
+WHERE
+	a.deleted_at IS NULL
+	AND b.deleted_at IS NULL
 GROUP BY a.report_id, a.prompt_id, b.prompt, a.llm;
 
 
