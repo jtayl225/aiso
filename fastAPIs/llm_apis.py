@@ -195,7 +195,7 @@ def health_check():
     return {"message": "API is alive!"}
 
 @app.post("/ai-search", response_model=SearchResponse)
-def ai_search(request: SearchRequest):
+async def ai_search(request: SearchRequest):
     results = []
     target = request.searchTarget
     temp_range = (0.5, 0.75)  # Reasonable range
