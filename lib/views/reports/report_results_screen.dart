@@ -394,7 +394,7 @@ class _ReportResultsScreenState extends State<ReportResultsScreen> {
         Text('Search Target', style: Theme.of(context).textTheme.titleMedium),
         const SizedBox(height: 8),
         // Text('Type: ${searchTarget.type.label}', style: Theme.of(context).textTheme.bodyMedium),
-        Text('Type: ${searchTarget.type}', style: Theme.of(context).textTheme.bodyMedium),
+        // Text('Type: ${searchTarget.type}', style: Theme.of(context).textTheme.bodyMedium),
         Text('Name: ${searchTarget.name}', style: Theme.of(context).textTheme.bodyMedium),
         Text('Description: ${searchTarget.description}', style: Theme.of(context).textTheme.bodyMedium),
         if (searchTarget.url != null)

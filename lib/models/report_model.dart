@@ -8,7 +8,7 @@ class Report {
   final String id;
   final String userId;
   final String title;
-  final String description;
+  // final String description;
   final Cadence cadence;
   List<Prompt>? prompts;
   SearchTarget? searchTarget;
@@ -20,7 +20,7 @@ class Report {
     required this.id, 
     required this.userId, 
     required this.title, 
-    required this.description,
+    // required this.description,
     required this.cadence,
     this.prompts,
     this.searchTarget,
@@ -34,7 +34,7 @@ class Report {
       id: json['id'] as String,
       userId: json['user_id'] as String,
       title: json['title'] as String,
-      description: json['description'] as String,
+      // description: json['description'] as String,
       cadence: CadenceExtension.fromString(json['cadence'] as String),
       prompts: (json['prompts'] as List<dynamic>?)
         ?.map((item) => Prompt.fromJson(item))
@@ -56,7 +56,7 @@ class Report {
       // 'id': id, // handled by supabase
       'user_id': userId,
       'title': title,
-      'description': description,
+      // 'description': description,
       'cadence': cadence.toJson()
     };
   }
@@ -65,7 +65,7 @@ class Report {
     String? id,
     String? userId,
     String? title,
-    String? description,
+    // String? description,
     Cadence? cadence,
     List<Prompt>? prompts,
     SearchTarget? searchTarget,
@@ -77,7 +77,7 @@ class Report {
       id: id ?? this.id,
       userId: userId ?? this.userId,
       title: title ?? this.title,
-      description: description ?? this.description,
+      // description: description ?? this.description,
       cadence: cadence ?? this.cadence,
       // Clone the list if provided, else clone current if not null, else null
       prompts: prompts ?? (this.prompts != null ? List<Prompt>.from(this.prompts!) : null),

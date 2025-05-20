@@ -42,12 +42,19 @@ class _ReportEditorScreenState extends State<ReportEditorScreen> {
     } else {
       final authViewModel = context.read<AuthViewModel>();
       final creatorUserId = authViewModel.currentUser?.id ?? '';
-      _report = Report(id: '', userId: creatorUserId, title: '', description: '', cadence: Cadence.month, dbTimestamps: DbTimestamps.now());
+      _report = Report(
+        id: '', 
+        userId: creatorUserId, 
+        title: '', 
+        // description: '', 
+        cadence: Cadence.month, 
+        dbTimestamps: DbTimestamps.now()
+        );
       _isEditMode = false;
     }
 
     _titleController = TextEditingController(text: _report.title);
-    _descriptionController = TextEditingController(text: _report.description);
+    // _descriptionController = TextEditingController(text: _report.description);
     _cadence = _report.cadence;
     _searchTargetType = _report.searchTarget?.type ?? SearchTargetType.business;
     _targetNameController = TextEditingController(text: _report.searchTarget?.name ?? '');
@@ -89,7 +96,7 @@ class _ReportEditorScreenState extends State<ReportEditorScreen> {
       id: _isEditMode ? _report.id : '', // Empty ID if creating new
       userId: _report.userId,
       title: _titleController.text.trim(),
-      description: _descriptionController.text.trim(),
+      // description: _descriptionController.text.trim(),
       cadence: _cadence,
       prompts: _report.prompts,
       searchTarget: searchTarget,

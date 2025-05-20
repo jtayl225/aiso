@@ -31,26 +31,38 @@ class AuthViewModel extends ChangeNotifier {
   Future<void> checkAuthStatus() async {
     _authState = AuthState.loading;
     notifyListeners();
+    _authState = AuthState.unauthenticated;
 
-    // Use local session
-    final UserModel? currentUser = await _authService.getCurrentUser(); 
-    if (currentUser != null) {
-      _currentUser = currentUser;
-      _isAnonymous = _authService.isAnonymous;
-      _authState = AuthState.authenticated;
-      notifyListeners();
-      return;
-    }
+    // // Use local session
+    // final UserModel? currentUser = await _authService.getCurrentUser(); 
+    // if (currentUser != null) {
+    //   _currentUser = currentUser;
+    //   _isAnonymous = _authService.isAnonymous;
+    //   debugPrint('DEBUG: is anon? $_isAnonymous'); 
+    //   _authState = AuthState.authenticated;
+    //   notifyListeners();
+    //   return;
+    // }
 
-    // If no session, sign in anonymously
-    _currentUser = await _authService.anonSignin();
-    _isAnonymous = _authService.isAnonymous;
+    // // signIn('jdtay.90+aiso00@gmail.com', '123456');
+    // _currentUser = await _authService.signInWithEmailAndPassword('jdtay.90+aiso00@gmail.com', '123456');
+    //  if (_currentUser != null) {
+    //   _authState = AuthState.authenticated;
+    //   _isAnonymous = _authService.isAnonymous;
+    // }
 
-    if (_currentUser != null) {
-      _authState = AuthState.anon;
-    } else {
-      _authState = AuthState.unauthenticated;
-    }
+    debugPrint('DEBUG: is anon? $_isAnonymous'); 
+    debugPrint('DEBUG: current user ID: ${_currentUser?.id}'); 
+
+    // // If no session, sign in anonymously
+    // _currentUser = await _authService.anonSignin();
+    // _isAnonymous = _authService.isAnonymous;
+
+    // if (_currentUser != null) {
+    //   _authState = AuthState.anon;
+    // } else {
+    //   _authState = AuthState.unauthenticated;
+    // }
 
     notifyListeners();
   }

@@ -13,6 +13,7 @@ from enum import Enum
 from typing import List, Optional
 import os
 import random
+import asyncio
 
 app = FastAPI()
 
@@ -169,6 +170,22 @@ def call_chatgpt(user_prompt: str, search_target: SearchTarget, temp: float = 0.
     result_02 = call_chatgpt_02(search_target = search_target, results = result_01.results)
     return result_02
 
+# Helper async function
+async def run_llm_call(prompt, target, epoch, temp):
+    response = await call_chatgpt(
+        user_prompt=prompt.prompt,
+        search_target=target,
+        temp=temp
+    )
+    return SearchPromptResult(
+        promptId=prompt.promptId,
+        epoch=epoch,
+        llm=LLM.chatgpt,
+        temperature=temp,
+        search_target_found=response.search_target_found,
+        search_target_rank=response.search_target_rank
+    )
+
 ####################
 # Endpoint
 ####################
@@ -182,7 +199,9 @@ def ai_search(request: SearchRequest):
     results = []
     target = request.searchTarget
     temp_range = (0.5, 0.75)  # Reasonable range
-    epochs = 10
+    epochs = 3
+
+    tasks = []
 
     for epoch in range(epochs):
 
@@ -190,16 +209,21 @@ def ai_search(request: SearchRequest):
 
         # chatgpt
         for prompt in request.prompts:
-            response = call_chatgpt(user_prompt = prompt.prompt, search_target = target, temp = temp)
-            result = SearchPromptResult(
-                promptId = prompt.promptId,
-                epoch = epoch,
-                llm = LLM.chatgpt, 
-                temperature = temp, 
-                search_target_found = response.search_target_found,
-                search_target_rank = response.search_target_rank
-                )
-            results.append(result)
+            # response = call_chatgpt(user_prompt = prompt.prompt, search_target = target, temp = temp)
+            # result = SearchPromptResult(
+            #     promptId = prompt.promptId,
+            #     epoch = epoch,
+            #     llm = LLM.chatgpt, 
+            #     temperature = temp, 
+            #     search_target_found = response.search_target_found,
+            #     search_target_rank = response.search_target_rank
+            #     )
+            # results.append(result)
+            tasks.append(
+                run_llm_call(prompt, target, epoch, temp)
+            )
+            results = await asyncio.gather(*tasks)
+            
 
             # gemini
             # TODO

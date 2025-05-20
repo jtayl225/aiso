@@ -119,7 +119,7 @@ class ReportViewModel extends ChangeNotifier {
 
   bool _reportChanged(Report? old, Report newReport) {
     if (old == null) return true;
-    return old.title != newReport.title || old.description != newReport.description;
+    return old.title != newReport.title; // || old.description != newReport.description;
   }
 
   // PROMPTS // 
