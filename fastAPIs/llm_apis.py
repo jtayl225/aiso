@@ -165,7 +165,7 @@ def call_chatgpt_02(search_target: SearchTarget, results: List[SearchResult_01],
 ####################
 # Functions
 ####################
-def call_chatgpt(user_prompt: str, search_target: SearchTarget, temp: float = 0.5):
+async def call_chatgpt(user_prompt: str, search_target: SearchTarget, temp: float = 0.5):
     result_01 = call_chatgpt_01(user_prompt = user_prompt, temp = temp)
     result_02 = call_chatgpt_02(search_target = search_target, results = result_01.results)
     return result_02
