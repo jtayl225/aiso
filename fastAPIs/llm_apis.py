@@ -7,6 +7,7 @@ Created on Tue May 13 10:15:06 2025
 """
 
 from fastapi import FastAPI
+from fastapi import HTTPException
 from pydantic import BaseModel, Field
 from openai import OpenAI
 from enum import Enum
@@ -196,37 +197,42 @@ def health_check():
 
 @app.post("/ai-search", response_model=SearchResponse)
 async def ai_search(request: SearchRequest):
-    results = []
-    target = request.searchTarget
-    temp_range = (0.5, 0.75)  # Reasonable range
-    epochs = 3
+    try:
+        results = []
+        target = request.searchTarget
+        temp_range = (0.5, 0.75)  # Reasonable range
+        epochs = 3
 
-    tasks = []
+        tasks = []
 
-    for epoch in range(epochs):
+        for epoch in range(epochs):
 
-        temp = round(random.uniform(*temp_range), 2)  # e.g. 0.42, 0.78
+            temp = round(random.uniform(*temp_range), 2)  # e.g. 0.42, 0.78
 
-        # chatgpt
-        for prompt in request.prompts:
-            # response = call_chatgpt(user_prompt = prompt.prompt, search_target = target, temp = temp)
-            # result = SearchPromptResult(
-            #     promptId = prompt.promptId,
-            #     epoch = epoch,
-            #     llm = LLM.chatgpt, 
-            #     temperature = temp, 
-            #     search_target_found = response.search_target_found,
-            #     search_target_rank = response.search_target_rank
-            #     )
-            # results.append(result)
-            tasks.append(
-                run_llm_call(prompt, target, epoch, temp)
-            )
-        
-        results = await asyncio.gather(*tasks)
+            # chatgpt
+            for prompt in request.prompts:
+                # response = call_chatgpt(user_prompt = prompt.prompt, search_target = target, temp = temp)
+                # result = SearchPromptResult(
+                #     promptId = prompt.promptId,
+                #     epoch = epoch,
+                #     llm = LLM.chatgpt, 
+                #     temperature = temp, 
+                #     search_target_found = response.search_target_found,
+                #     search_target_rank = response.search_target_rank
+                #     )
+                # results.append(result)
+                tasks.append(
+                    run_llm_call(prompt, target, epoch, temp)
+                )
             
+        results = await asyncio.gather(*tasks)
+                
 
-            # gemini
-            # TODO
+                # gemini
+                # TODO
 
-    return SearchResponse(reportId = request.reportId, searchResults = results)
+        return SearchResponse(reportId = request.reportId, searchResults = results)
+    except Exception as e:
+        # Log the exception details
+        print(f"An error occurred: {e}")
+        raise HTTPException(status_code=500, detail="Internal Server Error")
