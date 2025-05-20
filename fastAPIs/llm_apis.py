@@ -80,7 +80,7 @@ class SearchResult_01(BaseModel):
 class SearchResults_01(BaseModel):
     results: List[SearchResult_01]
 
-def call_chatgpt_01(user_prompt: str, temp: float = 0.5) -> SearchResults_01:
+async def call_chatgpt_01(user_prompt: str, temp: float = 0.5) -> SearchResults_01:
     system_prompt = """
     You are a professional digital marketing expert. For a given prompt, you will generate up to 10 search result responses related to the query. Each response should include:
 
@@ -113,7 +113,7 @@ class SearchTargetResult(BaseModel):
     search_target_found: bool
     search_target_rank: Optional[int] = None
 
-def call_chatgpt_02(search_target: SearchTarget, results: List[SearchResult_01], temp: float = 0.0) -> SearchTargetResult:
+async def call_chatgpt_02(search_target: SearchTarget, results: List[SearchResult_01], temp: float = 0.0) -> SearchTargetResult:
 
     system_prompt = """
     You are a precise assistant who answers the following in **strict JSON format**:
@@ -166,8 +166,8 @@ def call_chatgpt_02(search_target: SearchTarget, results: List[SearchResult_01],
 # Functions
 ####################
 async def call_chatgpt(user_prompt: str, search_target: SearchTarget, temp: float = 0.5):
-    result_01 = call_chatgpt_01(user_prompt = user_prompt, temp = temp)
-    result_02 = call_chatgpt_02(search_target = search_target, results = result_01.results)
+    result_01 = await call_chatgpt_01(user_prompt = user_prompt, temp = temp)
+    result_02 = await call_chatgpt_02(search_target = search_target, results = result_01.results)
     return result_02
 
 # Helper async function
@@ -222,7 +222,8 @@ async def ai_search(request: SearchRequest):
             tasks.append(
                 run_llm_call(prompt, target, epoch, temp)
             )
-            results = await asyncio.gather(*tasks)
+        
+        results = await asyncio.gather(*tasks)
             
 
             # gemini
