@@ -114,7 +114,7 @@ class SearchTargetResult(BaseModel):
     search_target_found: bool
     search_target_rank: Optional[int] = None
 
-async def call_chatgpt_02(search_target: SearchTarget, results: List[SearchResult_01], temp: float = 0.0) -> SearchTargetResult:
+async def call_chatgpt_02(search_target: SearchTarget, results: List[SearchResult_01], temp: float = 0.3) -> SearchTargetResult:
 
     system_prompt = """
     You are a precise assistant who answers the following in **strict JSON format**:
@@ -123,6 +123,8 @@ async def call_chatgpt_02(search_target: SearchTarget, results: List[SearchResul
       "search_target_found": true | false,
       "rank": integer | null
     }
+
+    You are comparing a list of search results against a search target. Consider name, description, and URL, and allow for small variations.
 
     Rules:
     - If the target is found, set "search_target_found" to true and "rank" to the integer rank where it appears.
