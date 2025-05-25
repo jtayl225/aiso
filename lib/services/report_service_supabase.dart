@@ -1,9 +1,15 @@
+import 'dart:convert';
+
 import 'package:aiso/models/prompt_model.dart';
 import 'package:aiso/models/prompt_template_model.dart';
+import 'package:aiso/models/purchase_enum.dart';
 import 'package:aiso/models/report_model.dart';
 import 'package:aiso/models/report_results.dart';
+import 'package:aiso/models/reports/prompt_result_model.dart';
+import 'package:aiso/models/reports/report_run_model.dart';
 import 'package:aiso/models/search_target_model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
 
 class ReportServiceSupabase {
@@ -81,6 +87,25 @@ class ReportServiceSupabase {
     }
   }
 
+  Future<List<ReportRun>> fetchReportRuns(String reportId) async {
+    debugPrint('DEBUG: Service is fetching all report runs for userId: $reportId');
+    final response = await _supabase
+      .from('report_runs')
+      .select('*')
+      .eq('report_id', reportId)
+      .eq('status', 'completed')
+      .isFilter('deleted_at', null);
+
+    // Inspect the response to see its structure
+    // debugPrint('Response: $response');
+
+    final List<ReportRun> reportRuns = (response as List).map((item) {
+      return ReportRun.fromJson(item);
+    }).toList();
+
+    return reportRuns;
+  }
+
   // REPORT RESULTS //
   Future<List<ReportResult>> fetchReportResults(String reportId) async {
     debugPrint('DEBUG: Service is fetching all report results For reportId: $reportId');
@@ -111,28 +136,114 @@ class ReportServiceSupabase {
     return searchTarget;
   }
 
-  Future<void> runReport(String reportId) async {
-    final supabase = Supabase.instance.client;
-    // final session = supabase.auth.currentSession;
+  // Future<void> runReport(String reportId) async {
+  //   final supabase = Supabase.instance.client;
+  //   // final session = supabase.auth.currentSession;
 
-    final response = await supabase.functions.invoke(
-      'run-report',
-      method: HttpMethod.post,
-      // headers: {
-      //   'Authorization': 'Bearer ${session?.accessToken}',
-      //   'Content-Type': 'application/json',
-      // },
-      // body: {'name': 'Functions'}
-      body: {'reportId': reportId, 'name': 'Functions'}
+  //   final response = await supabase.functions.invoke(
+  //     'run-report',
+  //     method: HttpMethod.post,
+  //     // headers: {
+  //     //   'Authorization': 'Bearer ${session?.accessToken}',
+  //     //   'Content-Type': 'application/json',
+  //     // },
+  //     // body: {'name': 'Functions'}
+  //     body: {'reportId': reportId, 'name': 'Functions'}
+  //     );
+
+  //   if (response.status == 200) {
+  //     final data = response.data;
+  //     debugPrint('DEBUG: Function response: $data');
+  //   } else {
+  //     debugPrint('DEBUG: Function error (${response.status}): ${response.data}');
+  //   }
+  // }
+
+  Future<void> runReport(String reportId) async {
+    final url = Uri.parse('https://app-kyeo.onrender.com/run-task'); // Replace with the correct path if needed
+
+    try {
+      final response = await http.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          'report_id': reportId,
+        }),
       );
 
-    if (response.status == 200) {
-      final data = response.data;
-      debugPrint('DEBUG: Function response: $data');
-    } else {
-      debugPrint('DEBUG: Function error (${response.status}): ${response.data}');
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        debugPrint('DEBUG: Render response: $data');
+      } else {
+        debugPrint('DEBUG: Render error (${response.statusCode}): ${response.body}');
+      }
+    } catch (e) {
+      debugPrint('DEBUG: Network error: $e');
     }
   }
+
+  Future<String?> generateCheckoutUrl(ProductType purchaseType, {String? reportId}) async {
+    try {
+      final accessToken = _supabase.auth.currentSession?.accessToken;
+      if (accessToken == null) {
+        debugPrint('DEBUG: No access token found. User might not be logged in.');
+        return null;
+      }
+
+      final response = await _supabase.functions.invoke(
+        'stripe-generate-checkout-url',
+        body: {'productType': purchaseType.value, 'report_id': reportId},
+        headers: {
+          'Authorization': 'Bearer $accessToken',
+        },
+      );
+
+      final data = response.data;
+      final checkoutUrl = data?['checkout_url'] as String?;
+
+      debugPrint('DEBUG: stripe-generate-checkout-url response: $data');
+      debugPrint('DEBUG: stripe-generate-checkout-url URL: $checkoutUrl');
+
+      return checkoutUrl;
+    } catch (e, stackTrace) {
+      debugPrint('DEBUG: handlePurchase error: $e');
+      debugPrint('DEBUG: Stack trace: $stackTrace');
+      return null;
+    }
+  }
+
+  Future<String?> generateBillingPortal() async {
+    try {
+      final accessToken = _supabase.auth.currentSession?.accessToken;
+      if (accessToken == null) {
+        debugPrint('DEBUG: No access token found. User might not be logged in.');
+        return null;
+      }
+
+      final response = await _supabase.functions.invoke(
+        'stripe-billing-portal',
+        body: {},
+        headers: {
+          'Authorization': 'Bearer $accessToken',
+        },
+      );
+
+      final data = response.data;
+      final url = data?['url'] as String?;
+
+      debugPrint('DEBUG: stripe-billing-portal response: $data');
+      debugPrint('DEBUG: stripe-billing-portal URL: $url');
+
+      return url;
+    } catch (e, stackTrace) {
+      debugPrint('DEBUG: billing portal error: $e');
+      debugPrint('DEBUG: Stack trace: $stackTrace');
+      return null;
+    }
+  }
+
 
 
   // SEARCH TARGET //
@@ -213,6 +324,18 @@ class ReportServiceSupabase {
     return insertedPrompts;
   }
 
+  Future<Prompt> fetchPrompt(String promptId) async {
+    debugPrint('DEBUG: Service is fetching prompt for promptId: $promptId');
+    final response = await _supabase
+      .from('prompts')
+      .select()
+      .eq('id', promptId)
+      .isFilter('deleted_at', null)
+      .single();
+    final Prompt prompt = Prompt.fromJson(response);
+    return prompt;
+  }
+
   Future<List<PromptTemplate>> fetchPromptTemplates() async {
     debugPrint('DEBUG: Service is fetching all prompt templates');
     final response = await _supabase
@@ -237,6 +360,26 @@ class ReportServiceSupabase {
         'updated_at': DateTime.now().toUtc().toIso8601String(),
       })
       .eq('id', prompt.id);
+  }
+
+  Future<List<PromptResult>> fetchPromptResults(String reportId, String runId, String promptId) async {
+    debugPrint('DEBUG: Service is fetching all prompt results for reportId: $reportId, runId: $runId');
+    final response = await _supabase
+      .from('prompt_results_vw')
+      .select()
+      .eq('report_id', reportId)
+      .eq('run_id', runId)
+      .eq('prompt_id', promptId)
+      .isFilter('deleted_at', null);
+
+    // Inspect the response to see its structure
+    // debugPrint('Response: $response');
+
+    final List<PromptResult> promptResults = (response as List).map((item) {
+      return PromptResult.fromJson(item);
+    }).toList();
+
+    return promptResults;
   }
 
 

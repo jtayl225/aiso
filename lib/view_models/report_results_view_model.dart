@@ -1,3 +1,4 @@
+import 'package:aiso/models/purchase_enum.dart';
 import 'package:aiso/models/report_results.dart';
 import 'package:aiso/models/search_target_model.dart';
 import 'package:aiso/services/report_service_supabase.dart';
@@ -68,5 +69,40 @@ class ReportResultsViewModel extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Future<String?> generateCheckoutUrl(ProductType productType) async {
+    isLoading = true;
+    notifyListeners();
+
+    try {
+      debugPrint('DEBUG: view model about to call handle-stripe-purchase edge function');
+      final String? url = await _reportService.generateCheckoutUrl(productType);
+      return url; // Let the UI handle launching
+    } catch (e) {
+      _handleError(e);
+      return null;
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<String?> generateBillingPortal() async {
+    isLoading = true;
+    notifyListeners();
+
+    try {
+      debugPrint('DEBUG: view model about to call generateBillingPortal edge function');
+      final String? url = await _reportService.generateBillingPortal();
+      return url; // Let the UI handle launching
+    } catch (e) {
+      _handleError(e);
+      return null;
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
+
 
 }

@@ -7,6 +7,7 @@ class ReportResult {
   final LLM llm;
   final int alpha;
   final int n;
+  final double? meanRank;
 
   ReportResult({
     required this.reportId,
@@ -15,6 +16,7 @@ class ReportResult {
     required this.llm, 
     required this.alpha, 
     required this.n, 
+    this.meanRank, 
     });
 
   double get pct => n != 0 ? alpha / n : 0;  // returns 0 if n is zero to avoid division by zero
@@ -29,6 +31,7 @@ class ReportResult {
       llm: LLMParsing.fromString(json['llm'] as String),
       alpha: json['alpha'] as int,
       n: json['n'] as int,
+      meanRank: json['mean_rank'] != null ? double.tryParse(json['mean_rank'].toString()) : null,
     );
   }
 
@@ -41,6 +44,7 @@ class ReportResult {
       'llm': llm.name,  // enum to string
       'alpha': alpha,
       'n': n,
+      'mean_rank': meanRank
     };
   }
 

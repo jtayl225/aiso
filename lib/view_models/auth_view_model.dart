@@ -4,6 +4,7 @@ import '../models/auth_state_enum.dart';
 import '../models/user_model.dart';
 
 class AuthViewModel extends ChangeNotifier {
+  bool isSubscribed = false;
   final AuthServiceSupabase _authService = AuthServiceSupabase();
 
   // State variables

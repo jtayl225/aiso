@@ -217,15 +217,42 @@
 //   }
 // }
 
+
+
+import 'package:aiso/constants/app_colors.dart';
+import 'package:aiso/constants/string_constants.dart';
+import 'package:aiso/models/purchase_enum.dart';
 import 'package:aiso/models/report_model.dart';
 import 'package:aiso/models/search_target_type_enum.dart';
 import 'package:aiso/models/report_results.dart';
+import 'package:aiso/view_models/auth_view_model.dart';
 import 'package:aiso/view_models/report_results_view_model.dart';
 import 'package:aiso/view_models/reports_view_model.dart';
+import 'package:aiso/views/plots/BlurredOverlay.dart';
+import 'package:aiso/views/plots/ProportionCircle.dart';
 import 'package:aiso/views/reports/line_chart.dart';
+import 'package:aiso/views/reports/prompt_result_screen.dart';
 import 'package:aiso/views/reports/reports_editor_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+class LLMData {
+  final String name;
+  final String logo;
+  final double accuracy;
+  final double rank;
+  final bool isBlurred;
+
+  LLMData({
+    required this.name,
+    required this.logo,
+    required this.accuracy,
+    required this.rank,
+    required this.isBlurred,
+  });
+}
+
 
 class ReportResultsScreen extends StatefulWidget {
   final String reportId;
@@ -259,12 +286,32 @@ class _ReportResultsScreenState extends State<ReportResultsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final authViewModel = context.watch<AuthViewModel>();
     final reportViewModel = context.watch<ReportViewModel>();
     final resultsViewModel = context.watch<ReportResultsViewModel>();
 
     final Report? report = reportViewModel.getReportById(widget.reportId);
     final results = resultsViewModel.results;
     final searchTarget = resultsViewModel.searchTarget;
+    final isSubscribed = authViewModel.isSubscribed;
+
+    final llms = [
+      LLMData(
+        name: "chatGPT",
+        logo: "assets/OpenAI-black-monoblossom.png",
+        accuracy: 0.85,
+        rank: 3.7,
+        isBlurred: false,
+      ),
+      LLMData(
+        name: "Gemini",
+        logo: "assets/gemini_icon.png",
+        accuracy: 0.72,
+        rank: 4.1,
+        isBlurred: true,
+      ),
+    ];
+
 
     if (report == null) {
       return const Scaffold(
@@ -290,77 +337,255 @@ class _ReportResultsScreenState extends State<ReportResultsScreen> {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildActionButtons(resultsViewModel, report.id),
-              const SizedBox(height: 24),
-              _buildSearchTargetInfo(context, searchTarget),
-              const SizedBox(height: 24),
-              Text("Line chart - Timeseries"),
+      body: ScrollConfiguration(
+        behavior: ScrollConfiguration.of(context).copyWith(overscroll: false),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+
+                _buildActionButtons(context, resultsViewModel, report.id),
+
+                const SizedBox(height: 24),
+
+                _buildSearchTargetInfo(context, searchTarget),
+
+                const SizedBox(height: 24),
         
-              Center(
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: ConstrainedBox(
-                          constraints: BoxConstraints(
-                            maxWidth: 300,  // maximum width
-                            maxHeight: 300, // maximum height
-                          ),
-                          child: AspectRatio(
-                            aspectRatio: 1.5,
-                            child: DateLineChart(),
-                          ),
-                        ),              
-                      ),
-
-                      const SizedBox(height: 8),
-
-                      Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: ConstrainedBox(
-                          constraints: BoxConstraints(
-                            maxWidth: 300,  // maximum width
-                            maxHeight: 300, // maximum height
-                          ),
-                          child: AspectRatio(
-                            aspectRatio: 1.5,
-                            child: DateLineChart(),
+        
+                Text('Summary', style: Theme.of(context).textTheme.titleMedium),
+                const SizedBox(height: 8),
+                // Text("Plots"),
+        
+                Center(
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        // Label Column
+                        SizedBox(
+                          height: 278,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: const [
+                              SizedBox(height: 84),
+                              Text('% Top 10'),
+                              Spacer(),
+                              Text('Average Rank'),
+                              SizedBox(height: 50),
+                            ],
                           ),
                         ),
-                                        
-                      ),
-                    ],
+                    
+                        const SizedBox(width: 16), // space between label and cards
+                    
+                        _llmPerformanceCard(
+                          logoImage: "assets/OpenAI-black-monoblossom.png",
+                          llmName: "chatGPT",
+                          accuracy: 0.85,
+                          rank: 3.7,
+                          isBlurred: false,
+                        ),
+                        _llmPerformanceCard(
+                          logoImage: "assets/gemini_icon.png",
+                          llmName: "Gemini",
+                          accuracy: 0.72,
+                          rank: 4.1,
+                          isBlurred: !isSubscribed,
+                        ),
+                         _llmPerformanceCard(
+                          logoImage: "assets/gemini_icon.png",
+                          llmName: "Gemini",
+                          accuracy: 0.72,
+                          rank: 4.1,
+                          isBlurred: !isSubscribed,
+                        ),
+                         _llmPerformanceCard(
+                          logoImage: "assets/gemini_icon.png",
+                          llmName: "Gemini",
+                          accuracy: 0.72,
+                          rank: 4.1,
+                          isBlurred: !isSubscribed,
+                        ),
+                         _llmPerformanceCard(
+                          logoImage: "assets/gemini_icon.png",
+                          llmName: "Gemini",
+                          accuracy: 0.72,
+                          rank: 4.1,
+                          isBlurred: !isSubscribed,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              
-              const SizedBox(height: 24),
-              // Expanded(child: _buildDataTable(results)),
-               _buildDataTable(results)
-            ],
+        
+        
+                // Column(
+                //   crossAxisAlignment: CrossAxisAlignment.center,
+                //   children: [
+                //     Row(
+                //       mainAxisAlignment: MainAxisAlignment.center,
+                //       children: [
+                //         Image.asset(
+                //         logoImage,
+                //         width: 30.0,
+                //         height: 30.0,
+                //       ),
+                //         const SizedBox(width: 4),
+                //         Text("chatGPT"),
+                //       ],
+                //     ),
+                    
+                //     const SizedBox(height: 4),
+                    
+                //     BlurredOverlay(
+                //       isBlurred: false,
+                //       child: CustomPaint(
+                //         painter: RadialPainter(proportion: 0.85, backgroundColor: AppColors.color3),
+                //         child: Center(
+                //           child: Text("85%"),
+                //         ),
+                //       ),
+                //     ),
+                    
+                //     const SizedBox(height: 4),
+                    
+                //     BlurredOverlay(
+                //       isBlurred: false,
+                //       child: CustomPaint(
+                //         painter: RadialPainter(proportion: ((10+1) - 3.7) / 10, backgroundColor: AppColors.color3),
+                //         child: Center(
+                //           child: Text("#3.7"),
+                //         ),
+                //       ),
+                //     ),
+                //   ],
+                // ),
+        
+        
+        
+        
+          
+                // Center(
+                //   child: SingleChildScrollView(
+                //     scrollDirection: Axis.horizontal,
+                //     child: Row(
+                //       mainAxisAlignment: MainAxisAlignment.center,
+                //       children: [
+                //         Padding(
+                //           padding: const EdgeInsets.all(16.0),
+                //           child: ConstrainedBox(
+                //             constraints: BoxConstraints(
+                //               maxWidth: 300,  // maximum width
+                //               maxHeight: 300, // maximum height
+                //             ),
+                //             child: AspectRatio(
+                //               aspectRatio: 1.5,
+                //               child: DateLineChart(),
+                //             ),
+                //           ),              
+                //         ),
+        
+                //         const SizedBox(height: 8),
+        
+                //         Padding(
+                //           padding: const EdgeInsets.all(16.0),
+                //           child: ConstrainedBox(
+                //             constraints: BoxConstraints(
+                //               maxWidth: 300,  // maximum width
+                //               maxHeight: 300, // maximum height
+                //             ),
+                //             child: AspectRatio(
+                //               aspectRatio: 1.5,
+                //               child: DateLineChart(),
+                //             ),
+                //           ),
+                                          
+                //         ),
+                //       ],
+                //     ),
+                //   ),
+                // ),
+                
+                const SizedBox(height: 24),
+                // Expanded(child: _buildDataTable(results)),
+                Text('Summary Table', style: Theme.of(context).textTheme.titleMedium),
+                const SizedBox(height: 8),
+
+                 _buildDataTable(results)
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  Widget _buildActionButtons(ReportResultsViewModel viewModel, String reportId) {
+  Future<void> launchCheckoutUrl(BuildContext context, String? checkoutUrl) async {
+    if (checkoutUrl == null) return;
+
+    final Uri url = Uri.parse(checkoutUrl);
+
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url, mode: LaunchMode.externalApplication);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Could not launch checkout')),
+      );
+    }
+  }
+
+  Widget _buildActionButtons(BuildContext context, ReportResultsViewModel viewModel, String reportId) {
     return Row(
       children: [
+
+         ElevatedButton(
+          onPressed: () async {
+            final billingUrl = await viewModel.generateBillingPortal();
+            launchCheckoutUrl(context, billingUrl);
+
+          },
+          child: const Text('Test billing portal', style: TextStyle(color: Colors.black),),
+        ),
+        const SizedBox(width: 16),
+
+        ElevatedButton(
+          onPressed: () async {
+            final checkoutUrl = await viewModel.generateCheckoutUrl(ProductType.PURCHASE);
+            launchCheckoutUrl(context, checkoutUrl);
+
+          },
+          child: const Text('Test one-off purchase', style: TextStyle(color: Colors.black),),
+        ),
+        const SizedBox(width: 16),
+
+        ElevatedButton(
+          onPressed: () async {
+            final checkoutUrl = await viewModel.generateCheckoutUrl(ProductType.SUBSCRIBE_MONTHLY);
+            launchCheckoutUrl(context, checkoutUrl);
+          },
+          child: const Text('Test monthly subscription', style: TextStyle(color: Colors.black),),
+        ),
+        const SizedBox(width: 16),
+
+        ElevatedButton(
+          onPressed: () async {
+            final checkoutUrl = await viewModel.generateCheckoutUrl(ProductType.SUBSCRIBE_YEARLY);
+            launchCheckoutUrl(context, checkoutUrl);
+          },
+          child: const Text('Test yearly subscription', style: TextStyle(color: Colors.black),),
+        ),
+        const SizedBox(width: 16),
+
         ElevatedButton(
           onPressed: () async {
             await viewModel.runReport(reportId);
           },
-          child: const Text('Run Report'),
+          child: const Text('Run Report', style: TextStyle(color: Colors.black),),
         ),
         const SizedBox(width: 16),
         if (viewModel.isLoading) ...[
@@ -379,10 +604,10 @@ class _ReportResultsScreenState extends State<ReportResultsScreen> {
   Widget _buildSearchTargetInfo(BuildContext context, searchTarget) {
     if (searchTarget == null) return const SizedBox.shrink();
 
-    debugPrint('searchTarget: $searchTarget');
-    debugPrint('searchTarget.type: ${searchTarget.type}');
-    debugPrint('searchTarget.type.runtimeType: ${searchTarget.type.runtimeType}');
-    debugPrint('searchTarget.type == null: ${searchTarget.type == null}');
+    // debugPrint('searchTarget: $searchTarget');
+    // debugPrint('searchTarget.type: ${searchTarget.type}');
+    // debugPrint('searchTarget.type.runtimeType: ${searchTarget.type.runtimeType}');
+    // debugPrint('searchTarget.type == null: ${searchTarget.type == null}');
     // debugPrint(SearchTargetType.business.label);
 
     // Force extension usage to avoid Dart import pruning
@@ -416,14 +641,38 @@ class _ReportResultsScreenState extends State<ReportResultsScreen> {
             _buildColumn('Alpha', results, (d) => d.alpha),
             _buildColumn('N', results, (d) => d.n),
             _buildColumn('%', results, (d) => d.pct),
+            _buildColumn('Rank', results, (d) => d.meanRank ?? 11.0),
           ],
           rows: results.map((r) {
-            return DataRow(cells: [
-              DataCell(Text(r.prompt)),
+            return DataRow(
+              // onSelectChanged: (_) {
+              //   Navigator.push(
+              //     context,
+              //     MaterialPageRoute(
+              //       builder: (_) => PromptResultsScreen(reportId: r.reportId),
+              //     ),
+              //   );
+              // },
+              cells: [
+              // DataCell(Text(r.prompt)),
+              DataCell(
+                InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => PromptResultsScreen(reportId: r.reportId, promptId: r.promptId),
+                      ),
+                    );
+                  },
+                  child: Text(r.prompt),
+                ),
+              ),
               DataCell(Text(r.llm.name)),
               DataCell(Text(r.alpha.toString())),
               DataCell(Text(r.n.toString())),
               DataCell(Text(r.pctString)),
+              DataCell(Text(r.meanRank != null ? r.meanRank!.toStringAsFixed(1) : '-')),
             ]);
           }).toList(),
         ),
@@ -445,7 +694,252 @@ class _ReportResultsScreenState extends State<ReportResultsScreen> {
   }
 
   int _getColumnIndex(String label) {
-    const labels = ['Prompt', 'LLM', 'Alpha', 'N', '%'];
+    const labels = ['Prompt', 'LLM', 'Alpha', 'N', '%', 'Rank'];
     return labels.indexOf(label);
   }
+
+  // Widget _buildUpgradeOption({
+  //   required String title,
+  //   required String price,
+  //   required String markedUp,
+  //   required VoidCallback onTap,
+  // }) {
+  //   return GestureDetector(
+  //     onTap: onTap,
+  //     child: Container(
+  //       padding: const EdgeInsets.all(12),
+  //       width: 100,
+  //       decoration: BoxDecoration(
+  //         color: Colors.grey[100],
+  //         border: Border.all(color: Colors.blueAccent),
+  //         borderRadius: BorderRadius.circular(12),
+  //       ),
+  //       child: Column(
+  //         children: [
+  //           Text(
+  //             title,
+  //             style: const TextStyle(fontWeight: FontWeight.bold),
+  //           ),
+  //           const SizedBox(height: 4),
+  //           Text(
+  //             price,
+  //             style: const TextStyle(
+  //               fontSize: 16,
+  //               fontWeight: FontWeight.w600,
+  //               color: Colors.green,
+  //             ),
+  //           ),
+  //           Text(
+  //             markedUp,
+  //             style: const TextStyle(
+  //               fontSize: 12,
+  //               color: Colors.grey,
+  //               decoration: TextDecoration.lineThrough,
+  //             ),
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
+
+  Widget _buildUpgradeOption({
+    required String title,
+    required String price,
+    required String markedUp,
+    required VoidCallback onTap,
+  }) {
+    return Material(
+      color: Colors.grey[100],
+      borderRadius: BorderRadius.circular(12),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(12),
+        hoverColor: Colors.blue[50], // subtle background on hover
+        splashColor: Colors.blue.withOpacity(0.2), // ripple effect
+        child: Container(
+          width: 100,
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.blueAccent),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Column(
+            children: [
+              Text(
+                title,
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                price,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.green,
+                ),
+              ),
+              Text(
+                markedUp,
+                style: const TextStyle(
+                  fontSize: 12,
+                  color: Colors.grey,
+                  decoration: TextDecoration.lineThrough,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+
+  Widget _llmPerformanceCard({
+    required String logoImage,
+    required String llmName,
+    required double accuracy,
+    required double rank,
+    required bool isBlurred,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                logoImage,
+                width: 30.0,
+                height: 30.0,
+              ),
+              const SizedBox(width: 4),
+              Text(llmName),
+            ],
+          ),
+          const SizedBox(height: 4),
+          BlurredOverlay(
+            isBlurred: false, // isBlurred,
+            child: CustomPaint(
+              painter: RadialPainter(
+                proportion: accuracy,
+                backgroundColor: AppColors.white,
+              ),
+              child: Center(child: Text("${(accuracy * 100).toStringAsFixed(0)}%")),
+            ),
+          ),
+
+          const SizedBox(height: 4),
+
+          BlurredOverlay(
+            isBlurred: isBlurred,
+            onTap: () {
+              // showDialog(
+              //   context: context,
+              //   builder: (_) => AlertDialog(
+              //     title: const Text("Upgrade"),
+              //     content: const Text("Purchase report for \$19.95 or subscribe for \$9.95/month."),
+              //     actions: [
+              //       TextButton(
+              //         onPressed: () => Navigator.pop(context),
+              //         child: const Text("Later"),
+              //       ),
+              //       ElevatedButton(
+              //         onPressed: () {
+              //           Navigator.pop(context);
+              //           // Navigate to upgrade screen or page
+              //         },
+              //         child: const Text("Upgrade Now"),
+              //       ),
+              //     ],
+              //   ),
+              // );
+              showDialog(
+                context: context,
+                builder: (_) => AlertDialog(
+                  title: const Text("Upgrade"),
+                  content: ScrollConfiguration(
+                    behavior: ScrollConfiguration.of(context).copyWith(overscroll: false),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text("Choose your plan:"),
+                          const SizedBox(height: 16),
+                          SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Row(
+                              children: [
+                                _buildUpgradeOption(
+                                  title: "One-Off",
+                                  price: "\$19.99",
+                                  markedUp: "\$24.99",
+                                  onTap: () async {
+                                    Navigator.pop(context);
+                                    final viewModel = context.read<ReportResultsViewModel>();
+                                    final checkoutUrl = await viewModel.generateCheckoutUrl(ProductType.PURCHASE);
+                                    launchCheckoutUrl(context, checkoutUrl);
+                                  },
+                                ),
+                                const SizedBox(width: 8),
+                                _buildUpgradeOption(
+                                  title: "Monthly",
+                                  price: "\$9.99",
+                                  markedUp: "\$14.99",
+                                  onTap: () async {
+                                    Navigator.pop(context);
+                                    final viewModel = context.read<ReportResultsViewModel>();
+                                    final checkoutUrl = await viewModel.generateCheckoutUrl(ProductType.SUBSCRIBE_MONTHLY);
+                                    launchCheckoutUrl(context, checkoutUrl);
+                                  },
+                                ),
+                                const SizedBox(width: 8),
+                                _buildUpgradeOption(
+                                  title: "Yearly",
+                                  price: "\$99.99",
+                                  markedUp: "\$149.99",
+                                  onTap: () async {
+                                    Navigator.pop(context);
+                                    final viewModel = context.read<ReportResultsViewModel>();
+                                    final checkoutUrl = await viewModel.generateCheckoutUrl(ProductType.SUBSCRIBE_YEARLY);
+                                    launchCheckoutUrl(context, checkoutUrl);
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text("Later"),
+                    ),
+                  ],
+                ),
+              );
+
+
+
+            },
+            child: CustomPaint(
+              painter: RadialPainter(
+                proportion: (10 + 1 - rank) / 10,
+                backgroundColor: AppColors.white,
+              ),
+              child: Center(child: Text("#${rank.toStringAsFixed(1)}")),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+
+
+
 }

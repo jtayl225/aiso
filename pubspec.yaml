@@ -39,6 +39,8 @@ dependencies:
   supabase_flutter: ^2.8.4
   google_fonts: ^6.2.1
   fl_chart: ^1.0.0
+  http: ^1.4.0
+  url_launcher: ^6.3.1
 
 dev_dependencies:
   flutter_test:
@@ -64,8 +66,15 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/dummy_logo.png
-    - assets/large_aiso_logo.png
+    - assets/
+    # - assets/dummy_logo.png
+    # - assets/large_aiso_logo.png
+    # - assets/OpenAI-black-monoblossom.png
+    # - assets/gemini_icon.png
+
+    
+
+    
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -33,5 +33,23 @@ class DbTimestamps {
     );
   }
 
+  factory DbTimestamps.fromJson(Map<String, dynamic> json) {
+    return DbTimestamps(
+      createdAt: DateTime.parse(json['created_at']),
+      updatedAt: DateTime.parse(json['updated_at']),
+      deletedAt: json['deleted_at'] != null ? DateTime.parse(json['deleted_at']) : null,
+      archivedAt: json['archived_at'] != null ? DateTime.parse(json['archived_at']) : null,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'created_at': createdAt.toIso8601String(),
+      'updated_at': updatedAt.toIso8601String(),
+      if (deletedAt != null) 'deleted_at': deletedAt!.toIso8601String(),
+      if (archivedAt != null) 'archived_at': archivedAt!.toIso8601String(),
+    };
+  }
+
 }
 

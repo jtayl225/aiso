@@ -1,5 +1,6 @@
 import 'package:aiso/models/prompt_model.dart';
 import 'package:aiso/models/prompt_template_model.dart';
+import 'package:aiso/models/purchase_enum.dart';
 import 'package:aiso/models/report_model.dart';
 import 'package:aiso/models/search_target_model.dart';
 import 'package:aiso/services/report_service_supabase.dart';
@@ -12,6 +13,14 @@ class ReportViewModel extends ChangeNotifier {
   bool isLoading = false;
   String? errorMessage;
   final ReportServiceSupabase _reportService = ReportServiceSupabase();
+
+  void clearReports() {
+    reports = [];
+    promptTemplates = [];
+    errorMessage = null;
+    isLoading = false;
+    notifyListeners();
+  }
 
   void _handleError(Object error, [StackTrace? stackTrace]) {
     errorMessage = error.toString();
@@ -275,6 +284,23 @@ class ReportViewModel extends ChangeNotifier {
     } catch (e) {
       _handleError(e);
       return false;
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<String?> generateCheckoutUrl(ProductType productType) async {
+    isLoading = true;
+    notifyListeners();
+
+    try {
+      debugPrint('DEBUG: view model about to call handle-stripe-purchase edge function');
+      final String? url = await _reportService.generateCheckoutUrl(productType);
+      return url; // Let the UI handle launching
+    } catch (e) {
+      _handleError(e);
+      return null;
     } finally {
       isLoading = false;
       notifyListeners();

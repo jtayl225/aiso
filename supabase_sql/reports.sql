@@ -1,3 +1,14 @@
+-- create users table
+CREATE TABLE users (
+  user_id uuid PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+  stripe_customer_id text DEFAULT NULL,
+  email text NOT NULL,
+  created_at timestamp with time zone DEFAULT now(),
+  updated_at timestamp with time zone DEFAULT now(),
+  deleted_at timestamp with time zone
+);
+
+
 -- Create enum type
 CREATE TYPE cadence AS ENUM ('hour', 'day', 'week', 'month');
 
@@ -84,7 +95,8 @@ CREATE TABLE report_runs (
   status text NOT NULL CHECK (status IN ('pending', 'running', 'completed', 'failed')),
   error_message text,
   created_at timestamp with time zone DEFAULT now(),
-  updated_at timestamp with time zone DEFAULT now()
+  updated_at timestamp with time zone DEFAULT now(),
+  deleted_at timestamp with time zone
 );
 
 CREATE INDEX idx_report_runs_report_id_status ON report_runs(report_id, status);
@@ -114,14 +126,45 @@ CREATE TABLE report_results (
   epoch INT NOT NULL,
   temperature DOUBLE PRECISION NOT NULL,
   llm llm NOT NULL,
-  result_json jsonb,
+  llm_model TEXT NOT NULL DEFAULT 'unknown',
   search_target_found BOOL NOT NULL,
   search_target_rank INT,
+  result_json jsonb,
   created_at timestamp with time zone DEFAULT now(),
   updated_at timestamp with time zone DEFAULT now(),
   deleted_at timestamp with time zone,
   UNIQUE (run_id, report_id, prompt_id, epoch, llm)
 );
+
+
+CREATE TYPE entity_type AS ENUM ('product', 'service', 'business', 'person');
+
+CREATE TABLE prompt_search_results (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  run_id uuid REFERENCES public.report_runs(id) ON DELETE CASCADE,
+  report_id uuid REFERENCES public.reports(id) ON DELETE CASCADE,
+  prompt_id uuid REFERENCES public.prompts(id) ON DELETE CASCADE,
+  epoch INT NOT NULL,
+  llm llm NOT NULL,
+  -- entity details:
+  entity_type entity_type NOT NULL, 
+  rank INT NOT NULL,
+  name text NOT NULL,
+  description text NOT NULL,
+  url text, -- optional
+  -- result_json jsonb,
+  created_at timestamp with time zone DEFAULT now(),
+  updated_at timestamp with time zone DEFAULT now(),
+  deleted_at timestamp with time zone,
+);
+
+ALTER TABLE prompt_search_results
+DROP CONSTRAINT prompt_search_results_unique_key;
+
+ALTER TABLE prompt_search_results
+ADD CONSTRAINT prompt_search_results_unique_key
+UNIQUE (run_id, report_id, prompt_id, epoch, llm, rank);
+
 
 CREATE OR REPLACE VIEW report_results_summary_vw AS
 SELECT
@@ -130,7 +173,8 @@ SELECT
   b.prompt,
   a.llm,
   SUM(CASE WHEN a.search_target_found THEN 1 ELSE 0 END) AS alpha,
-  COUNT(*) AS n
+  COUNT(*) AS n,
+  AVG(CASE WHEN a.search_target_found THEN a.search_target_rank END) AS mean_rank
 FROM report_results AS a
 INNER JOIN prompts AS b
   ON a.report_id = b.report_id
@@ -163,5 +207,36 @@ BEGIN
   );
 END;
 $$ LANGUAGE plpgsql STABLE;
+
+
+-- subscriptions
+CREATE TABLE subscriptions (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+
+  -- Foreign key to your internal user
+  user_id uuid REFERENCES users(user_id) ON DELETE CASCADE,
+
+  -- Stripe references
+  stripe_customer_id text NOT NULL,
+  stripe_subscription_id text UNIQUE NOT NULL,
+  stripe_price_id text,
+  stripe_product_id text,
+  stripe_quantity int,
+
+  -- Stripe status (e.g., active, trialing, canceled)
+  stripe_status text NOT NULL,
+
+  -- Key stripe timestamps 
+  stripe_created timestamptz NOT NULL DEFAULT now(),
+  stripe_start_date  timestamptz NOT NULL, -- change from current_period_start
+  stripe_ended_at timestamptz, -- current_period_end, can be NULL
+  stripe_cancel_at timestamptz,
+  stripe_canceled_at timestamptz,
+
+  -- Metadata
+  created_at timestamptz DEFAULT now(),
+  updated_at timestamptz DEFAULT now()
+);
+
 
 

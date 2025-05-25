@@ -55,7 +55,7 @@ class WelcomeScreen extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 24.0,
                     fontWeight: FontWeight.bold,
-                    color: AppColors.color1,
+                    color: AppColors.color2,
                   ),
                 ),
                 
@@ -95,7 +95,7 @@ class WelcomeScreen extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 14.0,
                               fontWeight: FontWeight.bold,
-                              color: AppColors.color1,
+                              color: AppColors.color2,
                             ),
                           ),
                         ),
@@ -119,7 +119,7 @@ class WelcomeScreen extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 14.0,
                               fontWeight: FontWeight.bold,
-                              color: AppColors.color1,
+                              color: AppColors.color2,
                             ),
                           ),
                         ),

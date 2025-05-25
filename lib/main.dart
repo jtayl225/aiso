@@ -42,8 +42,8 @@ class MyApp extends StatelessWidget {
         
         // Set primary swatch and other colors
         primaryColor: AppColors.color1,
-        scaffoldBackgroundColor: AppColors.color3,
-        canvasColor: AppColors.color4,
+        scaffoldBackgroundColor: AppColors.white,
+        canvasColor: AppColors.color3,
         colorScheme: ColorScheme(
           brightness: Brightness.light,
           primary: AppColors.color1,
@@ -52,7 +52,7 @@ class MyApp extends StatelessWidget {
           onSecondary: Colors.black,
           error: Colors.red,
           onError: Colors.white,
-          surface: AppColors.color4,
+          surface: AppColors.color3,
           onSurface: Colors.black,
         ),
       ),
