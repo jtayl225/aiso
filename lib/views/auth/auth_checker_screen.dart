@@ -14,17 +14,17 @@ class AuthChecker extends StatelessWidget {
     final authViewModel = context.watch<AuthViewModel>();
 
     switch (authViewModel.authState) {
-      case AuthState.initial:
+      case MyAuthState.initial:
         return const Scaffold(body: Center(child: CircularProgressIndicator()));
-      case AuthState.loading:
+      case MyAuthState.loading:
         return const Scaffold(body: Center(child: CircularProgressIndicator()));
-      case AuthState.anon:
+      case MyAuthState.anon:
         return const ReportsHomeScreen();
-      case AuthState.error:
+      case MyAuthState.error:
         return const Scaffold(body: Center(child: Text('An error occurred')));
-      case AuthState.authenticated:
+      case MyAuthState.authenticated:
         return const ReportsHomeScreen();
-      case AuthState.unauthenticated:
+      case MyAuthState.unauthenticated:
         return const AuthScreen();
     }
 

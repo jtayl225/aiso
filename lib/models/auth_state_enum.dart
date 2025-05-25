@@ -1,4 +1,4 @@
-enum AuthState {
+enum MyAuthState {
   initial,
   loading,
   anon,

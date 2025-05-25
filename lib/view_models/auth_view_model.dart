@@ -1,18 +1,21 @@
+import 'package:aiso/models/subscriptions_model.dart';
 import 'package:aiso/services/auth_service_supabase.dart';
 import 'package:flutter/foundation.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../models/auth_state_enum.dart';
 import '../models/user_model.dart';
 
 class AuthViewModel extends ChangeNotifier {
   bool isSubscribed = false;
   final AuthServiceSupabase _authService = AuthServiceSupabase();
+  RealtimeChannel? _subscriptionChannel;
 
   // State variables
   AuthScreenState _authScreenState = AuthScreenState.welcome;
   AuthScreenState get authScreenState => _authScreenState;
 
-  AuthState _authState = AuthState.initial;
-  AuthState get authState => _authState;
+  MyAuthState _authState = MyAuthState.initial;
+  MyAuthState get authState => _authState;
 
   UserModel? _currentUser;
   UserModel? get currentUser => _currentUser;
@@ -28,11 +31,32 @@ class AuthViewModel extends ChangeNotifier {
     checkAuthStatus();
   }
 
+  // subscribe to supabase
+  void subscribeToSubscriptionStatus() {
+    final userId = Supabase.instance.client.auth.currentUser?.id;
+    if (userId == null) return;
+
+    _subscriptionChannel = Supabase.instance.client
+        .channel('public:subscriptions')
+        .onPostgresChanges(
+          event: PostgresChangeEvent.update,
+          schema: 'public',
+          table: 'subscriptions',
+          filter: PostgresChangeFilter(type: PostgresChangeFilterType.eq, column: 'user_id', value: userId),
+          callback: (payload) {
+            final newValue = payload.newRecord['stripe_status'];
+            isSubscribed = newValue == 'active';
+            notifyListeners();
+          },
+        )
+        .subscribe();
+  }
+
   // Check authentication status
   Future<void> checkAuthStatus() async {
-    _authState = AuthState.loading;
+    _authState = MyAuthState.loading;
     notifyListeners();
-    _authState = AuthState.unauthenticated;
+    _authState = MyAuthState.unauthenticated;
 
     // // Use local session
     // final UserModel? currentUser = await _authService.getCurrentUser(); 
@@ -71,28 +95,33 @@ class AuthViewModel extends ChangeNotifier {
 
   // Sign up
   Future<bool> signUp(String email, String password) async {
-    _authState = AuthState.loading;
+    _authState = MyAuthState.loading;
     _errorMessage = null;
     notifyListeners();
 
     try {
       final newUser = await _authService.signUp(email, password);
       if (newUser != null) {
+
         _currentUser = newUser;
-        _authState = AuthState.authenticated;
-        notifyListeners();
+        _authState = MyAuthState.authenticated;
+
+        final List<Subscription> subs = await _authService.fetchUserSubscriptions();
+        isSubscribed = subs.isNotEmpty;
+        subscribeToSubscriptionStatus();
+        
         return true;
       } else {
-        _authState = AuthState.unauthenticated;
+        _authState = MyAuthState.unauthenticated;
         _errorMessage = 'Sign up failed. Please try again.';
-        notifyListeners();
         return false;
       }
     } catch (e) {
-      _authState = AuthState.error;
+      _authState = MyAuthState.error;
       _errorMessage = e.toString();
-      notifyListeners();
       return false;
+    } finally {
+      notifyListeners();
     }
   }
 
@@ -100,22 +129,27 @@ class AuthViewModel extends ChangeNotifier {
 
   // Sign in
   Future<String?> signIn(String email, String password) async {
-    _authState = AuthState.loading;
+    _authState = MyAuthState.loading;
     notifyListeners();
 
     try {
       _currentUser = await _authService.signInWithEmailAndPassword(email, password);
-
+    
       if (_currentUser != null) {
-        _authState = AuthState.authenticated;
+        _authState = MyAuthState.authenticated;
         _isAnonymous = _authService.isAnonymous;
+
+        final List<Subscription> subs = await _authService.fetchUserSubscriptions();
+        isSubscribed = subs.isNotEmpty;
+        subscribeToSubscriptionStatus();
+
         return _currentUser!.id;
       } else {
-        _authState = AuthState.unauthenticated;
+        _authState = MyAuthState.unauthenticated;
         return null;
       }
     } catch (e) {
-      _authState = AuthState.unauthenticated;
+      _authState = MyAuthState.unauthenticated;
       debugPrint('Sign-in error: $e');
       return null;
     } finally {
@@ -127,18 +161,18 @@ class AuthViewModel extends ChangeNotifier {
   // Sign out
   Future<bool> signOut() async {
     try {
-      _authState = AuthState.loading;
+      _authState = MyAuthState.loading;
       notifyListeners();
 
       await _authService.signOut(); // Perform sign-out
 
       _currentUser = null;
-      _authState = AuthState.unauthenticated;
+      _authState = MyAuthState.unauthenticated;
       notifyListeners();
 
       return true; // ✅ Sign-out successful
     } catch (e) {
-      _authState = AuthState.error;
+      _authState = MyAuthState.error;
       notifyListeners();
       return false; // ❌ Sign-out failed
     }

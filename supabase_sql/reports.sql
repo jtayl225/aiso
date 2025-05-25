@@ -185,7 +185,37 @@ WHERE
 GROUP BY a.report_id, a.prompt_id, b.prompt, a.llm;
 
 
-
+-- prompts results view
+CREATE OR REPLACE VIEW prompt_results_vw AS
+SELECT
+  a.id,
+  a.report_id,
+  a.run_id,
+  a.prompt_id,
+  a.epoch,
+  a.llm,
+  a.entity_type,
+  a.rank,
+  a.name,
+  a.description,
+  CASE
+    WHEN b.search_target_found IS FALSE THEN FALSE
+    WHEN a.rank = b.search_target_rank THEN TRUE 
+    ELSE FALSE 
+  END AS is_target,
+  a.url,
+  a.created_at,
+  a.updated_at,
+  a.deleted_at
+FROM public.prompt_search_results as a
+INNER JOIN public.report_results as b
+  ON a.report_id = b.report_id
+  AND a.run_id = b.run_id
+  AND a.prompt_id = b.prompt_id
+  AND a.epoch = b.epoch
+  AND a.llm = b.llm
+ORDER BY a.epoch, a.rank
+;
 
 -- function to get reports to run
 CREATE OR REPLACE FUNCTION get_due_reports(current_time timestamp with time zone)
