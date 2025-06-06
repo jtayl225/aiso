@@ -6,6 +6,7 @@ import 'package:aiso/constants/string_constants.dart';
 import 'package:aiso/view_models/auth_view_model.dart';
 import 'package:aiso/view_models/reports_view_model.dart';
 import 'package:aiso/views/auth/auth_checker_screen.dart';
+import 'package:aiso/views/generate_free_report_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -152,13 +153,17 @@ class _WelcomeScreenState2 extends State<WelcomeScreen2> {
                 width: maxButtonWidth,
                 child: ElevatedButton(
                   onPressed: () {
-                    debugPrint("Continue as Guest pressed");
+                    debugPrint("DEBUG: Generate free report pressed!");
                     // TODO: Implement your guest logic here
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => AgentFormScreen()),
+                    );
                   },
                   style: ElevatedButton.styleFrom(
                     foregroundColor: Colors.black, // 👈 sets the text/icon color
                   ),
-                  child: const Text('Continue as Guest'),
+                  child: const Text('Generate free report!'),
                 ),
               ),
               const SizedBox(height: 24),
