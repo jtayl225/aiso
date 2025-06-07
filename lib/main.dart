@@ -1,15 +1,13 @@
 import 'package:aiso/Dashboards/views/dashboard_menu.dart';
 import 'package:aiso/Dashboards/views/dashboard_screen.dart';
 import 'package:aiso/Store/views/store_screen.dart';
-import 'package:aiso/constants/app_colors.dart';
 import 'package:aiso/reports/views/example_timeline_screen.dart';
 import 'package:aiso/themes/light_mode.dart';
 import 'package:aiso/view_models/auth_view_model.dart';
-import 'package:aiso/view_models/reports_view_model.dart';
+import 'package:aiso/reports/view_models/reports_view_model.dart';
 import 'package:aiso/views/auth/auth_checker_screen.dart';
-import 'package:aiso/views/reports/prompt_hash_view.dart';
+import 'package:aiso/reports/views/prompt_hash_view.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -42,28 +40,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'AI Search Optimisation',
       theme: lightMode,
-      // ThemeData(
-      //   // Set the default font family to Roboto Mono
-      //   textTheme: GoogleFonts.montserratTextTheme(Theme.of(context).textTheme),
-      //   // If you want to set it globally for app UI, you can also update the fontFamily directly like:
-      //   fontFamily: 'Montserrat',
-        
-      //   // Set primary swatch and other colors
-      //   primaryColor: AppColors.color1,
-      //   scaffoldBackgroundColor: AppColors.white,
-      //   canvasColor: AppColors.color3,
-      //   colorScheme: ColorScheme(
-      //     brightness: Brightness.light,
-      //     primary: AppColors.color1,
-      //     onPrimary: Colors.white,
-      //     secondary: AppColors.color2,
-      //     onSecondary: Colors.black,
-      //     error: Colors.red,
-      //     onError: Colors.white,
-      //     surface: AppColors.color3,
-      //     onSurface: Colors.black,
-      //   ),
-      // ),
       home: const ExampleTimelineScreen(), //AuthChecker(), // DashboardMenu(), // DashboardScreen(url: "https://www.wikipedia.org"), // StoreScreen(), //PromptHashScreen(), // AuthChecker(),  https://aiso-seyf.onrender.com 
     );
   }

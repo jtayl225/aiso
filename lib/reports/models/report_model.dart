@@ -9,6 +9,7 @@ class Report {
   final String userId;
   final String title;
   // final String description;
+  final bool isPaid;
   final Cadence cadence;
   List<Prompt>? prompts;
   SearchTarget? searchTarget;
@@ -21,6 +22,7 @@ class Report {
     required this.userId, 
     required this.title, 
     // required this.description,
+    required this.isPaid, 
     required this.cadence,
     this.prompts,
     this.searchTarget,
@@ -35,6 +37,7 @@ class Report {
       userId: json['user_id'] as String,
       title: json['title'] as String,
       // description: json['description'] as String,
+      isPaid: json['is_paid'] as bool,
       cadence: CadenceExtension.fromString(json['cadence'] as String),
       prompts: (json['prompts'] as List<dynamic>?)
         ?.map((item) => Prompt.fromJson(item))
@@ -57,6 +60,7 @@ class Report {
       'user_id': userId,
       'title': title,
       // 'description': description,
+      'is_paid': isPaid,
       'cadence': cadence.toJson()
     };
   }
@@ -66,6 +70,7 @@ class Report {
     String? userId,
     String? title,
     // String? description,
+    bool? isPaid,
     Cadence? cadence,
     List<Prompt>? prompts,
     SearchTarget? searchTarget,
@@ -78,6 +83,7 @@ class Report {
       userId: userId ?? this.userId,
       title: title ?? this.title,
       // description: description ?? this.description,
+      isPaid: isPaid ?? this.isPaid,
       cadence: cadence ?? this.cadence,
       // Clone the list if provided, else clone current if not null, else null
       prompts: prompts ?? (this.prompts != null ? List<Prompt>.from(this.prompts!) : null),

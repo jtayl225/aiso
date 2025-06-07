@@ -2,7 +2,7 @@ import 'package:aiso/Dashboards/views/dashboard_menu.dart';
 import 'package:aiso/models/auth_state_enum.dart';
 import 'package:aiso/view_models/auth_view_model.dart';
 import 'package:aiso/views/auth/auth_screen.dart';
-import 'package:aiso/views/reports/reports_home_screen.dart';
+import 'package:aiso/reports/views/reports_home_screen.dart';
 import 'package:aiso/views/todo_placeholder_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

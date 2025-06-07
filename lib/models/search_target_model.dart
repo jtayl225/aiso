@@ -1,11 +1,13 @@
 import 'package:aiso/models/db_timestamps_model.dart';
-import 'package:aiso/models/search_target_type_enum.dart';
+import 'package:aiso/models/entity_model.dart';
+import 'package:aiso/models/industry_model.dart';
 
 class SearchTarget {
   final String id;
   final String reportId;
   final String name;          // e.g. "New Balance 1080v13"
-  final SearchTargetType type;          // e.g. "Product", "Service", "Business", "Person"
+  final EntityType type;          // e.g. "Product", "Service", "Business", "Person"
+  final Industry industry;
   final String description;   // Use case, benefits, location, etc. go here
   final String? url;          // Optional link to a website or product page
   final DbTimestamps dbTimestamps;
@@ -15,6 +17,7 @@ class SearchTarget {
     required this.reportId,
     required this.name,
     required this.type,
+    required this.industry,
     required this.description,
     this.url,
     required this.dbTimestamps
@@ -25,7 +28,8 @@ class SearchTarget {
       id: json['id'],
       reportId: json['report_id'],
       name: json['name'],
-      type: SearchTargetTypeExtension.fromString(json['type']),
+      type: EntityTypeExtension.fromValue(json['type']),
+      industry: Industry.fromJson(json['industries']),
       description: json['description'],
       url: json['url'],
       dbTimestamps: DbTimestamps(
@@ -40,8 +44,9 @@ class SearchTarget {
     return {
       // 'id': id,
       'report_id': reportId,
-      'name': name,
+      'industry_id': industry.id,
       'type': type.name.toLowerCase(),
+      'name': name,
       'description': description,
       'url': url
     };
@@ -51,7 +56,8 @@ class SearchTarget {
     String? id,
     String? reportId,
     String? name,
-    SearchTargetType? type,
+    EntityType? type,
+    Industry? industry,
     String? description,
     String? url,
     DbTimestamps? dbTimestamps,
@@ -61,6 +67,7 @@ class SearchTarget {
       reportId: reportId ?? this.reportId,
       name: name ?? this.name,
       type: type ?? this.type,
+      industry: industry ?? this.industry,
       description: description ?? this.description,
       url: url ?? this.url,
       dbTimestamps: dbTimestamps ?? this.dbTimestamps,

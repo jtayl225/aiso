@@ -18,3 +18,10 @@ CREATE TYPE llm AS ENUM (
 CREATE TYPE entity_type AS ENUM ('product', 'service', 'business', 'person');
 
 CREATE TYPE cadence AS ENUM ('hour', 'day', 'week', 'month');
+
+CREATE TYPE processing_status AS ENUM (
+  'initialising',   -- or 'initializing' if you prefer US spelling
+  'running',        -- when the LLM calls are in flight
+  'completed',      -- happy-path finish
+  'failed'          -- any error case
+);

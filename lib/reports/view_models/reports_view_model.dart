@@ -1,7 +1,7 @@
 import 'package:aiso/models/prompt_model.dart';
 import 'package:aiso/models/prompt_template_model.dart';
 import 'package:aiso/models/purchase_enum.dart';
-import 'package:aiso/models/report_model.dart';
+import 'package:aiso/reports/models/report_model.dart';
 import 'package:aiso/models/search_target_model.dart';
 import 'package:aiso/services/report_service_supabase.dart';
 import 'package:flutter/material.dart';
@@ -274,12 +274,12 @@ class ReportViewModel extends ChangeNotifier {
     }
   }
 
-  Future<bool> runReport(String reportId) async {
+  Future<bool> runReport(Report report) async {
     isLoading = true;
     notifyListeners();
     try {
       debugPrint('DEBUG: view model about to call run-report edge function');
-      await _reportService.runReport(reportId);
+      await _reportService.runReport(report);
       return true;
     } catch (e) {
       _handleError(e);

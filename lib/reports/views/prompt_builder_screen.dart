@@ -1,7 +1,7 @@
 import 'package:aiso/models/db_timestamps_model.dart';
 import 'package:aiso/models/prompt_model.dart';
 import 'package:aiso/models/prompt_template_model.dart';
-import 'package:aiso/view_models/reports_view_model.dart';
+import 'package:aiso/reports/view_models/reports_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

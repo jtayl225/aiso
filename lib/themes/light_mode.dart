@@ -5,23 +5,53 @@ import 'package:google_fonts/google_fonts.dart';
 ThemeData lightMode = ThemeData(
   useMaterial3: true,
   textTheme: GoogleFonts.montserratTextTheme(),
-  // primaryColor: AppColors.color1,
-  scaffoldBackgroundColor: Colors.grey.shade100,
-  // canvasColor: AppColors.color3,
+  scaffoldBackgroundColor: Colors.white, //Colors.grey.shade100,
+
   colorScheme: ColorScheme.light(
-    brightness: Brightness.light, 
+    brightness: Brightness.light,
     primary: AppColors.color1,
     onPrimary: Colors.white,
     secondary: AppColors.color2,
     onSecondary: Colors.black,
     error: Colors.red,
     onError: Colors.white,
-    surface: AppColors.color3, // background
+    surface: Colors.white,
     onSurface: Colors.black,
-    primaryContainer: AppColors.color1.withValues(alpha:0.8),
-    onPrimaryContainer: Colors.white,
-    secondaryContainer: AppColors.color2.withValues(alpha: 0.8),
+    primaryContainer: AppColors.color1.withValues(alpha: 0.2),
+    onPrimaryContainer: Colors.black,
+    secondaryContainer: AppColors.color2.withValues(alpha: 0.2),
     onSecondaryContainer: Colors.black,
+  ),
+
+  appBarTheme: AppBarTheme(
+    backgroundColor: AppColors.color1,
+    foregroundColor: Colors.white,
+    elevation: 0,
+    titleTextStyle: GoogleFonts.montserrat(
+      fontSize: 20, fontWeight: FontWeight.w600, color: Colors.white),
+  ),
+
+  elevatedButtonTheme: ElevatedButtonThemeData(
+    style: ElevatedButton.styleFrom(
+      backgroundColor: AppColors.color1,   // ← was `primary:`
+      foregroundColor: Colors.white,        // ← was `onPrimary:`
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
     ),
-    
+  ),
+
+  cardTheme: CardThemeData(           // ← use CardThemeData, not CardTheme
+    color: Colors.white,
+    elevation: 1,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.all(Radius.circular(12)),
+      side: BorderSide(
+      color: Colors.grey.shade300, // light‐gray border
+      width: 1,
+    ),
+    ),
+  ),
+
+  // …any other overrides…
 );

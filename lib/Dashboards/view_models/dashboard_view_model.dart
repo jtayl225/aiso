@@ -1,8 +1,5 @@
 import 'package:aiso/Dashboards/services/dashboard_service.dart';
-import 'package:aiso/models/subscriptions_model.dart';
-import 'package:aiso/services/auth_service_supabase.dart';
 import 'package:flutter/foundation.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 class DashboardViewModel extends ChangeNotifier {
 

@@ -1,13 +1,15 @@
 import 'dart:convert';
 
+import 'package:aiso/models/locality_model.dart';
 import 'package:aiso/models/prompt_model.dart';
 import 'package:aiso/models/prompt_template_model.dart';
 import 'package:aiso/models/purchase_enum.dart';
-import 'package:aiso/models/report_model.dart';
+import 'package:aiso/reports/models/report_model.dart';
 import 'package:aiso/models/report_results.dart';
-import 'package:aiso/models/reports/prompt_result_model.dart';
-import 'package:aiso/models/reports/report_run_model.dart';
+import 'package:aiso/reports/models/prompt_result_model.dart';
+import 'package:aiso/reports/models/report_run_model.dart';
 import 'package:aiso/models/search_target_model.dart';
+import 'package:crypto/crypto.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
@@ -159,7 +161,7 @@ class ReportServiceSupabase {
   //   }
   // }
 
-  Future<void> runReport(String reportId) async {
+  Future<String?> runReport(Report report) async {
     final url = Uri.parse('https://app-kyeo.onrender.com/run-task'); // Replace with the correct path if needed
 
     try {
@@ -169,18 +171,22 @@ class ReportServiceSupabase {
           'Content-Type': 'application/json',
         },
         body: jsonEncode({
-          'report_id': reportId,
+          'report_id': report.id,
+          'is_paid': report.isPaid,
         }),
       );
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         debugPrint('DEBUG: Render response: $data');
+        return data['report_run_id'] as String;
       } else {
         debugPrint('DEBUG: Render error (${response.statusCode}): ${response.body}');
+        return null;
       }
     } catch (e) {
       debugPrint('DEBUG: Network error: $e');
+      return null;
     }
   }
 
@@ -380,6 +386,82 @@ class ReportServiceSupabase {
     }).toList();
 
     return promptResults;
+  }
+
+  /// Ensure a prompt exists for [text], attach it to [reportId], and return its Prompt record.
+  Future<Prompt> upsertPromptAndAttach({required String reportId, required String promptText,}) async {
+    // 1. Hash the normalized prompt
+    // final promptHash = _hashString(promptText);
+
+    // 2) Upsert into the prompts table directly by hash
+    final response = await _supabase
+        .from('prompts')
+        .upsert({'prompt': promptText.trim()},  onConflict: 'prompt_hash')
+        .select()
+        .single();
+
+    // 3) Parse the Prompt object
+    final Prompt prompt = Prompt.fromJson(response);
+
+    // 4) Link prompt to report (idempotent via onConflict)
+    await _supabase
+        .from('report_prompts')
+        .upsert({
+          'report_id': reportId,
+          'prompt_id': prompt.id,
+        }, onConflict: 'report_id, prompt_id');
+
+    // 5) Return the prompt record
+    return prompt;
+
+  }
+
+  // (Re-use your existing hash helper)
+  String _hashString(String value) {
+    final normalized = value.trim().toLowerCase();
+    final bytes = utf8.encode(normalized);
+    final digest = sha256.convert(bytes);
+    return digest.toString();
+  }
+
+  // LOCATIONS
+
+  Future<Locality> fetchLocality(String localityId) async {
+    debugPrint('DEBUG: Service is fetching locality for localityId: $localityId');
+    final response = await _supabase
+      .from('locality_vw')
+      .select()
+      .eq('locality_id', localityId)
+      .select()
+      .single();
+    // debugPrint('DEBUG: report results response: $response');
+    final Locality locality = Locality.fromJson(response);
+    return locality;
+  }
+
+  Future<Locality?> fetchLocalityFromHash(String localityHash) async {
+    debugPrint('DEBUG: Service is fetching locality for hash: $localityHash');
+    final response = await _supabase
+      .from('localities')
+      .select()
+      .eq('locality_hash', localityHash)
+      .select()
+      .maybeSingle();
+    if (response == null) return null;
+    final Locality locality = Locality.fromJson(response);
+    return locality;
+  }
+
+  Future<Locality> createLocality(Locality locality) async {
+    debugPrint('DEBUG: Service is creating a locality: ${locality.regionIsoCode}, ${locality.name}.');
+    final response = await _supabase
+      .from('localities')
+      .insert(locality.toJson())
+      .select()
+      .single();
+    final Locality insertedLocality = Locality.fromJson(response);
+    debugPrint('DEBUG: inserted Locality ID: ${insertedLocality.id}');
+    return insertedLocality;
   }
 
 

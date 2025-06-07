@@ -222,17 +222,17 @@
 import 'package:aiso/constants/app_colors.dart';
 import 'package:aiso/constants/string_constants.dart';
 import 'package:aiso/models/purchase_enum.dart';
-import 'package:aiso/models/report_model.dart';
+import 'package:aiso/reports/models/report_model.dart';
 import 'package:aiso/models/search_target_type_enum.dart';
 import 'package:aiso/models/report_results.dart';
 import 'package:aiso/view_models/auth_view_model.dart';
-import 'package:aiso/view_models/report_results_view_model.dart';
-import 'package:aiso/view_models/reports_view_model.dart';
+import 'package:aiso/reports/view_models/report_results_view_model.dart';
+import 'package:aiso/reports/view_models/reports_view_model.dart';
 import 'package:aiso/views/plots/BlurredOverlay.dart';
 import 'package:aiso/views/plots/ProportionCircle.dart';
-import 'package:aiso/views/reports/line_chart.dart';
-import 'package:aiso/views/reports/prompt_result_screen.dart';
-import 'package:aiso/views/reports/reports_editor_screen.dart';
+import 'package:aiso/reports/views/line_chart.dart';
+import 'package:aiso/reports/views/prompt_result_screen.dart';
+import 'package:aiso/reports/views/reports_editor_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -583,7 +583,7 @@ class _ReportResultsScreenState extends State<ReportResultsScreen> {
 
         ElevatedButton(
           onPressed: () async {
-            await viewModel.runReport(reportId);
+            // await viewModel.runReport(reportId);
           },
           child: const Text('Run Report', style: TextStyle(color: Colors.black),),
         ),

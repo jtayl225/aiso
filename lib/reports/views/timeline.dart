@@ -608,12 +608,12 @@ class Timeline extends StatelessWidget {
                 // └───────────────────────────────────────┘
                 Expanded(
                   child: Card(
-                    elevation: isActive ? 4 : 1,
+                    elevation: isActive ? 1 : 0,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                       side: BorderSide(
-                        color: isActive ? highlightColor : Colors.transparent,
-                        width: isActive ? 1.5 : 0,
+                        color: isActive ? highlightColor : Colors.grey.shade300, //Colors.transparent,
+                        width: isActive ? 1.5 : 1,
                       ),
                     ),
                     child: Padding(
@@ -638,7 +638,7 @@ class Timeline extends StatelessWidget {
                               data: step.description,
                               extensionSet: md.ExtensionSet.gitHubWeb,
                               styleSheet: MarkdownStyleSheet.fromTheme(Theme.of(context))
-                                .copyWith(p: const TextStyle(fontSize: 14, color: Colors.black54)),
+                                .copyWith(p: const TextStyle(fontSize: 14, color: Colors.black)),
                             ),         
 
                         ],

@@ -1,8 +1,8 @@
 CREATE TABLE IF NOT EXISTS search_targets (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   report_id uuid REFERENCES public.reports(id) ON DELETE CASCADE,
+  industry_id UUID NOT NULL REFERENCES industries(id) ON DELETE RESTRICT,
   type entity_type, -- 👈 enum column
-  industry text NOT NULL,
   name text NOT NULL,
   description text NOT NULL,
   url text,

@@ -1,6 +1,7 @@
 --------------------
 -- llm_runs
 --------------------
+
 CREATE TABLE IF NOT EXISTS llm_runs (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   prompt_id uuid REFERENCES public.prompts(id) ON DELETE CASCADE,
@@ -10,15 +11,16 @@ CREATE TABLE IF NOT EXISTS llm_runs (
   target_entity_industry text NOT NULL,
   
   -- metadata
+  is_paid BOOLEAN NOT NULL DEFAULT false,
   epochs INT NOT NULL, -- total number of epochs
   started_at timestamp with time zone NOT NULL DEFAULT now(),
   finished_at timestamp with time zone,
-  status text NOT NULL CHECK (status IN ('running', 'completed', 'failed')),
+  status processing_status NOT NULL DEFAULT 'initialising', -- 👈 enum column
   error_message text,
   llm_generation llm NOT NULL,
   llm_generation_model TEXT NOT NULL DEFAULT 'unknown',
 
-  result_json jsonb,
+  -- result_json jsonb,
 
   -- timestamps
   created_at timestamp with time zone DEFAULT now(),
@@ -37,7 +39,7 @@ CREATE TABLE IF NOT EXISTS llm_epochs (
   -- data
   epoch INT NOT NULL,
   temperature DOUBLE PRECISION NOT NULL,
-  status text NOT NULL CHECK (status IN ('running', 'completed', 'failed')),
+  status processing_status NOT NULL DEFAULT 'initialising', -- 👈 enum column
 
   -- timestamps
   created_at timestamp with time zone DEFAULT now(),

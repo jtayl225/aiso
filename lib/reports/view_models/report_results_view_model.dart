@@ -1,6 +1,7 @@
 import 'package:aiso/models/purchase_enum.dart';
 import 'package:aiso/models/report_results.dart';
 import 'package:aiso/models/search_target_model.dart';
+import 'package:aiso/reports/models/report_model.dart';
 import 'package:aiso/services/report_service_supabase.dart';
 import 'package:flutter/material.dart';
 
@@ -52,14 +53,14 @@ class ReportResultsViewModel extends ChangeNotifier {
     }
   }
 
-  Future<bool> runReport(String reportId) async {
+  Future<bool> runReport(Report report) async {
     isLoading = true;
     notifyListeners();
     try {
       debugPrint('DEBUG: view model about to call run-report edge function');
-      await _reportService.runReport(reportId);
-      results = await _reportService.fetchReportResults(reportId);
-      searchTarget = await _reportService.fetchSearchTarget(reportId);
+      await _reportService.runReport(report);
+      results = await _reportService.fetchReportResults(report.id);
+      searchTarget = await _reportService.fetchSearchTarget(report.id);
       return true;
     } catch (e) {
       _handleError(e);

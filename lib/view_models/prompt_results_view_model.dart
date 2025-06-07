@@ -1,7 +1,7 @@
 import 'package:aiso/models/prompt_model.dart';
 import 'package:aiso/models/purchase_enum.dart';
-import 'package:aiso/models/reports/prompt_result_model.dart';
-import 'package:aiso/models/reports/report_run_model.dart';
+import 'package:aiso/reports/models/prompt_result_model.dart';
+import 'package:aiso/reports/models/report_run_model.dart';
 import 'package:aiso/services/report_service_supabase.dart';
 import 'package:flutter/material.dart';
 

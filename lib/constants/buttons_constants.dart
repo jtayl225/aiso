@@ -18,8 +18,6 @@ class ButtonDimensions {
         return mediumWidth;
       case ButtonSize.large:
         return largeWidth;
-      default:
-        return mediumWidth; // Default size
     }
   }
 
@@ -32,8 +30,6 @@ class ButtonDimensions {
         return mediumHeight;
       case ButtonSize.large:
         return largeHeight;
-      default:
-        return mediumHeight; // Default size
     }
   }
 }

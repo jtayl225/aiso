@@ -2,6 +2,7 @@ CREATE TABLE IF NOT EXISTS reports (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id uuid NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
   title text NOT NULL,
+  is_paid BOOLEAN NOT NULL DEFAULT false,
   cadence cadence, -- 👈 enum column
 
   -- timestamps

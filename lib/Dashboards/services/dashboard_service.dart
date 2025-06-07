@@ -1,15 +1,5 @@
-import 'dart:convert';
-
-import 'package:aiso/models/prompt_model.dart';
-import 'package:aiso/models/prompt_template_model.dart';
-import 'package:aiso/models/purchase_enum.dart';
-import 'package:aiso/models/report_model.dart';
-import 'package:aiso/models/report_results.dart';
-import 'package:aiso/models/reports/prompt_result_model.dart';
-import 'package:aiso/models/reports/report_run_model.dart';
-import 'package:aiso/models/search_target_model.dart';
+import 'package:aiso/reports/models/report_model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
 
 class DashboardServiceSupabase {

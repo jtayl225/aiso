@@ -1,12 +1,14 @@
 import 'package:aiso/models/cadence_enum.dart';
 import 'package:aiso/models/db_timestamps_model.dart';
+import 'package:aiso/models/entity_model.dart';
+import 'package:aiso/models/industry_model.dart';
 import 'package:aiso/models/prompt_model.dart';
-import 'package:aiso/models/report_model.dart';
+import 'package:aiso/reports/models/report_model.dart';
 import 'package:aiso/models/search_target_model.dart';
 import 'package:aiso/models/search_target_type_enum.dart';
 import 'package:aiso/view_models/auth_view_model.dart';
-import 'package:aiso/view_models/reports_view_model.dart';
-import 'package:aiso/views/reports/prompt_builder_screen.dart';
+import 'package:aiso/reports/view_models/reports_view_model.dart';
+import 'package:aiso/reports/views/prompt_builder_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -26,7 +28,7 @@ class _ReportEditorScreenState extends State<ReportEditorScreen> {
   late TextEditingController _titleController;
   late TextEditingController _descriptionController;
   late Cadence _cadence;
-  late SearchTargetType _searchTargetType;
+  late EntityType _searchTargetType;
   late TextEditingController _targetNameController;
   late TextEditingController _targetDescriptionController;
   late TextEditingController _targetUrlController;
@@ -46,6 +48,7 @@ class _ReportEditorScreenState extends State<ReportEditorScreen> {
         id: '', 
         userId: creatorUserId, 
         title: '', 
+        isPaid: true,
         // description: '', 
         cadence: Cadence.month, 
         dbTimestamps: DbTimestamps.now()
@@ -56,7 +59,7 @@ class _ReportEditorScreenState extends State<ReportEditorScreen> {
     _titleController = TextEditingController(text: _report.title);
     // _descriptionController = TextEditingController(text: _report.description);
     _cadence = _report.cadence;
-    _searchTargetType = _report.searchTarget?.type ?? SearchTargetType.business;
+    _searchTargetType = _report.searchTarget?.type ?? EntityType.business;
     _targetNameController = TextEditingController(text: _report.searchTarget?.name ?? '');
     _targetDescriptionController = TextEditingController(text: _report.searchTarget?.description ?? '');
     _targetUrlController = TextEditingController(text: _report.searchTarget?.url ?? '');
@@ -80,6 +83,7 @@ class _ReportEditorScreenState extends State<ReportEditorScreen> {
       reportId: _isEditMode ? _report.id : '',
       name: _targetNameController.text.trim(),
       type: _searchTargetType,
+      industry: Industry(id: '', name: ''),
       description: _targetDescriptionController.text.trim(),
       url: _targetUrlController.text.trim(),
       dbTimestamps: _isEditMode && _report.searchTarget != null
@@ -97,6 +101,7 @@ class _ReportEditorScreenState extends State<ReportEditorScreen> {
       userId: _report.userId,
       title: _titleController.text.trim(),
       // description: _descriptionController.text.trim(),
+      isPaid: true,
       cadence: _cadence,
       prompts: _report.prompts,
       searchTarget: searchTarget,

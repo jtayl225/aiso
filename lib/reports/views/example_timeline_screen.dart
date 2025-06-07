@@ -1,6 +1,6 @@
-import 'dart:math';
+// import 'dart:math';
 
-import 'package:aiso/constants/buttons_constants.dart';
+// import 'package:aiso/constants/buttons_constants.dart';
 import 'package:aiso/reports/views/timeline.dart';
 import 'package:flutter/material.dart';
 
@@ -26,7 +26,7 @@ class _ExampleTimelineScreenState extends State<ExampleTimelineScreen> {
     final List<StepData> _steps = [
     StepData(title: 'Initialising', description: 'Setting up our services.'),
     StepData(title: 'Generating results', description: 'Generating results from LLMs.'),
-    StepData(title: 'Searching for you business', description: 'Searching the LLM results for you business.'),
+    StepData(title: 'Searching for you business', description: 'Searching the LLM results for your business.'),
     StepData(title: 'Done!', description: 'Woohoo! :rocket:'),
   ];
 

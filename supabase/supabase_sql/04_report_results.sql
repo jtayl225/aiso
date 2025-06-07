@@ -1,6 +1,14 @@
 --------------------
 -- report_runs
 --------------------
+CREATE TYPE report_run_status AS ENUM (
+  'initialising',
+  'generating',
+  'searching',
+  'completed',
+  'failed'
+);
+
 
 CREATE TABLE IF NOT EXISTS report_runs (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -9,11 +17,11 @@ CREATE TABLE IF NOT EXISTS report_runs (
   -- metadata
   started_at timestamp with time zone NOT NULL DEFAULT now(),
   finished_at timestamp with time zone,
-  status text NOT NULL CHECK (status IN ('running', 'completed', 'failed')),
+  status report_run_status NOT NULL DEFAULT 'initialising';
   error_message text,
   llm_classification llm NOT NULL,
   llm_classification_model TEXT NOT NULL DEFAULT 'unknown',
-  result_json jsonb,
+  -- result_json jsonb,
 
   -- timestamps
   created_at timestamp with time zone DEFAULT now(),
