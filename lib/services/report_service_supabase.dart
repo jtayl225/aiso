@@ -1,6 +1,7 @@
 import 'dart:convert';
 
-import 'package:aiso/models/locality_model.dart';
+import 'package:aiso/models/industry_model.dart';
+import 'package:aiso/models/location_models.dart';
 import 'package:aiso/models/prompt_model.dart';
 import 'package:aiso/models/prompt_template_model.dart';
 import 'package:aiso/models/purchase_enum.dart';
@@ -9,7 +10,7 @@ import 'package:aiso/models/report_results.dart';
 import 'package:aiso/reports/models/prompt_result_model.dart';
 import 'package:aiso/reports/models/report_run_model.dart';
 import 'package:aiso/models/search_target_model.dart';
-import 'package:crypto/crypto.dart';
+// import 'package:crypto/crypto.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
@@ -416,13 +417,13 @@ class ReportServiceSupabase {
 
   }
 
-  // (Re-use your existing hash helper)
-  String _hashString(String value) {
-    final normalized = value.trim().toLowerCase();
-    final bytes = utf8.encode(normalized);
-    final digest = sha256.convert(bytes);
-    return digest.toString();
-  }
+  // // (Re-use your existing hash helper)
+  // String _hashString(String value) {
+  //   final normalized = value.trim().toLowerCase();
+  //   final bytes = utf8.encode(normalized);
+  //   final digest = sha256.convert(bytes);
+  //   return digest.toString();
+  // }
 
   // LOCATIONS
 
@@ -462,6 +463,24 @@ class ReportServiceSupabase {
     final Locality insertedLocality = Locality.fromJson(response);
     debugPrint('DEBUG: inserted Locality ID: ${insertedLocality.id}');
     return insertedLocality;
+  }
+
+  Future<List<Industry>> fetchIndustries() async {
+    debugPrint('DEBUG: Service is fetching all industries');
+
+    final response = await _supabase
+      .from('industries')
+      .select('id, name')
+      .isFilter('deleted_at', null);
+
+    // Inspect the response to see its structure
+    // debugPrint('Response: $response');
+
+    final List<Industry> industries = (response as List).map((item) {
+      return Industry.fromJson(item);
+    }).toList();
+
+    return industries;
   }
 
 

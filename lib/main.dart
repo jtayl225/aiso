@@ -1,16 +1,11 @@
-import 'package:aiso/Dashboards/views/dashboard_menu.dart';
-import 'package:aiso/Dashboards/views/dashboard_screen.dart';
-import 'package:aiso/Store/views/store_screen.dart';
 import 'package:aiso/reports/views/example_timeline_screen.dart';
 import 'package:aiso/themes/light_mode.dart';
 import 'package:aiso/view_models/auth_view_model.dart';
 import 'package:aiso/reports/view_models/reports_view_model.dart';
 import 'package:aiso/views/auth/auth_checker_screen.dart';
-import 'package:aiso/reports/views/prompt_hash_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
 Future<void> main() async {
 
@@ -38,9 +33,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'AI Search Optimisation',
+      title: 'GEO MAX',
       theme: lightMode,
-      home: const ExampleTimelineScreen(), //AuthChecker(), // DashboardMenu(), // DashboardScreen(url: "https://www.wikipedia.org"), // StoreScreen(), //PromptHashScreen(), // AuthChecker(),  https://aiso-seyf.onrender.com 
+      home: const AuthChecker(), // ExampleTimelineScreen(), AuthChecker(), // DashboardMenu(), // DashboardScreen(url: "https://www.wikipedia.org"), // StoreScreen(), //PromptHashScreen(), // AuthChecker(),  https://aiso-seyf.onrender.com 
     );
   }
 }

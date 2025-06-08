@@ -13,8 +13,6 @@ extension ProductTypeExtension on ProductType {
         return 'subscribe_monthly';
       case ProductType.SUBSCRIBE_YEARLY:
         return 'subscribe_yearly';
-      default:
-        return '';
     }
   }
 }

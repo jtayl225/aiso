@@ -1,14 +1,19 @@
 import 'dart:convert';
 
+import 'package:aiso/models/cadence_enum.dart';
+import 'package:aiso/models/db_timestamps_model.dart';
 import 'package:aiso/models/entity_model.dart';
 import 'package:aiso/models/industry_model.dart';
 import 'package:aiso/models/location_models.dart';
 import 'package:aiso/models/prompt_model.dart';
 import 'package:aiso/models/search_target_model.dart';
 import 'package:aiso/reports/models/report_model.dart';
+import 'package:aiso/reports/views/timeline.dart';
+import 'package:aiso/services/location_service_supabase.dart';
 import 'package:aiso/services/report_service_supabase.dart';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 /// Reuse enum for report_run_status
@@ -26,22 +31,58 @@ extension ReportRunStatusX on ReportRunStatus {
 /// It listens to supabase realtime on report_runs for status updates,
 /// and drives both timeline and result screens.
 class FreeReportViewModel extends ChangeNotifier {
-  
-  final String prompt;
-  final List<Entity> entities;
-  final int searchTargetRank;
-  final String reportRunId;
+
+  final String userId;
+  FreeReportViewModel({required this.userId});
+
+  String email = '';
+  String entityName = '';
+  final String prompt = '';
+  final List<Entity> entities = [];
+  final int searchTargetRank = -1;
+  String reportRunId = '';
   bool isLoading = false;
   String? errorMessage;
+
+  
+
   final ReportServiceSupabase _reportService = ReportServiceSupabase();
+  final LocationServiceSupabase _locationService = LocationServiceSupabase();
 
   List<Industry> industries = [];
   Industry? selectedIndustry;
 
   List<Country> countries = [];
-  Country? selectedCountry;
-  Region? selectedRegion;
+  // Country? selectedCountry;
+  // Region? selectedRegion;
   Locality? selectedLocality;
+
+  Country? _selectedCountry;
+  Country? get selectedCountry => _selectedCountry;
+  set selectedCountry(Country? value) {
+    _selectedCountry = value;
+    selectedRegion = null; // Reset selected region if country changes
+    notifyListeners(); // ✅ Trigger UI rebuild
+  }
+
+  Region? _selectedRegion;
+  Region? get selectedRegion => _selectedRegion;
+  set selectedRegion(Region? value) {
+    _selectedRegion = value;
+    notifyListeners();
+  }
+
+  bool get isFormValid => 
+    email.isNotEmpty &&
+    email.contains('@') &&
+    selectedIndustry != null && 
+    entityName.isNotEmpty &&
+    _selectedCountry != null &&
+    _selectedRegion != null &&
+    selectedLocality != null;
+
+
+
 
   // track purchase reveals
   final Set<int> _revealed = {};
@@ -50,17 +91,70 @@ class FreeReportViewModel extends ChangeNotifier {
   ReportRunStatus _currentStatus = ReportRunStatus.initialising;
   ReportRunStatus get currentStatus => _currentStatus;
 
+  static final List<StepData> _steps = [
+    StepData(title: 'Initialising', description: 'Setting up our services.'),
+    StepData(title: 'Generating results', description: 'Generating results from LLMs.'),
+    StepData(title: 'Searching for you business', description: 'Searching the LLM results for your business.'),
+    StepData(title: 'Done!', description: 'Woohoo! :rocket:'),
+  ];
+  List<StepData> get steps => _steps;
+
+  int _currentStep = 1;
+  int get currentStep => _currentStep;
+
   // Supabase subscription
   RealtimeChannel? _subscription;
 
-  FreeReportViewModel({
-    required this.prompt,
-    required this.entities,
-    required this.searchTargetRank,
-    required this.reportRunId,
-  }) {
-    _initSupabaseListener();
+  // FreeReportViewModel({
+  //   required this.prompt,
+  //   required this.entities,
+  //   required this.searchTargetRank,
+  //   required this.reportRunId,
+  // }) {
+  //   _initSupabaseListener();
+  // }
+
+  bool _isInitialized = false;
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   WidgetsBinding.instance.addPostFrameCallback((_) {
+  //     Provider.of<FreeReportViewModel>(context, listen: false).init();
+  //   });
+  // }
+
+  // FreeReportViewModel() {
+  //   init();
+  // }
+
+  Future<void> init() async {
+    if (_isInitialized) return;
+    _isInitialized = true;
+
+    // Defer first notification to avoid "called during build"
+    Future.microtask(() {
+      isLoading = true;
+      errorMessage = null;
+      notifyListeners();
+    });
+
+    try {
+      final fetchedCountries = await _locationService.fetchCountries();
+      countries = fetchedCountries;
+      final fetchedIndustries = await _reportService.fetchIndustries();
+      industries = fetchedIndustries;
+    } catch (e) {
+      errorMessage = 'Failed to initialize: $e';
+    } finally {
+      // Defer again to ensure build is complete
+      Future.microtask(() {
+        isLoading = false;
+        notifyListeners();
+      });
+    }
   }
+
 
   void _handleError(Object error, [StackTrace? stackTrace]) {
     errorMessage = error.toString();
@@ -96,6 +190,7 @@ class FreeReportViewModel extends ChangeNotifier {
             final statusEnum = ReportRunStatusX.fromString(newStatus);
             if (statusEnum != _currentStatus) {
               _currentStatus = statusEnum;
+              _currentStep = statusEnum.index + 1;
               notifyListeners();
             }
           },
@@ -129,28 +224,72 @@ class FreeReportViewModel extends ChangeNotifier {
       return digest.toString();
     }
 
-  Future<bool> createAndRunFreeReport(Report freeReport, SearchTarget freeSearchTarget, String freePromptText, Locality freeLocality) async {
+  /// createAndRunFreeReport
+  Report _buildFreeReport() {
+
+    final Report freeReport = Report(
+      id: '', // generated by supabase
+      userId: userId,
+      title: 'Free report!',
+      isPaid: false,
+      cadence: Cadence.month,
+      dbTimestamps: DbTimestamps.now(),
+    );
+
+    return freeReport;
+
+  }
+
+  SearchTarget _buildSearchTarget(String reportId) {
+
+    final SearchTarget searchTarget = SearchTarget(
+      id: '', // generated by supabase
+      reportId: reportId, 
+      name: entityName, 
+      type: EntityType.business, 
+      industry: selectedIndustry!,
+      description: 'A real estate agency.', 
+      dbTimestamps: DbTimestamps.now()
+      );
+
+    return searchTarget;
+
+  }
+
+  String _buildFreePrompt(String basePrompt) {
+  if (selectedLocality == null || selectedRegion == null || selectedCountry == null) {
+    throw StateError('All location fields must be selected');
+  }
+
+  return '$basePrompt in ${selectedLocality!.name}, '
+         '${selectedRegion!.code} ${selectedCountry!.name}';
+}
+
+
+  Future<bool> createAndRunFreeReport() async {
     isLoading = true;
     notifyListeners();
     try {
       debugPrint('DEBUG: createAndRunFreeReport.');
 
       // create report
+      final Report freeReport = _buildFreeReport();
       final Report report = await _reportService.createReport(freeReport);
 
+      // create search target
+      final SearchTarget freeSearchTarget = _buildSearchTarget(report.id);
+      await _reportService.createSearchTarget(freeSearchTarget);
+
       // // fetch parent prompt given industry
-      // final String parentPrompt = '';
-      // final String freePromptText = parentPrompt + ' in ${locality.name}, ${locality.region_code} ${locality.country_name}';
+      final String freePromptText = _buildFreePrompt('Best real estate agency');
 
       // creates prompt - handles upserts of new prompts
       final Prompt _ = await _reportService.upsertPromptAndAttach(reportId: report.id, promptText: freePromptText);
 
-      // create search target
-      final SearchTarget updatedSearchTarget = freeSearchTarget.copyWith(reportId: report.id);
-      await _reportService.createSearchTarget(updatedSearchTarget);
-
       // init free report run
-      await _reportService.runReport(report);
+      final String? newReportRunId = await _reportService.runReport(report);
+      if (newReportRunId == null || newReportRunId.isEmpty) return false;
+      reportRunId =  newReportRunId;
 
       // setup supabase listener
        _initSupabaseListener();
@@ -159,6 +298,19 @@ class FreeReportViewModel extends ChangeNotifier {
     } catch (e) {
       _handleError(e);
       return false;
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> fetchCountries() async {
+    isLoading = true;
+    notifyListeners();
+    try {
+      countries = await _locationService.fetchCountries();
+    } catch (e) {
+      _handleError(e);
     } finally {
       isLoading = false;
       notifyListeners();
@@ -220,12 +372,15 @@ class FreeReportViewModel extends ChangeNotifier {
 
   /// Returns up to 3 matching localities for the given input
   Future<List<Locality>> fetchLocalitySuggestions(String pattern) async {
+    debugPrint('fetchLocalitySuggestions called with: "$pattern"');
+
     final trimmed = pattern.trim();
     if (trimmed.isEmpty) return [];
+    if (selectedRegion == null) return [];
 
     final response = await Supabase.instance.client
         .from('localities')
-        .select('id, name')
+        .select('id, region_iso_code, name, latitude, longitude')
         .eq('region_iso_code', selectedRegion!.isoCode)
         .ilike('name', '%$trimmed%')
         .limit(3);

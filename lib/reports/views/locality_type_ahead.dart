@@ -19,6 +19,8 @@ class _LocalityFieldState extends State<LocalityField> {
   // 3) Your suggestions controller (holds loading / error / list state)
   late final SuggestionsController<Locality> _suggestionsController;
 
+  Locality? _selected; // local field to show in text box
+
   @override
   void initState() {
     super.initState();
@@ -37,7 +39,8 @@ class _LocalityFieldState extends State<LocalityField> {
 
   @override
   Widget build(BuildContext context) {
-    final vm = Provider.of<FreeReportViewModel>(context, listen: false);
+    // final vm = Provider.of<FreeReportViewModel>(context, listen: false);
+    final vm = context.watch<FreeReportViewModel>();
 
     return TypeAheadField<Locality>(
       suggestionsController: _suggestionsController,
@@ -51,24 +54,41 @@ class _LocalityFieldState extends State<LocalityField> {
       },
 
       // 🔹 REQUIRED: what happens when one is tapped
+      // onSelected: (Locality suggestion) {
+      //   vm.selectedLocality = suggestion;
+      //   controller.text = suggestion.name;
+      // },
+
       onSelected: (Locality suggestion) {
-        vm.selectedLocality = suggestion;
-        _controller.text = suggestion.name;
+        setState(() {
+          _selected = suggestion;
+          vm.selectedLocality = suggestion;
+        });
+        _suggestionsController.close(); // ✅ dismiss suggestions
       },
 
       // 🔹 The actual text field: MUST use the given controller & focusNode
       builder: (context, TextEditingController controller, FocusNode focusNode) {
+        // ✅ Set initial value from selectedLocality if needed
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (_selected != null && controller.text != _selected!.name) {
+            controller.text = _selected!.name;
+          }
+        });
+
         return TextFormField(
-          controller: _controller,   // <— your field’s controller
-          focusNode: _focusNode,     // <— and focus node
+          controller: controller,   // <— your field’s controller
+          focusNode: focusNode,     // <— and focus node
           decoration: const InputDecoration(
-            labelText: 'Locality',
+            labelText: 'Suburb',
             border: OutlineInputBorder(),
           ),
           validator: (val) =>
               vm.selectedLocality == null ? 'Please pick a locality' : null,
         );
       },
+
+      
 
       // Optional: empty state
       emptyBuilder: (context) => const Padding(

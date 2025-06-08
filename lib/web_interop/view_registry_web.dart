@@ -3,7 +3,7 @@
 // ignore: avoid_web_libraries_in_flutter
 import 'dart:ui_web' as ui_web;
 
-import 'package:web/web.dart' as web;
+// import 'package:web/web.dart' as web;
 
 typedef ViewFactory = Object Function(int viewId);
 

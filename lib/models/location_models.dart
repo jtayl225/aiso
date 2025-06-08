@@ -118,24 +118,24 @@ class LatLng {
 
 class Locality {
   final String id;
-  final String countryAlpha2;
-  final String countryAlpha3;
-  final String countryName;
-  final String regionCode;
+  // final String countryAlpha2;
+  // final String countryAlpha3;
+  // final String countryName;
+  // final String regionCode;
   final String regionIsoCode;
-  final String regionName;
+  // final String regionName;
   final String name;
   final double latitude;
   final double longitude;
 
   Locality({
     required this.id,
-    required this.countryAlpha2,
-    required this.countryAlpha3,
-    required this.countryName,
-    required this.regionCode,
+    // required this.countryAlpha2,
+    // required this.countryAlpha3,
+    // required this.countryName,
+    // required this.regionCode,
     required this.regionIsoCode, 
-    required this.regionName,
+    // required this.regionName,
     required this.name, 
     required this.latitude, 
     required this.longitude, 
@@ -145,13 +145,13 @@ class Locality {
     return Locality(
       id: json['id'] as String,
 
-      countryAlpha2: json['country_alpha2'] as String,
-      countryAlpha3: json['country_alpha3'] as String,
-      countryName: json['country_name'] as String,
+      // countryAlpha2: json['country_alpha2'] as String,
+      // countryAlpha3: json['country_alpha3'] as String,
+      // countryName: json['country_name'] as String,
 
-      regionCode: json['region_code'] as String,
+      // regionCode: json['region_code'] as String,
       regionIsoCode: json['region_iso_code'] as String,
-      regionName: json['region_name'] as String,
+      // regionName: json['region_name'] as String,
 
       name: json['name'] as String,
       latitude: json['latitude'] as double,
@@ -172,13 +172,13 @@ class Locality {
   Locality copyWith({
     String? id,
 
-    String? countryAlpha2,
-    String? countryAlpha3,
-    String? countryName,
+    // String? countryAlpha2,
+    // String? countryAlpha3,
+    // String? countryName,
 
-    String? regionCode,
+    // String? regionCode,
     String? regionIsoCode,
-    String? regionName,
+    // String? regionName,
 
     String? name,
     double? latitude,
@@ -187,12 +187,12 @@ class Locality {
   }) {
    return Locality(
       id: id ?? this.id,
-      countryAlpha2: countryAlpha2 ?? this.countryAlpha2,
-      countryAlpha3: countryAlpha3 ?? this.countryAlpha3,
-      countryName: countryName ?? this.countryName,
-      regionCode: regionCode ?? this.regionCode,
+      // countryAlpha2: countryAlpha2 ?? this.countryAlpha2,
+      // countryAlpha3: countryAlpha3 ?? this.countryAlpha3,
+      // countryName: countryName ?? this.countryName,
+      // regionCode: regionCode ?? this.regionCode,
       regionIsoCode: regionIsoCode ?? this.regionIsoCode,
-      regionName: regionName ?? this.regionName,
+      // regionName: regionName ?? this.regionName,
       name: name ?? this.name,
       latitude: latitude ?? this.latitude,
       longitude: longitude ?? this.longitude,

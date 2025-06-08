@@ -1,8 +1,7 @@
 import 'dart:math';
-
-import 'package:aiso/constants/app_colors.dart';
 import 'package:aiso/constants/buttons_constants.dart';
 import 'package:aiso/constants/string_constants.dart';
+import 'package:aiso/reports/view_models/free_report_view_model.dart';
 import 'package:aiso/view_models/auth_view_model.dart';
 import 'package:aiso/reports/view_models/reports_view_model.dart';
 import 'package:aiso/views/auth/auth_checker_screen.dart';
@@ -154,11 +153,24 @@ class _WelcomeScreenState2 extends State<WelcomeScreen2> {
                 child: ElevatedButton(
                   onPressed: () {
                     debugPrint("DEBUG: Generate free report pressed!");
-                    // TODO: Implement your guest logic here
+                    // // TODO: Implement your guest logic here
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(builder: (context) => FreeReportFormScreen()),
+                    // );
+
+                    // Where you route to FreeReportFormScreen or a similar parent
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => FreeReportFormScreen()),
+                      MaterialPageRoute(
+                        builder: (_) => ChangeNotifierProvider(
+                          create: (_) => FreeReportViewModel(),
+                          child: FreeReportFormScreen(), // or parent screen of all 3
+                        ),
+                      ),
                     );
+
+
                   },
                   style: ElevatedButton.styleFrom(
                     foregroundColor: Colors.black, // 👈 sets the text/icon color

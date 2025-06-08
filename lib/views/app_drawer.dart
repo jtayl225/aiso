@@ -1,7 +1,5 @@
-import 'package:aiso/models/auth_state_enum.dart';
 import 'package:aiso/view_models/auth_view_model.dart';
 import 'package:aiso/views/auth/auth_checker_screen.dart';
-import 'package:aiso/views/auth/auth_screen.dart';
 import 'package:aiso/views/auth/signin_screen.dart';
 import 'package:aiso/reports/views/reports_home_screen.dart';
 import 'package:flutter/material.dart';
