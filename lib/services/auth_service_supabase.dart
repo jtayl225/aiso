@@ -15,7 +15,7 @@ class AuthServiceSupabase {
           (user.identities == null || user.identities!.isEmpty);
   }
 
-  Future<UserModel?> anonSignin() async {
+  Future<UserModel?> anonSignIn() async {
     try {
       final response = await _supabase.auth.signInAnonymously();
       final user = response.user;

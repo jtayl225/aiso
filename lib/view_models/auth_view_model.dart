@@ -178,6 +178,39 @@ class AuthViewModel extends ChangeNotifier {
     }
   }
 
+  // anonSignIn
+  Future<String?> anonSignIn() async {
+    // _authState = MyAuthState.loading;
+    _errorMessage = null;
+    // notifyListeners();
+
+    try {
+      _currentUser = await _authService.anonSignIn();
+
+      if (_currentUser != null) {
+        // _authState = MyAuthState.anon;
+        _isAnonymous = true;
+
+        // final List<Subscription> subs = await _authService.fetchUserSubscriptions();
+        // isSubscribed = subs.isNotEmpty;
+        // subscribeToSubscriptionStatus();
+
+        return _currentUser!.id;
+      } else {
+        // _authState = MyAuthState.unauthenticated;
+        _errorMessage = 'Anonymous sign-in failed.';
+        return null;
+      }
+    } catch (e) {
+      _authState = MyAuthState.error;
+      _errorMessage = e.toString();
+      return null;
+    } finally {
+      // notifyListeners();
+    }
+  }
+
+
 
   // Auth Screen Setter method:
   void setAuthScreenState(AuthScreenState state) {

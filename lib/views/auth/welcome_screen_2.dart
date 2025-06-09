@@ -1,11 +1,11 @@
 import 'dart:math';
 import 'package:aiso/constants/buttons_constants.dart';
 import 'package:aiso/constants/string_constants.dart';
-import 'package:aiso/reports/view_models/free_report_view_model.dart';
+import 'package:aiso/Reports/view_models/free_report_view_model.dart';
 import 'package:aiso/view_models/auth_view_model.dart';
-import 'package:aiso/reports/view_models/reports_view_model.dart';
+import 'package:aiso/Reports/view_models/reports_view_model.dart';
 import 'package:aiso/views/auth/auth_checker_screen.dart';
-import 'package:aiso/reports/views/generate_free_report_view.dart';
+import 'package:aiso/Reports/views/generate_free_report_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -151,7 +151,7 @@ class _WelcomeScreenState2 extends State<WelcomeScreen2> {
               SizedBox(
                 width: maxButtonWidth,
                 child: ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     debugPrint("DEBUG: Generate free report pressed!");
                     // // TODO: Implement your guest logic here
                     // Navigator.push(
@@ -159,16 +159,60 @@ class _WelcomeScreenState2 extends State<WelcomeScreen2> {
                     //   MaterialPageRoute(builder: (context) => FreeReportFormScreen()),
                     // );
 
-                    // Where you route to FreeReportFormScreen or a similar parent
+                    
+
+                    // // fetch curentUserId from AuthViewModel
+                    // final authViewModel = Provider.of<AuthViewModel>(context, listen: false);
+                    // final currentUserId = await authViewModel.anonSignIn();
+
+                    // final navigator = Navigator.of(context);
+                    // final scaffold = ScaffoldMessenger.of(context);
+
+                    // if (!mounted) return;
+
+                    // if (currentUserId == null) {
+                    //   // handle unauthenticated user
+                    //   ScaffoldMessenger.of(context).showSnackBar(
+                    //     SnackBar(content: Text('User not logged in')),
+                    //   );
+                    //   return;
+                    // }
+
+                    // // Where you route to FreeReportFormScreen or a similar parent
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //     builder: (_) => ChangeNotifierProvider.value(
+                    //       value: Provider.of<FreeReportViewModel>(context, listen: false),
+                    //       builder: (context, child) {
+                    //         // ✅ This context is under the provider
+                    //         return const FreeReportFormScreen();
+                    //       },
+                    //     ),
+                    //   ),
+                    // );
+
+                    final authVM = Provider.of<AuthViewModel>(context, listen: false);
+                    final userId = await authVM.anonSignIn();
+                    if (!context.mounted) return;
+
+                    if (userId == null) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Failed to sign in anonymously')),
+                      );
+                      return;
+                    }
+
                     Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (_) => ChangeNotifierProvider(
-                          create: (_) => FreeReportViewModel(),
-                          child: FreeReportFormScreen(), // or parent screen of all 3
+                          create: (_) => FreeReportViewModel(userId: userId),
+                          child: const FreeReportFormScreen(),
                         ),
                       ),
                     );
+
 
 
                   },

@@ -1,7 +1,10 @@
-import 'package:aiso/reports/views/example_timeline_screen.dart';
+import 'package:aiso/Home/views/home_view.dart';
+import 'package:aiso/Home/widgets/home_tablet_desktop.dart';
+import 'package:aiso/Store/view_models/store_view_model.dart';
+import 'package:aiso/Reports/views/example_timeline_screen.dart';
 import 'package:aiso/themes/light_mode.dart';
 import 'package:aiso/view_models/auth_view_model.dart';
-import 'package:aiso/reports/view_models/reports_view_model.dart';
+import 'package:aiso/Reports/view_models/reports_view_model.dart';
 import 'package:aiso/views/auth/auth_checker_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -19,7 +22,8 @@ Future<void> main() async {
       providers: [
         ChangeNotifierProvider(create: (_) => AuthViewModel()),
         // ChangeNotifierProvider(create: (_) => MessengerViewModel()),
-        ChangeNotifierProvider(create: (_) => ReportViewModel()),
+        ChangeNotifierProvider(create: (_) => ReportViewModel()), 
+        ChangeNotifierProvider(create: (_) => StoreViewModel()),
       ],
       child: MyApp(),
     ),
@@ -35,7 +39,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'GEO MAX',
       theme: lightMode,
-      home: const AuthChecker(), // ExampleTimelineScreen(), AuthChecker(), // DashboardMenu(), // DashboardScreen(url: "https://www.wikipedia.org"), // StoreScreen(), //PromptHashScreen(), // AuthChecker(),  https://aiso-seyf.onrender.com 
+      home: const MyHome(), //AuthChecker(), // ExampleTimelineScreen(), AuthChecker(), // DashboardMenu(), // DashboardScreen(url: "https://www.wikipedia.org"), // StoreScreen(), //PromptHashScreen(), // AuthChecker(),  https://aiso-seyf.onrender.com 
     );
   }
 }

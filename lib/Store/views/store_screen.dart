@@ -96,23 +96,28 @@ class _StoreScreenState extends State<StoreScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Store')),
-      body: Column(
-        children: [
-          Expanded(
-            child: PageView.builder(
-              controller: _pageController,
-              scrollDirection: Axis.horizontal,
-              itemCount: products.length,
-              onPageChanged: (index) => setState(() => _currentPage = index),
-              itemBuilder: (context, index) {
-                return ProductCard(products[index]);
-              },
-            ),
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 800),
+          child: Column(
+            children: [
+              Expanded(
+                child: PageView.builder(
+                  controller: _pageController,
+                  scrollDirection: Axis.horizontal,
+                  itemCount: products.length,
+                  onPageChanged: (index) => setState(() => _currentPage = index),
+                  itemBuilder: (context, index) {
+                    return ProductCard(products[index]);
+                  },
+                ),
+              ),
+              const SizedBox(height: 10),
+              _buildIndicatorDots(),
+              const SizedBox(height: 20),
+            ],
           ),
-          const SizedBox(height: 10),
-          _buildIndicatorDots(),
-          const SizedBox(height: 20),
-        ],
+        ),
       ),
     );
   }

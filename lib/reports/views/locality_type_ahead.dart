@@ -1,5 +1,5 @@
 import 'package:aiso/models/location_models.dart';
-import 'package:aiso/reports/view_models/free_report_view_model.dart';
+import 'package:aiso/Reports/view_models/free_report_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';

@@ -40,24 +40,24 @@ class Entity {
   /// Creates an [Entity] from a JSON map.
   factory Entity.fromJson(Map<String, dynamic> json) {
     return Entity(
-      type: EntityTypeExtension.fromValue(json['type'] as String),
-      rank: json['rank'] as int,
-      name: json['name'] as String,
-      description: json['description'] as String,
-      url: json['url'] as String?,
+      type: EntityTypeExtension.fromValue(json['entity_type'] as String),
+      rank: json['entity_rank'] as int,
+      name: json['entity_name'] as String,
+      description: json['entity_description'] as String,
+      url: json['entity_url'] as String?,
     );
   }
 
   /// Converts this [Entity] to a JSON map.
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{
-      'type': type.toValue(),
-      'rank': rank,
-      'name': name,
-      'description': description,
+      'entity_type': type.toValue(),
+      'entity_rank': rank,
+      'entity_name': name,
+      'entity_description': description,
     };
     if (url != null) {
-      map['url'] = url;
+      map['entity_url'] = url;
     }
     return map;
   }

@@ -1,7 +1,7 @@
 import 'package:aiso/models/db_timestamps_model.dart';
 import 'package:aiso/models/prompt_model.dart';
 import 'package:aiso/models/prompt_template_model.dart';
-import 'package:aiso/reports/view_models/reports_view_model.dart';
+import 'package:aiso/Reports/view_models/reports_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -83,10 +83,10 @@ class _PromptBuilderScreenState extends State<PromptBuilderScreen> {
           Prompt(
             id: '',
             // templateId: _selectedTemplate!.id,
-            reportId: '',
+            // reportId: '',
             prompt: newPrompt.formattedPrompt,
             dbTimestamps: DbTimestamps.now(),
-            lastRunAt: null,
+            // lastRunAt: null,
           ),
         );
       }

@@ -7,7 +7,7 @@ class SearchTarget {
   final String reportId;
   final String name;          // e.g. "New Balance 1080v13"
   final EntityType type;          // e.g. "Product", "Service", "Business", "Person"
-  final Industry industry;
+  final Industry? industry;
   final String description;   // Use case, benefits, location, etc. go here
   final String? url;          // Optional link to a website or product page
   final DbTimestamps dbTimestamps;
@@ -17,7 +17,7 @@ class SearchTarget {
     required this.reportId,
     required this.name,
     required this.type,
-    required this.industry,
+    this.industry,
     required this.description,
     this.url,
     required this.dbTimestamps
@@ -29,7 +29,9 @@ class SearchTarget {
       reportId: json['report_id'],
       name: json['name'],
       type: EntityTypeExtension.fromValue(json['type']),
-      industry: Industry.fromJson(json['industries']),
+      industry: json['industries'] != null
+        ? Industry.fromJson(json['industries'])
+        : null,
       description: json['description'],
       url: json['url'],
       dbTimestamps: DbTimestamps(
@@ -44,7 +46,7 @@ class SearchTarget {
     return {
       // 'id': id,
       'report_id': reportId,
-      'industry_id': industry.id,
+      'industry_id': industry?.id,
       'type': type.name.toLowerCase(),
       'name': name,
       'description': description,

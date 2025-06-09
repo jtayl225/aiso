@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS report_runs (
   -- metadata
   started_at timestamp with time zone NOT NULL DEFAULT now(),
   finished_at timestamp with time zone,
-  status report_run_status NOT NULL DEFAULT 'initialising';
+  status report_run_status NOT NULL DEFAULT 'initialising',
   error_message text,
   llm_classification llm NOT NULL,
   llm_classification_model TEXT NOT NULL DEFAULT 'unknown',

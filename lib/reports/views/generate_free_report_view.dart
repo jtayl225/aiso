@@ -5,10 +5,11 @@ import 'package:aiso/models/entity_model.dart';
 import 'package:aiso/models/industry_model.dart';
 import 'package:aiso/models/location_models.dart';
 import 'package:aiso/models/search_target_model.dart';
-import 'package:aiso/reports/models/report_model.dart';
-import 'package:aiso/reports/view_models/free_report_view_model.dart';
-import 'package:aiso/reports/views/example_timeline_screen.dart';
-import 'package:aiso/reports/views/locality_type_ahead.dart';
+import 'package:aiso/Reports/models/report_model.dart';
+import 'package:aiso/Reports/view_models/free_report_view_model.dart';
+import 'package:aiso/Reports/views/example_timeline_screen.dart';
+import 'package:aiso/Reports/views/free_report_timeline_screen.dart';
+import 'package:aiso/Reports/views/locality_type_ahead.dart';
 import 'package:aiso/view_models/auth_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -43,6 +44,8 @@ class _FreeReportFormScreenState extends State<FreeReportFormScreen> {
   Widget build(BuildContext context) {
 
     final vm = Provider.of<FreeReportViewModel>(context);
+    // final authViewModel = Provider.of<AuthViewModel>(context, listen: false);
+    // final currentUserId = authViewModel.anonSignIn();
 
     return Scaffold(
       appBar: AppBar(title: Text("Generate Free Report!")),
@@ -135,14 +138,46 @@ class _FreeReportFormScreenState extends State<FreeReportFormScreen> {
                         ? () {
                             if (_formKey.currentState!.validate()) {
                               vm.createAndRunFreeReport();
-                              Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (_) => ExampleTimelineScreen(),
-                              ),
-                            );
+
+                              // Delay navigation until the next frame to avoid build conflicts
+                              WidgetsBinding.instance.addPostFrameCallback((_) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => ChangeNotifierProvider<FreeReportViewModel>.value(
+                                      value: vm,
+                                      child: const FreeReportTimelineScreen(),
+                                    ),
+                                  ),
+                                );
+                              });
                             }
                           }
-                        : null, // ✅ disables the button
+                        : null,
+
+                      // onPressed: vm.isFormValid
+                      //   ? () {
+                      //       if (_formKey.currentState!.validate()) {
+                      //         vm.createAndRunFreeReport();
+                      //         // Navigator.push(
+                      //         //   context,
+                      //         //   MaterialPageRoute(
+                      //         //     builder: (context) => ChangeNotifierProvider.value(
+                      //         //       value: Provider.of<FreeReportViewModel>(context, listen: false),
+                      //         //       child: FreeReportTimelineScreen(),
+                      //         //     ),
+                      //         //   ),
+                      //         // );
+                      //         Navigator.push(
+                      //           context,
+                      //           MaterialPageRoute(
+                      //             builder: (_) => const FreeReportTimelineScreen(),
+                      //           ),
+                      //         );
+
+                      //       }
+                      //     }
+                      //   : null, // ✅ disables the button
                       // onPressed: () {
                       //   // Validate all fields in the Form
                       //   if (_formKey.currentState!.validate()) {

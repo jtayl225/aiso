@@ -3,7 +3,7 @@ import 'package:aiso/constants/buttons_constants.dart';
 import 'package:aiso/constants/string_constants.dart';
 import 'package:aiso/models/auth_state_enum.dart';
 import 'package:aiso/view_models/auth_view_model.dart';
-import 'package:aiso/reports/view_models/reports_view_model.dart';
+import 'package:aiso/Reports/view_models/reports_view_model.dart';
 import 'package:aiso/views/auth/auth_checker_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

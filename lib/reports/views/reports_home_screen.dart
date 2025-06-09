@@ -1,8 +1,8 @@
-import 'package:aiso/reports/view_models/report_results_view_model.dart';
-import 'package:aiso/reports/view_models/reports_view_model.dart';
+import 'package:aiso/Reports/view_models/report_results_view_model.dart';
+import 'package:aiso/Reports/view_models/reports_view_model.dart';
 import 'package:aiso/views/app_drawer.dart';
-import 'package:aiso/reports/views/report_results_screen.dart';
-import 'package:aiso/reports/views/reports_editor_screen.dart';
+import 'package:aiso/Reports/views/report_results_screen.dart';
+import 'package:aiso/Reports/views/reports_editor_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

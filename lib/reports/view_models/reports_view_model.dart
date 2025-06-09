@@ -1,14 +1,29 @@
+import 'package:aiso/models/cadence_enum.dart';
+import 'package:aiso/models/db_timestamps_model.dart';
 import 'package:aiso/models/prompt_model.dart';
 import 'package:aiso/models/prompt_template_model.dart';
 import 'package:aiso/models/purchase_enum.dart';
-import 'package:aiso/reports/models/report_model.dart';
+import 'package:aiso/Reports/models/report_model.dart';
 import 'package:aiso/models/search_target_model.dart';
 import 'package:aiso/services/report_service_supabase.dart';
 import 'package:flutter/material.dart';
 
 class ReportViewModel extends ChangeNotifier {
 
-  List<Report> reports = [];
+  // List<Report> reports = [];
+  List<Report> reports = [
+    Report(id: '0', userId: '', title: 'title', isPaid: true, cadence: Cadence.month, dbTimestamps: DbTimestamps.now()),
+    Report(id: '1', userId: '', title: 'title2', isPaid: true, cadence: Cadence.month, dbTimestamps: DbTimestamps.now()),
+    Report(id: '2', userId: '', title: 'title3', isPaid: true, cadence: Cadence.month, dbTimestamps: DbTimestamps.now()),
+    Report(id: '3', userId: '', title: 'title4', isPaid: true, cadence: Cadence.month, dbTimestamps: DbTimestamps.now()),
+    Report(id: '4', userId: '', title: 'title4', isPaid: true, cadence: Cadence.month, dbTimestamps: DbTimestamps.now()),
+    Report(id: '5', userId: '', title: 'title4', isPaid: true, cadence: Cadence.month, dbTimestamps: DbTimestamps.now()),
+    Report(id: '6', userId: '', title: 'title4', isPaid: true, cadence: Cadence.month, dbTimestamps: DbTimestamps.now()),
+    Report(id: '7', userId: '', title: 'title4', isPaid: true, cadence: Cadence.month, dbTimestamps: DbTimestamps.now()),
+    Report(id: '8', userId: '', title: 'title4', isPaid: true, cadence: Cadence.month, dbTimestamps: DbTimestamps.now()),
+    Report(id: '9', userId: '', title: 'title4', isPaid: true, cadence: Cadence.month, dbTimestamps: DbTimestamps.now()),
+  ];
+
   List<PromptTemplate> promptTemplates = [];
   bool isLoading = false;
   String? errorMessage;
@@ -225,9 +240,9 @@ class ReportViewModel extends ChangeNotifier {
     notifyListeners();
     try {
       // parallel
-      final promptTemplatesFuture = _reportService.fetchPromptTemplates();
+      // final promptTemplatesFuture = _reportService.fetchPromptTemplates();
       final reportsFuture = _reportService.fetchReports(userId);
-      promptTemplates = await promptTemplatesFuture;
+      // promptTemplates = await promptTemplatesFuture;
       reports = await reportsFuture;
       return true;
     } catch (e) {

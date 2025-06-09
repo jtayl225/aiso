@@ -1,8 +1,9 @@
 import 'package:aiso/Dashboards/views/dashboard_menu.dart';
 import 'package:aiso/models/auth_state_enum.dart';
+import 'package:aiso/Reports/views/generate_free_report_view.dart';
 import 'package:aiso/view_models/auth_view_model.dart';
 import 'package:aiso/views/auth/auth_screen.dart';
-import 'package:aiso/reports/views/reports_home_screen.dart';
+import 'package:aiso/Reports/views/reports_home_screen.dart';
 import 'package:aiso/views/todo_placeholder_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -20,7 +21,7 @@ class AuthChecker extends StatelessWidget {
       case MyAuthState.loading:
         return const Scaffold(body: Center(child: CircularProgressIndicator()));
       case MyAuthState.anon:
-        return const ReportsHomeScreen();
+        return const FreeReportFormScreen();
       case MyAuthState.error:
         return const Scaffold(body: Center(child: Text('An error occurred')));
       case MyAuthState.authenticated:

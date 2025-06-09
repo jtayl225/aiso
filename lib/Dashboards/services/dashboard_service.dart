@@ -1,4 +1,4 @@
-import 'package:aiso/reports/models/report_model.dart';
+import 'package:aiso/Reports/models/report_model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter/foundation.dart';
 

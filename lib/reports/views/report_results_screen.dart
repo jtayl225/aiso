@@ -222,17 +222,17 @@
 import 'package:aiso/constants/app_colors.dart';
 import 'package:aiso/constants/string_constants.dart';
 import 'package:aiso/models/purchase_enum.dart';
-import 'package:aiso/reports/models/report_model.dart';
+import 'package:aiso/Reports/models/report_model.dart';
 import 'package:aiso/models/search_target_type_enum.dart';
 import 'package:aiso/models/report_results.dart';
 import 'package:aiso/view_models/auth_view_model.dart';
-import 'package:aiso/reports/view_models/report_results_view_model.dart';
-import 'package:aiso/reports/view_models/reports_view_model.dart';
+import 'package:aiso/Reports/view_models/report_results_view_model.dart';
+import 'package:aiso/Reports/view_models/reports_view_model.dart';
 import 'package:aiso/views/plots/BlurredOverlay.dart';
 import 'package:aiso/views/plots/ProportionCircle.dart';
-import 'package:aiso/reports/views/line_chart.dart';
-import 'package:aiso/reports/views/prompt_result_screen.dart';
-import 'package:aiso/reports/views/reports_editor_screen.dart';
+import 'package:aiso/Reports/views/line_chart.dart';
+import 'package:aiso/Reports/views/prompt_result_screen.dart';
+import 'package:aiso/Reports/views/reports_editor_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -825,7 +825,7 @@ class _ReportResultsScreenState extends State<ReportResultsScreen> {
             child: CustomPaint(
               painter: RadialPainter(
                 proportion: accuracy,
-                backgroundColor: AppColors.white,
+                backgroundColor: Colors.white,
               ),
               child: Center(child: Text("${(accuracy * 100).toStringAsFixed(0)}%")),
             ),
@@ -929,7 +929,7 @@ class _ReportResultsScreenState extends State<ReportResultsScreen> {
             child: CustomPaint(
               painter: RadialPainter(
                 proportion: (10 + 1 - rank) / 10,
-                backgroundColor: AppColors.white,
+                backgroundColor: Colors.white,
               ),
               child: Center(child: Text("#${rank.toStringAsFixed(1)}")),
             ),

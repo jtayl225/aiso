@@ -160,3 +160,21 @@ WHERE
   AND status != 'failed'
 ;
 
+--------------------
+-- llm_results_with_epochs_vw
+--------------------
+
+CREATE OR REPLACE VIEW llm_results_with_epochs_vw AS
+SELECT 
+  lr.*,
+  le.llm_run_id,
+  le.status AS epoch_status,
+  le.epoch,
+  le.temperature,
+  le.created_at AS epoch_created_at,
+  le.updated_at AS epoch_updated_at
+FROM public.llm_results lr
+INNER JOIN public.llm_epochs le 
+  ON lr.llm_epoch_id = le.id
+;
+

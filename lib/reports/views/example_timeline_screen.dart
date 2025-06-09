@@ -1,7 +1,7 @@
 // import 'dart:math';
 
 // import 'package:aiso/constants/buttons_constants.dart';
-import 'package:aiso/reports/views/timeline.dart';
+import 'package:aiso/Reports/views/timeline.dart';
 import 'package:flutter/material.dart';
 
 /// A demo screen that shows the Timeline widget in action.

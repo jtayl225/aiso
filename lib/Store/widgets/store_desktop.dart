@@ -1,0 +1,100 @@
+import 'package:aiso/Home/widgets/centered_view.dart';
+import 'package:aiso/NavBar/views/navgation_bar.dart';
+import 'package:aiso/Store/view_models/store_view_model.dart';
+import 'package:aiso/Store/widgets/product_card.dart';
+import 'package:aiso/Store/widgets/store_details.dart';
+import 'package:aiso/constants/app_colors.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+class StoreDesktop extends StatelessWidget {
+  const StoreDesktop({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+
+    final storeViewModel = context.watch<StoreViewModel>();
+    final products = storeViewModel.products;
+
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: CenteredView(
+          child: Column(
+            children: <Widget>[
+              MyNavigationBar(),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      StoreDetails(),
+                      const SizedBox(height: 16),
+                      Container(
+                        decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16),
+                        gradient: LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [
+                            AppColors.color6,
+                            AppColors.color5, 
+                            AppColors.color4, 
+                            AppColors.color3, 
+                            AppColors.color2, 
+                            AppColors.color1, 
+                            // Colors.white,
+                          ],
+                        ),
+                      ),
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                             mainAxisAlignment: MainAxisAlignment.center,
+                            children: products.map((product) => Padding(
+                              padding: const EdgeInsets.all(6),
+                              child: ProductCard(product),
+                            )).toList(),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              
+            ],
+          ),
+        ),
+      ),
+    );
+
+  }
+}
+
+
+// Scaffold(
+//       backgroundColor: Colors.white,
+//       body: CenteredView(
+//         child: Column(
+//           children: <Widget>[
+//             MyNavigationBar(),
+//             Expanded(
+//               child: Row(children: [
+//                 HomeDetails(),
+//                 Expanded(
+//                   child: Center(
+//                     child: CallToAction(
+//                       title: 'Generate free report!',
+//                       onPressed: () {
+//                             // Your action here
+//                             debugPrint("DEBUG: Call to action pressed!");
+//                           },
+//                       ),
+//                   ),
+//                 )
+//               ]),
+//             )
+//           ]
+//           ),
+//       ),
+//     );

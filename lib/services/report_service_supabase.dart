@@ -1,14 +1,16 @@
 import 'dart:convert';
 
+import 'package:aiso/models/entity_model.dart';
 import 'package:aiso/models/industry_model.dart';
 import 'package:aiso/models/location_models.dart';
 import 'package:aiso/models/prompt_model.dart';
 import 'package:aiso/models/prompt_template_model.dart';
 import 'package:aiso/models/purchase_enum.dart';
-import 'package:aiso/reports/models/report_model.dart';
+import 'package:aiso/models/report_run_results_model.dart';
+import 'package:aiso/Reports/models/report_model.dart';
 import 'package:aiso/models/report_results.dart';
-import 'package:aiso/reports/models/prompt_result_model.dart';
-import 'package:aiso/reports/models/report_run_model.dart';
+import 'package:aiso/Reports/models/prompt_result_model.dart';
+import 'package:aiso/Reports/models/report_run_model.dart';
 import 'package:aiso/models/search_target_model.dart';
 // import 'package:crypto/crypto.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -110,6 +112,54 @@ class ReportServiceSupabase {
   }
 
   // REPORT RESULTS //
+  Future<ReportRunResults> fetchReportRunResults(String reportRunId) async {
+
+    debugPrint('DEBUG: Service is fetching all report run results for reportRunId: $reportRunId');
+
+    final response = await _supabase
+      .from('report_results')
+      .select()
+      .eq('report_run_id', reportRunId)
+      .limit(1)
+      .maybeSingle(); // <- returns null instead of throwing
+
+    if (response == null) {
+      throw Exception('No report result found for reportRunId: $reportRunId');
+    }
+
+    debugPrint('DEBUG: report results response: $response');
+
+    final ReportRunResults reportRunResult = ReportRunResults.fromJson(response);
+
+    // final List<ReportRunResults> reportRunResult = (response as List).map((item) {
+    //   return ReportRunResults.fromJson(item);
+    // }).toList();
+
+    return reportRunResult;
+  }
+
+  Future<List<Entity>> fetchLlmRunResults(String llmEochId) async {
+
+    debugPrint('DEBUG: Service is fetchLlmRunResults');
+
+    final response = await _supabase
+      .from('llm_results')
+      .select()
+      .eq('llm_epoch_id', llmEochId);
+
+    // debugPrint('DEBUG: report results response: $response');
+
+    // final ReportRunResults reportRunResult = ReportRunResults.fromJson(response);
+
+    final List<Entity> entities = (response as List).map((item) {
+      return Entity.fromJson(item);
+    }).toList();
+
+    return entities;
+  }
+  
+
+
   Future<List<ReportResult>> fetchReportResults(String reportId) async {
     debugPrint('DEBUG: Service is fetching all report results For reportId: $reportId');
     final response = await _supabase
@@ -400,6 +450,8 @@ class ReportServiceSupabase {
         .upsert({'prompt': promptText.trim()},  onConflict: 'prompt_hash')
         .select()
         .single();
+
+    debugPrint("Response from prompts upsert: $response");
 
     // 3) Parse the Prompt object
     final Prompt prompt = Prompt.fromJson(response);

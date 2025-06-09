@@ -28,17 +28,23 @@ ThemeData lightMode = ThemeData(
     foregroundColor: Colors.white,
     elevation: 0,
     titleTextStyle: GoogleFonts.montserrat(
-      fontSize: 20, fontWeight: FontWeight.w600, color: Colors.white),
+      fontSize: 20, fontWeight: FontWeight.w600, color: Colors.white
+      ),
   ),
 
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
-      backgroundColor: AppColors.color1,   // ← was `primary:`
+      backgroundColor: AppColors.color6,   // ← was `primary:`
       foregroundColor: Colors.white,        // ← was `onPrimary:`
+      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
       ),
+      textStyle: GoogleFonts.montserrat(
+      fontSize: 18, fontWeight: FontWeight.w500, color: Colors.white
+      ),
     ),
+    
   ),
 
   cardTheme: CardThemeData(           // ← use CardThemeData, not CardTheme
