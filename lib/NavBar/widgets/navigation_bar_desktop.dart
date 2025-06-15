@@ -6,7 +6,10 @@ import 'package:aiso/NavBar/widgets/nav_bar_logo.dart';
 import 'package:aiso/Reports/views/reports_view.dart';
 import 'package:aiso/Store/views/store_screen.dart';
 import 'package:aiso/Store/views/store_view.dart';
+import 'package:aiso/locator.dart';
 import 'package:aiso/models/auth_state_enum.dart';
+import 'package:aiso/routing/route_names.dart';
+import 'package:aiso/services/navigation_service.dart';
 import 'package:aiso/view_models/auth_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -25,18 +28,24 @@ class NavigationBarDesktop extends StatelessWidget {
     final loggedOutItems = <NavBarItem>[
        NavBarItem(
         'About',
-        onTap: () => Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => const HomeTabletDesktop()),
-        ),
+        // onTap: () => Navigator.push(
+        //   context,
+        //   MaterialPageRoute(builder: (_) => const HomeTabletDesktop()),
+        // ),
+        onTap: () {
+          locator<NavigationService>().navigateTo(HomeRoute);
+        }
       ),
 
       NavBarItem(
         'Pricing',
-        onTap: () => Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => const MyStore()),
-        ),
+        // onTap: () => Navigator.push(
+        //   context,
+        //   MaterialPageRoute(builder: (_) => const MyStore()),
+        // ),
+        onTap: () {
+          locator<NavigationService>().navigateTo(StoreRoute);
+        }
       ),
      
       NavBarItem(

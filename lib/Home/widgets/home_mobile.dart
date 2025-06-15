@@ -2,6 +2,7 @@ import 'package:aiso/Home/widgets/call_to_action.dart';
 import 'package:aiso/Home/widgets/centered_view.dart';
 import 'package:aiso/Home/widgets/home_details.dart';
 import 'package:aiso/NavBar/views/navgation_bar.dart';
+import 'package:aiso/Reports/views/free_report_form_view.dart';
 import 'package:flutter/material.dart';
 
 class HomeMobile extends StatelessWidget {
@@ -9,14 +10,7 @@ class HomeMobile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: CenteredView(
-        child: Column(
-          children: <Widget>[
-            MyNavigationBar(),
-            Expanded(
-              child: Column(
+    return Column(
                 children: [
                   HomeDetails(),
                   Expanded(
@@ -26,16 +20,17 @@ class HomeMobile extends StatelessWidget {
                         onPressed: () {
                             // Your action here
                             debugPrint("DEBUG: Call to action pressed!");
+
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) => FreeReportWrapper(),
+                              ),
+                            );
                           },
                         ),
                     ),
                   )
                 ]
-              ),
-            )
-          ]
-        ),
-      ),
-    );
+              );
   }
 }
