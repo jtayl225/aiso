@@ -1,0 +1,37 @@
+import 'package:aiso/Home/widgets/centered_view.dart';
+import 'package:aiso/NavBar/views/navgation_bar.dart';
+import 'package:aiso/locator.dart';
+import 'package:aiso/routing/route_names.dart';
+import 'package:aiso/routing/router.dart';
+import 'package:aiso/services/navigation_service.dart';
+import 'package:flutter/material.dart';
+import 'package:responsive_builder/responsive_builder.dart';
+
+class LayoutTemplate extends StatelessWidget {
+
+  const LayoutTemplate({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ResponsiveBuilder(
+      builder: (context, sizingInformation) => Scaffold(
+        // drawer: sizingInformation.isMobile ? NavigationDrawer() : null,
+        backgroundColor: Colors.white,
+        body: CenteredView(
+          child: Column(
+            children: <Widget>[
+              MyNavigationBar(),
+              Expanded(
+                  child: Navigator(
+                key: locator<NavigationService>().navigatorKey,
+                onGenerateRoute: generateRoute,
+                initialRoute: HomeRoute,
+              ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
