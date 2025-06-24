@@ -159,7 +159,7 @@
 import 'dart:ui';
 import 'package:aiso/Store/views/store_screen.dart';
 // import 'package:aiso/models/entity_model.dart';
-import 'package:aiso/Reports/view_models/free_report_view_model.dart';
+import 'package:aiso/reports/view_models/free_report_view_model.dart';
 import 'package:aiso/locator.dart';
 import 'package:aiso/routing/route_names.dart';
 import 'package:aiso/services/navigation_service.dart';

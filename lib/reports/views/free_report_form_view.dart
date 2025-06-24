@@ -1,6 +1,6 @@
-import 'package:aiso/Reports/view_models/free_report_view_model.dart';
-import 'package:aiso/Reports/widgets/free_report_form_desktop.dart';
-import 'package:aiso/Reports/widgets/free_report_form_mobile.dart';
+import 'package:aiso/reports/view_models/free_report_view_model.dart';
+import 'package:aiso/reports/widgets/free_report_form_desktop.dart';
+import 'package:aiso/reports/widgets/free_report_form_mobile.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_builder/responsive_builder.dart';

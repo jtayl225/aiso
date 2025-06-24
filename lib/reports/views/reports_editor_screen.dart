@@ -3,12 +3,12 @@ import 'package:aiso/models/db_timestamps_model.dart';
 import 'package:aiso/models/entity_model.dart';
 import 'package:aiso/models/industry_model.dart';
 import 'package:aiso/models/prompt_model.dart';
-import 'package:aiso/Reports/models/report_model.dart';
+import 'package:aiso/reports/models/report_model.dart';
 import 'package:aiso/models/search_target_model.dart';
 // import 'package:aiso/models/search_target_type_enum.dart';
 import 'package:aiso/view_models/auth_view_model.dart';
-import 'package:aiso/Reports/view_models/reports_view_model.dart';
-import 'package:aiso/Reports/views/prompt_builder_screen.dart';
+import 'package:aiso/reports/view_models/reports_view_model.dart';
+import 'package:aiso/reports/views/prompt_builder_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

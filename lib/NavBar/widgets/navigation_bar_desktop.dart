@@ -3,7 +3,7 @@ import 'package:aiso/Auth/views/auth_profile_view.dart';
 import 'package:aiso/Home/widgets/home_tablet_desktop.dart';
 import 'package:aiso/NavBar/widgets/nav_bar_item.dart';
 import 'package:aiso/NavBar/widgets/nav_bar_logo.dart';
-import 'package:aiso/Reports/views/reports_view.dart';
+import 'package:aiso/reports/views/reports_view.dart';
 import 'package:aiso/Store/views/store_screen.dart';
 import 'package:aiso/Store/views/store_view.dart';
 import 'package:aiso/locator.dart';

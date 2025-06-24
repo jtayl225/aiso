@@ -2,7 +2,7 @@ import 'package:aiso/Home/widgets/call_to_action.dart';
 import 'package:aiso/Home/widgets/centered_view.dart';
 import 'package:aiso/Home/widgets/home_details.dart';
 import 'package:aiso/NavBar/views/navgation_bar.dart';
-import 'package:aiso/Reports/views/free_report_form_view.dart';
+import 'package:aiso/reports/views/free_report_form_view.dart';
 import 'package:aiso/locator.dart';
 import 'package:aiso/routing/route_names.dart';
 import 'package:aiso/services/navigation_service.dart';

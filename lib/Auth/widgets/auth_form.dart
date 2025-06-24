@@ -155,8 +155,8 @@
 //   }
 // }
 
-import 'package:aiso/Reports/view_models/reports_view_model.dart';
-import 'package:aiso/Reports/views/reports_view.dart';
+import 'package:aiso/reports/view_models/reports_view_model.dart';
+import 'package:aiso/reports/views/reports_view.dart';
 import 'package:aiso/locator.dart';
 import 'package:aiso/routing/route_names.dart';
 import 'package:aiso/services/navigation_service.dart';

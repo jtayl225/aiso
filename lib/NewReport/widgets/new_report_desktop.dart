@@ -1,7 +1,7 @@
 import 'package:aiso/Home/widgets/centered_view.dart';
 import 'package:aiso/NewReport/view_models/new_report_view_model.dart';
 import 'package:aiso/NewReport/widgets/locality_card.dart';
-import 'package:aiso/Reports/view_models/free_report_view_model.dart';
+import 'package:aiso/reports/view_models/free_report_view_model.dart';
 import 'package:aiso/Widgets/flexible_layout.dart';
 import 'package:aiso/Widgets/generic_type_ahead.dart';
 import 'package:aiso/models/industry_model.dart';

@@ -3,7 +3,7 @@ import 'package:aiso/models/db_timestamps_model.dart';
 import 'package:aiso/models/prompt_model.dart';
 import 'package:aiso/models/prompt_template_model.dart';
 import 'package:aiso/models/purchase_enum.dart';
-import 'package:aiso/Reports/models/report_model.dart';
+import 'package:aiso/reports/models/report_model.dart';
 import 'package:aiso/models/search_target_model.dart';
 import 'package:aiso/services/report_service_supabase.dart';
 import 'package:flutter/material.dart';

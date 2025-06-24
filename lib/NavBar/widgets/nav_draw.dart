@@ -2,7 +2,7 @@ import 'package:aiso/Auth/views/auth_home_view.dart';
 import 'package:aiso/Auth/views/auth_profile_view.dart';
 import 'package:aiso/NavBar/widgets/nav_bar_logo.dart';
 import 'package:aiso/NavBar/widgets/nav_draw_item.dart';
-import 'package:aiso/Reports/views/reports_view.dart';
+import 'package:aiso/reports/views/reports_view.dart';
 import 'package:aiso/locator.dart';
 import 'package:aiso/models/auth_state_enum.dart';
 import 'package:aiso/routing/route_names.dart';

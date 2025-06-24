@@ -55,9 +55,9 @@
 //   }
 // }
 
-import 'package:aiso/Reports/view_models/free_report_view_model.dart';
-import 'package:aiso/Reports/views/free_report_results_screen.dart';
-import 'package:aiso/Reports/views/timeline.dart';
+import 'package:aiso/reports/view_models/free_report_view_model.dart';
+import 'package:aiso/reports/views/free_report_results_screen.dart';
+import 'package:aiso/reports/views/timeline.dart';
 import 'package:aiso/locator.dart';
 import 'package:aiso/routing/route_names.dart';
 import 'package:aiso/services/navigation_service.dart';

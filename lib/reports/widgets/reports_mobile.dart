@@ -1,6 +1,6 @@
-import 'package:aiso/Reports/view_models/reports_view_model.dart';
-import 'package:aiso/Reports/widgets/report_card.dart';
-import 'package:aiso/Reports/widgets/reports_details.dart';
+import 'package:aiso/reports/view_models/reports_view_model.dart';
+import 'package:aiso/reports/widgets/report_card.dart';
+import 'package:aiso/reports/widgets/reports_details.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

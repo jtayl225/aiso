@@ -1,5 +1,5 @@
-import 'package:aiso/Reports/widgets/free_report_form.dart';
-import 'package:aiso/Reports/widgets/free_report_form_details.dart';
+import 'package:aiso/reports/widgets/free_report_form.dart';
+import 'package:aiso/reports/widgets/free_report_form_details.dart';
 import 'package:flutter/material.dart';
 
 class FreeReportDesktop extends StatelessWidget {

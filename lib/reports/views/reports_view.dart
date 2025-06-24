@@ -1,5 +1,5 @@
-import 'package:aiso/Reports/widgets/reports_desktop.dart';
-import 'package:aiso/Reports/widgets/reports_mobile.dart';
+import 'package:aiso/reports/widgets/reports_desktop.dart';
+import 'package:aiso/reports/widgets/reports_mobile.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
