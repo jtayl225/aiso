@@ -1,5 +1,3 @@
-import 'package:aiso/Home/widgets/centered_view.dart';
-import 'package:aiso/NavBar/views/navgation_bar.dart';
 import 'package:aiso/Store/view_models/store_view_model.dart';
 import 'package:aiso/Store/widgets/product_card.dart';
 import 'package:aiso/Store/widgets/store_details.dart';
@@ -16,60 +14,44 @@ class StoreMobile extends StatelessWidget {
     final storeViewModel = context.watch<StoreViewModel>();
     final products = storeViewModel.products;
     
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: CenteredView(
+    return SingleChildScrollView(
+        child: Center(
           child: Column(
-            children: <Widget>[
-              MyNavigationBar(),
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Center(
-                    child: Column(
-                      children: [
-                        StoreDetails(),
-                        const SizedBox(height: 16),
-                        Container(
-                          decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16),
-                          gradient: LinearGradient(
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                            colors: [
-                              AppColors.color6,
-                              AppColors.color5, 
-                              AppColors.color4, 
-                              AppColors.color3, 
-                              AppColors.color2, 
-                              AppColors.color1, 
-                              // Colors.white,
-                            ],
-                          ),
-                        ),
-                          child: Center(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: products.map((product) => Padding(
-                                padding: const EdgeInsets.all(12),
-                                child: ProductCard(product),
-                              )).toList(),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+            children: [
+              StoreDetails(),
+              const SizedBox(height: 16),
+              Container(
+                decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    AppColors.color6,
+                    AppColors.color5, 
+                    AppColors.color4, 
+                    AppColors.color3, 
+                    AppColors.color2, 
+                    AppColors.color1, 
+                    // Colors.white,
+                  ],
+                ),
+              ),
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: products.map((product) => Padding(
+                      padding: const EdgeInsets.only(top: 6),
+                      child: ProductCard(product),
+                    )).toList(),
                   ),
                 ),
               ),
-              
             ],
           ),
         ),
-      ),
-    );
-
+      );
   }
 }
 

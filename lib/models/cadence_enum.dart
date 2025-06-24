@@ -1,13 +1,17 @@
 enum Cadence {
+  once,
   hour,
   day,
   week,
   month,
+  year
 }
 
 extension CadenceExtension on Cadence {
   String get label {
     switch (this) {
+      case Cadence.once:
+        return 'Once';
       case Cadence.hour:
         return 'Hourly';
       case Cadence.day:
@@ -16,6 +20,8 @@ extension CadenceExtension on Cadence {
         return 'Weekly';
       case Cadence.month:
         return 'Monthly';
+      case Cadence.year:
+        return 'Yearly';
     }
   }
 

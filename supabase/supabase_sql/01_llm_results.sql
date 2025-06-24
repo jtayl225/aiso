@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS llm_runs (
   target_entity_industry text NOT NULL,
   
   -- metadata
-  is_paid BOOLEAN NOT NULL DEFAULT false,
+  -- is_paid BOOLEAN NOT NULL DEFAULT false,
   epochs INT NOT NULL, -- total number of epochs
   started_at timestamp with time zone NOT NULL DEFAULT now(),
   finished_at timestamp with time zone,
@@ -39,6 +39,7 @@ CREATE TABLE IF NOT EXISTS llm_epochs (
   -- data
   epoch INT NOT NULL,
   temperature DOUBLE PRECISION NOT NULL,
+  top_p DOUBLE PRECISION NOT NULL,
   status processing_status NOT NULL DEFAULT 'initialising', -- 👈 enum column
 
   -- timestamps
@@ -177,4 +178,65 @@ FROM public.llm_results lr
 INNER JOIN public.llm_epochs le 
   ON lr.llm_epoch_id = le.id
 ;
+
+
+--------------------
+-- trigger
+--------------------
+
+-- Function to check if all epochs for an LLM run are completed or if any have failed
+CREATE OR REPLACE FUNCTION public.check_llm_run_completion()
+RETURNS TRIGGER AS $$
+DECLARE
+    v_total_epochs INT;
+    v_completed_epochs INT;
+    v_failed_epochs INT;
+BEGIN
+    -- Get the total number of expected epochs for the current llm_run
+    SELECT epochs INTO v_total_epochs
+    FROM public.llm_runs
+    WHERE id = NEW.llm_run_id;
+
+    -- Count completed epochs for this run
+    SELECT COUNT(*) INTO v_completed_epochs
+    FROM public.llm_epochs
+    WHERE llm_run_id = NEW.llm_run_id
+    AND status = 'completed';
+
+    -- Count failed epochs for this run
+    SELECT COUNT(*) INTO v_failed_epochs
+    FROM public.llm_epochs
+    WHERE llm_run_id = NEW.llm_run_id
+    AND status = 'failed';
+
+    -- If any epoch has failed, mark the entire run as failed
+    IF v_failed_epochs > 0 THEN
+        UPDATE public.llm_runs
+        SET
+            status = 'failed',
+            finished_at = now(),
+            error_message = 'One or more epochs failed.' -- You can customize this message
+        WHERE id = NEW.llm_run_id
+        AND status != 'failed'; -- Only update if not already failed
+    -- If all epochs are completed successfully and no epochs have failed
+    ELSIF v_completed_epochs = v_total_epochs THEN
+        UPDATE public.llm_runs
+        SET
+            status = 'completed',
+            finished_at = now(),
+            error_message = NULL -- Clear any previous error message
+        WHERE id = NEW.llm_run_id
+        AND status != 'completed'; -- Only update if not already completed
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER; -- SECURITY DEFINER allows the function to run with the permissions of the user who created it (e.g., supabase_admin)
+
+-- Trigger to execute the function after an llm_epoch's status is updated
+CREATE OR REPLACE TRIGGER on_llm_epoch_status_update
+AFTER UPDATE OF status ON public.llm_epochs
+FOR EACH ROW
+EXECUTE FUNCTION public.check_llm_run_completion();
+
 

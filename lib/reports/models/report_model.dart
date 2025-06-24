@@ -7,9 +7,10 @@ import 'package:aiso/models/search_target_model.dart';
 class Report {
   final String id;
   final String userId;
+  final String searchTargetId;
   final String title;
   // final String description;
-  final bool isPaid;
+  // final bool isPaid;
   final Cadence cadence;
   List<Prompt>? prompts;
   SearchTarget? searchTarget;
@@ -19,10 +20,11 @@ class Report {
 
   Report({
     required this.id, 
-    required this.userId, 
+    required this.userId,
+    required this.searchTargetId, 
     required this.title, 
     // required this.description,
-    required this.isPaid, 
+    // required this.isPaid, 
     required this.cadence,
     this.prompts,
     this.searchTarget,
@@ -35,9 +37,10 @@ class Report {
     return Report(
       id: json['id'] as String,
       userId: json['user_id'] as String,
+      searchTargetId: json['search_target_id'] as String,
       title: json['title'] as String,
       // description: json['description'] as String,
-      isPaid: json['is_paid'] as bool,
+      // isPaid: json['is_paid'] as bool,
       cadence: CadenceExtension.fromString(json['cadence'] as String),
       prompts: (json['prompts'] as List<dynamic>?)
         ?.map((item) => Prompt.fromJson(item))
@@ -58,9 +61,10 @@ class Report {
     return {
       // 'id': id, // handled by supabase
       'user_id': userId,
+      'search_target_id': searchTargetId,
       'title': title,
       // 'description': description,
-      'is_paid': isPaid,
+      // 'is_paid': isPaid,
       'cadence': cadence.toJson()
     };
   }
@@ -68,9 +72,10 @@ class Report {
   Report copyWith({
     String? id,
     String? userId,
+    String? searchTargetId,
     String? title,
     // String? description,
-    bool? isPaid,
+    // bool? isPaid,
     Cadence? cadence,
     List<Prompt>? prompts,
     SearchTarget? searchTarget,
@@ -81,9 +86,10 @@ class Report {
     return Report(
       id: id ?? this.id,
       userId: userId ?? this.userId,
+      searchTargetId: searchTargetId ?? this.searchTargetId,
       title: title ?? this.title,
       // description: description ?? this.description,
-      isPaid: isPaid ?? this.isPaid,
+      // isPaid: isPaid ?? this.isPaid,
       cadence: cadence ?? this.cadence,
       // Clone the list if provided, else clone current if not null, else null
       prompts: prompts ?? (this.prompts != null ? List<Prompt>.from(this.prompts!) : null),

@@ -207,7 +207,7 @@ class _WelcomeScreenState2 extends State<WelcomeScreen2> {
                       context,
                       MaterialPageRoute(
                         builder: (_) => ChangeNotifierProvider(
-                          create: (_) => FreeReportViewModel(userId: userId),
+                          create: (_) => FreeReportViewModel(),
                           child: const FreeReportFormScreen(),
                         ),
                       ),

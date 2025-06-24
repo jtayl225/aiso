@@ -160,6 +160,9 @@ import 'dart:ui';
 import 'package:aiso/Store/views/store_screen.dart';
 // import 'package:aiso/models/entity_model.dart';
 import 'package:aiso/Reports/view_models/free_report_view_model.dart';
+import 'package:aiso/locator.dart';
+import 'package:aiso/routing/route_names.dart';
+import 'package:aiso/services/navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -183,36 +186,30 @@ class _FreeReportResultScreenState extends State<FreeReportResultScreen> {
       debugPrint('DEBUG: promptText = "${vm.promptText}"');
       debugPrint('DEBUG: reportRunResults = ${vm.reportRunResults}');
       debugPrint('DEBUG: reportRunResults = ${vm.reportRunResults?.llmEpochId}');
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
+      return const Center(child: CircularProgressIndicator());
     }
 
     final entities = vm.entities;
     final prompt = vm.promptText;
     final searchTargetRank = vm.reportRunResults!.targetRank;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Free Ranking Report'),
-      ),
-      body: Padding(
+    return Padding(
         padding: const EdgeInsets.all(16.0),
         child: Center(
           child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 400),
+            constraints: const BoxConstraints(maxWidth: 600),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const Text(
-                  'Your free ranking report for:',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  'Your free report for:',
+                  style: TextStyle(fontSize: 16),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 8),
                 Text(
                   prompt,
-                  style: const TextStyle(fontSize: 16),
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 16),
@@ -280,17 +277,21 @@ class _FreeReportResultScreenState extends State<FreeReportResultScreen> {
                                 bottom: 8,
                                 right: 8,
                                 child: ElevatedButton(
-                                  onPressed: () async {
-                                    final purchased = await Navigator.of(context).push<bool>(
-                                      MaterialPageRoute(
-                                        builder: (_) => const StoreScreen(),
-                                      ),
-                                    );
-                                    if (purchased == true) {
-                                      setState(() {
-                                        _revealed.add(index);
-                                      });
-                                    }
+                                  onPressed: () { // async
+
+                                    debugPrint('navKey.currentState = ''${locator<NavigationService>().navigatorKey.currentState}');
+                                    locator<NavigationService>().navigateTo(StoreRoute);
+
+                                    // final purchased = await Navigator.of(context).push<bool>(
+                                    //   MaterialPageRoute(
+                                    //     builder: (_) => const StoreScreen(),
+                                    //   ),
+                                    // );
+                                    // if (purchased == true) {
+                                    //   setState(() {
+                                    //     _revealed.add(index);
+                                    //   });
+                                    // }
                                   },
                                   style: ElevatedButton.styleFrom(
                                     shape: RoundedRectangleBorder(
@@ -299,7 +300,7 @@ class _FreeReportResultScreenState extends State<FreeReportResultScreen> {
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 12, vertical: 8),
                                   ),
-                                  child: const Text('Reveal'),
+                                  child: const Text('View'),
                                 ),
                               ),
                             ],
@@ -313,7 +314,6 @@ class _FreeReportResultScreenState extends State<FreeReportResultScreen> {
             ),
           ),
         ),
-      ),
-    );
+      );
   }
 }

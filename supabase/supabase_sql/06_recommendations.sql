@@ -58,3 +58,51 @@ CREATE TABLE IF NOT EXISTS recommendation_framework_pillars (
   framework_pillar_id uuid NOT NULL REFERENCES framework_pillars(id) ON DELETE RESTRICT,
   PRIMARY KEY ( recommendation_id, framework_pillar_id )
 );
+
+--------------------
+-- report run recommendations
+--------------------
+CREATE TABLE IF NOT EXISTS report_run_recommendations (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  report_run_id uuid REFERENCES public.report_runs(id) ON DELETE CASCADE,
+  recommendation_id uuid REFERENCES public.recommendations(id) ON DELETE CASCADE,
+  generated_comment text NOT NULL,
+  is_done BOOL NOT NULL DEFAULT FALSE,
+  created_at timestamp with time zone DEFAULT now(),
+  updated_at timestamp with time zone DEFAULT now(),
+  deleted_at timestamp with time zone
+);
+
+--------------------
+-- report run recommendations view
+--------------------
+CREATE OR REPLACE VIEW report_run_recommendations_vw AS
+SELECT
+  a.id,
+  a.report_run_id,
+  a.recommendation_id,
+  a.generated_comment,
+  a.is_done,
+  a.created_at,
+  a.updated_at,
+  a.deleted_at,
+  b.cadence,
+  c.report_id
+FROM report_run_recommendations AS a
+INNER JOIN recommendations AS b
+  ON a.recommendation_id = b.id
+INNER JOIN report_runs AS c
+  ON a.report_run_id = c.id
+;
+
+--------------------
+-- report run recommendations view
+--------------------
+CREATE OR REPLACE VIEW recommendations_vw AS
+SELECT
+  *,
+  random() AS rand
+FROM recommendations
+;
+
+

@@ -4,6 +4,9 @@ import 'package:aiso/Home/widgets/home_details.dart';
 import 'package:aiso/NavBar/views/navgation_bar.dart';
 import 'package:aiso/Reports/view_models/free_report_view_model.dart';
 import 'package:aiso/Reports/views/free_report_form_view.dart';
+import 'package:aiso/locator.dart';
+import 'package:aiso/routing/route_names.dart';
+import 'package:aiso/services/navigation_service.dart';
 import 'package:aiso/view_models/auth_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -13,6 +16,7 @@ class HomeTabletDesktop extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final vm = context.watch<FreeReportViewModel>();
     return Row(children: [
                 HomeDetails(),
                 Expanded(
@@ -20,14 +24,17 @@ class HomeTabletDesktop extends StatelessWidget {
                     child: CallToAction(
                       title: 'Generate free report!',
                       onPressed: () {
-                            // Your action here
-                            debugPrint("DEBUG: Call to action pressed!");
 
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (_) => FreeReportWrapper(),
-                              ),
-                            );
+                        vm.reset();
+                        locator<NavigationService>().navigateTo(freeReportFormRoute);
+                            // // Your action here
+                            // debugPrint("DEBUG: Call to action pressed!");
+
+                            // Navigator.of(context).push(
+                            //   MaterialPageRoute(
+                            //     builder: (_) => FreeReportWrapper(),
+                            //   ),
+                            // );
 
                           },
                       ),

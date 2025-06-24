@@ -1,4 +1,11 @@
+import 'package:aiso/Auth/views/auth_home_view.dart';
+import 'package:aiso/Auth/views/auth_profile_view.dart';
 import 'package:aiso/Home/views/home_view.dart';
+import 'package:aiso/Reports/views/free_report_form_view.dart';
+import 'package:aiso/Reports/views/free_report_results_screen.dart';
+import 'package:aiso/Reports/views/free_report_timeline_screen.dart';
+import 'package:aiso/NewReport/views/new_report_view.dart';
+import 'package:aiso/Reports/views/reports_view.dart';
 import 'package:aiso/Store/views/store_view.dart';
 import 'package:aiso/routing/route_names.dart';
 import 'package:flutter/material.dart';
@@ -11,13 +18,27 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return _getPageRoute(MyHome(), settings.name);
     case StoreRoute:
       return _getPageRoute(MyStore(), settings.name);
+    case GetStartedRoute:
+      return _getPageRoute(AuthHome(), settings.name);
+    case ReportsRoute:
+      return _getPageRoute(MyReports(), settings.name);
+    case newReportRoute:
+      return _getPageRoute(NewReportView(), settings.name);
+    case ProfileRoute:
+      return _getPageRoute(AuthProfile(), settings.name);
+    case freeReportFormRoute:
+      return _getPageRoute(FreeReport(), settings.name);
+    case freeReportTimelineRoute:
+      return _getPageRoute(FreeReportTimelineScreen(), settings.name);
+    case freeReportResultsRoute:
+      return _getPageRoute(FreeReportResultScreen(), settings.name);
     default:
       return _getPageRoute(MyHome(), settings.name);
   }
 }
 
 PageRoute _getPageRoute(Widget child, String? routeName) {
-  return _FadeRoute(child: child, routeName: routeName);
+  return _NoTransitionRoute(child: child, routeName: routeName);
 }
 
 class _FadeRoute extends PageRouteBuilder {
@@ -42,4 +63,18 @@ class _FadeRoute extends PageRouteBuilder {
                   opacity: animation,
                   child: child,
                 ));
+}
+
+class _NoTransitionRoute extends PageRouteBuilder {
+  final Widget child;
+  final String? routeName;
+
+  _NoTransitionRoute({required this.child, this.routeName})
+      : super(
+          pageBuilder: (_, __, ___) => child,
+          settings: RouteSettings(name: routeName),
+          transitionDuration: Duration.zero,
+          reverseTransitionDuration: Duration.zero,
+          transitionsBuilder: (_, __, ___, child) => child,
+        );
 }

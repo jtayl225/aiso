@@ -1,9 +1,12 @@
 import 'package:aiso/constants/string_constants.dart';
+import 'package:aiso/locator.dart';
 import 'package:aiso/models/industry_model.dart';
 import 'package:aiso/models/location_models.dart';
 import 'package:aiso/Reports/view_models/free_report_view_model.dart';
 import 'package:aiso/Reports/views/free_report_timeline_screen.dart';
 import 'package:aiso/Reports/views/locality_type_ahead.dart';
+import 'package:aiso/routing/route_names.dart';
+import 'package:aiso/services/navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -53,13 +56,13 @@ class _FreeReportFormState extends State<FreeReportForm> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Center(
-                      child: Image.asset(
-                        logoImage,
-                        height: 100,
-                      ),
-                    ),
-                    const SizedBox(height: 20),
+                    // Center(
+                    //   child: Image.asset(
+                    //     logoImage,
+                    //     height: 100,
+                    //   ),
+                    // ),
+                    // const SizedBox(height: 20),
                     // _buildTextField("First Name", (val) => _updateField(val, (v) => firstName = v)),
                     // _buildTextField("Last Name", (val) => _updateField(val, (v) => lastName = v)),
                     _buildTextField("Email", (val) => _updateField(val, (v) => vm.email = v), 
@@ -115,19 +118,7 @@ class _FreeReportFormState extends State<FreeReportForm> {
                         ? () {
                             if (_formKey.currentState!.validate()) {
                               vm.createAndRunFreeReport();
-      
-                              // Delay navigation until the next frame to avoid build conflicts
-                              WidgetsBinding.instance.addPostFrameCallback((_) {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (_) => ChangeNotifierProvider<FreeReportViewModel>.value(
-                                      value: vm,
-                                      child: const FreeReportTimelineScreen(),
-                                    ),
-                                  ),
-                                );
-                              });
+                              locator<NavigationService>().navigateTo(freeReportTimelineRoute);
                             }
                           }
                         : null,

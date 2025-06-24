@@ -1,14 +1,19 @@
 import 'package:aiso/Home/views/home_view.dart';
 import 'package:aiso/Home/widgets/home_tablet_desktop.dart';
+import 'package:aiso/Reports/view_models/free_report_view_model.dart';
 import 'package:aiso/Store/view_models/store_view_model.dart';
 import 'package:aiso/Reports/views/example_timeline_screen.dart';
 import 'package:aiso/locator.dart';
+import 'package:aiso/routing/route_names.dart';
+import 'package:aiso/routing/router.dart';
+import 'package:aiso/services/navigation_service.dart';
 import 'package:aiso/themes/light_mode.dart';
 import 'package:aiso/view_models/auth_view_model.dart';
 import 'package:aiso/Reports/view_models/reports_view_model.dart';
 import 'package:aiso/views/auth/auth_checker_screen.dart';
 import 'package:aiso/views/layout_template/layout_template.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -20,12 +25,14 @@ Future<void> main() async {
   );
 
   setupLocator();
+  usePathUrlStrategy();
 
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AuthViewModel()),
         // ChangeNotifierProvider(create: (_) => MessengerViewModel()),
+        ChangeNotifierProvider(create: (_) => FreeReportViewModel()), 
         ChangeNotifierProvider(create: (_) => ReportViewModel()), 
         ChangeNotifierProvider(create: (_) => StoreViewModel()),
       ],
@@ -43,7 +50,13 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'GEO MAX',
       theme: lightMode,
-      home: const LayoutTemplate(), // MyHome(), //AuthChecker(), // ExampleTimelineScreen(), AuthChecker(), // DashboardMenu(), // DashboardScreen(url: "https://www.wikipedia.org"), // StoreScreen(), //PromptHashScreen(), // AuthChecker(),  https://aiso-seyf.onrender.com 
+      builder: (context, child) => LayoutTemplate(
+        child: child!,
+      ),
+      navigatorKey: locator<NavigationService>().navigatorKey,
+      onGenerateRoute: generateRoute,
+      initialRoute: HomeRoute,
+      // home: const LayoutTemplate(), // MyHome(), //AuthChecker(), // ExampleTimelineScreen(), AuthChecker(), // DashboardMenu(), // DashboardScreen(url: "https://www.wikipedia.org"), // StoreScreen(), //PromptHashScreen(), // AuthChecker(),  https://aiso-seyf.onrender.com 
     );
   }
 }

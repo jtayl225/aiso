@@ -1,5 +1,3 @@
-import 'package:aiso/Home/widgets/centered_view.dart';
-import 'package:aiso/NavBar/views/navgation_bar.dart';
 import 'package:aiso/Reports/view_models/reports_view_model.dart';
 import 'package:aiso/Reports/widgets/report_card.dart';
 import 'package:aiso/Reports/widgets/reports_details.dart';
@@ -15,14 +13,7 @@ class ReportsMobile extends StatelessWidget {
     final reportViewModel = context.watch<ReportViewModel>();
     final reports = reportViewModel.reports;
 
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: CenteredView(
-        child: Column(
-          children: <Widget>[
-            MyNavigationBar(),
-            Expanded(
-              child: SingleChildScrollView(
+    return SingleChildScrollView(
                 child: Column(
                   children: [
                   ReportsDetails(isCentered: true),
@@ -35,11 +26,6 @@ class ReportsMobile extends StatelessWidget {
                                 
                   )
                 ]),
-              ),
-            )
-          ]
-          ),
-      ),
-    );
+              );
   }
 }

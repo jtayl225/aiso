@@ -157,6 +157,9 @@
 
 import 'package:aiso/Reports/view_models/reports_view_model.dart';
 import 'package:aiso/Reports/views/reports_view.dart';
+import 'package:aiso/locator.dart';
+import 'package:aiso/routing/route_names.dart';
+import 'package:aiso/services/navigation_service.dart';
 import 'package:aiso/view_models/auth_view_model.dart';
 import 'package:aiso/views/auth/auth_checker_screen.dart';
 import 'package:flutter/material.dart';
@@ -268,12 +271,13 @@ class _AuthFormState extends State<AuthForm> {
     }
   }
 
-  void _submit() {
+  void _submit() async {
     if (_isSignIn) {
-      _signIn();
+      await _signIn();
     } else {
-      _signUp();
+      await _signUp();
     }
+    locator<NavigationService>().navigateTo(ReportsRoute);
   }
 
   @override

@@ -58,7 +58,7 @@ class ReportResultsViewModel extends ChangeNotifier {
     notifyListeners();
     try {
       debugPrint('DEBUG: view model about to call run-report edge function');
-      await _reportService.runReport(report);
+      await _reportService.runReport(report, true);
       results = await _reportService.fetchReportResults(report.id);
       searchTarget = await _reportService.fetchSearchTarget(report.id);
       return true;

@@ -18,14 +18,14 @@ class FreeReport extends StatelessWidget {
   }
 }
 
-class FreeReportWrapper extends StatelessWidget {
-  const FreeReportWrapper({super.key});
+// class FreeReportWrapper extends StatelessWidget {
+//   const FreeReportWrapper({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => FreeReportViewModel(userId: '0'),
-      child: const FreeReport(),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return ChangeNotifierProvider(
+//       create: (_) => FreeReportViewModel(),
+//       child: const FreeReport(),
+//     );
+//   }
+// }

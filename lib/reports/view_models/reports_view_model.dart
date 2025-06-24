@@ -12,16 +12,16 @@ class ReportViewModel extends ChangeNotifier {
 
   // List<Report> reports = [];
   List<Report> reports = [
-    Report(id: '0', userId: '', title: 'title', isPaid: true, cadence: Cadence.month, dbTimestamps: DbTimestamps.now()),
-    Report(id: '1', userId: '', title: 'title2', isPaid: true, cadence: Cadence.month, dbTimestamps: DbTimestamps.now()),
-    Report(id: '2', userId: '', title: 'title3', isPaid: true, cadence: Cadence.month, dbTimestamps: DbTimestamps.now()),
-    Report(id: '3', userId: '', title: 'title4', isPaid: true, cadence: Cadence.month, dbTimestamps: DbTimestamps.now()),
-    Report(id: '4', userId: '', title: 'title4', isPaid: true, cadence: Cadence.month, dbTimestamps: DbTimestamps.now()),
-    Report(id: '5', userId: '', title: 'title4', isPaid: true, cadence: Cadence.month, dbTimestamps: DbTimestamps.now()),
-    Report(id: '6', userId: '', title: 'title4', isPaid: true, cadence: Cadence.month, dbTimestamps: DbTimestamps.now()),
-    Report(id: '7', userId: '', title: 'title4', isPaid: true, cadence: Cadence.month, dbTimestamps: DbTimestamps.now()),
-    Report(id: '8', userId: '', title: 'title4', isPaid: true, cadence: Cadence.month, dbTimestamps: DbTimestamps.now()),
-    Report(id: '9', userId: '', title: 'title4', isPaid: true, cadence: Cadence.month, dbTimestamps: DbTimestamps.now()),
+    Report(id: '0', userId: '', searchTargetId: '', title: 'title', cadence: Cadence.month, dbTimestamps: DbTimestamps.now()),
+    Report(id: '1', userId: '', searchTargetId: '', title: 'title2', cadence: Cadence.month, dbTimestamps: DbTimestamps.now()),
+    Report(id: '2', userId: '', searchTargetId: '', title: 'title3', cadence: Cadence.month, dbTimestamps: DbTimestamps.now()),
+    Report(id: '3', userId: '', searchTargetId: '', title: 'title4', cadence: Cadence.month, dbTimestamps: DbTimestamps.now()),
+    Report(id: '4', userId: '', searchTargetId: '', title: 'title4', cadence: Cadence.month, dbTimestamps: DbTimestamps.now()),
+    Report(id: '5', userId: '', searchTargetId: '', title: 'title4', cadence: Cadence.month, dbTimestamps: DbTimestamps.now()),
+    Report(id: '6', userId: '', searchTargetId: '', title: 'title4', cadence: Cadence.month, dbTimestamps: DbTimestamps.now()),
+    Report(id: '7', userId: '', searchTargetId: '', title: 'title4', cadence: Cadence.month, dbTimestamps: DbTimestamps.now()),
+    Report(id: '8', userId: '', searchTargetId: '', title: 'title4', cadence: Cadence.month, dbTimestamps: DbTimestamps.now()),
+    Report(id: '9', userId: '', searchTargetId: '', title: 'title4', cadence: Cadence.month, dbTimestamps: DbTimestamps.now()),
   ];
 
   List<PromptTemplate> promptTemplates = [];
@@ -67,11 +67,11 @@ class ReportViewModel extends ChangeNotifier {
         report.prompts = reportPrompts;
       }
 
-      if (newReport.searchTarget != null) {
-        final updatedSearchTarget = newReport.searchTarget!.copyWith(reportId: report.id);
-        final reportSearchTarget = await _reportService.createSearchTarget(updatedSearchTarget);
-        report.searchTarget = reportSearchTarget;
-      }
+      // if (newReport.searchTarget != null) {
+      //   final updatedSearchTarget = newReport.searchTarget!.copyWith(reportId: report.id);
+      //   final reportSearchTarget = await _reportService.createSearchTarget(updatedSearchTarget);
+      //   report.searchTarget = reportSearchTarget;
+      // }
 
       reports.add(report);
       return true;
@@ -113,11 +113,11 @@ class ReportViewModel extends ChangeNotifier {
         await _syncPrompts(oldPrompts: originalReport.prompts, newPrompts: updatedPrompts);
       }
 
-      // 🧠 Search Target logic
-      if (searchTargetDidChange) {
-        final SearchTarget updatedSearchTarget = newReport.searchTarget!.copyWith(reportId: newReport.id);
-        await _syncSearchTarget(oldSearchTarget: originalReport.searchTarget, newSearchTarget: updatedSearchTarget);
-      }
+      // // 🧠 Search Target logic
+      // if (searchTargetDidChange) {
+      //   final SearchTarget updatedSearchTarget = newReport.searchTarget!.copyWith(reportId: newReport.id);
+      //   await _syncSearchTarget(oldSearchTarget: originalReport.searchTarget, newSearchTarget: updatedSearchTarget);
+      // }
 
       Report updatedReport = await _reportService.fetchReport(newReport.id);
       _upsertReport(updatedReport); // Update frontend memory/cache
@@ -229,7 +229,7 @@ class ReportViewModel extends ChangeNotifier {
   // }
 
   bool _searchTargetEquals(SearchTarget a, SearchTarget b) {
-    return a.type == b.type &&
+    return a.entityType == b.entityType &&
         a.name == b.name &&
         a.description == b.description &&
         a.url == b.url;
@@ -294,7 +294,7 @@ class ReportViewModel extends ChangeNotifier {
     notifyListeners();
     try {
       debugPrint('DEBUG: view model about to call run-report edge function');
-      await _reportService.runReport(report);
+      await _reportService.runReport(report, true);
       return true;
     } catch (e) {
       _handleError(e);

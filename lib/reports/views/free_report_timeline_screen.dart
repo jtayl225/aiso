@@ -58,6 +58,9 @@
 import 'package:aiso/Reports/view_models/free_report_view_model.dart';
 import 'package:aiso/Reports/views/free_report_results_screen.dart';
 import 'package:aiso/Reports/views/timeline.dart';
+import 'package:aiso/locator.dart';
+import 'package:aiso/routing/route_names.dart';
+import 'package:aiso/services/navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -78,25 +81,24 @@ class _FreeReportTimelineScreenState extends State<FreeReportTimelineScreen> {
     // Trigger navigation when all steps are complete
     if (!_hasNavigated && vm.currentStep == vm.steps.length) {
       _hasNavigated = true;
+      
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (_) => ChangeNotifierProvider.value(
-              value: vm,
-              child: const FreeReportResultScreen(),
-            ),
-          ),
-        );
+        locator<NavigationService>().navigateTo(freeReportResultsRoute);
+        // Navigator.pushReplacement(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (_) => ChangeNotifierProvider.value(
+        //       value: vm,
+        //       child: const FreeReportResultScreen(),
+        //     ),
+        //   ),
+        // );
+        
       });
     }
 
     // ✅ Always return a widget
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Free Report Progress'),
-      ),
-      body: Center(
+    return Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 400),
           child: Column(
@@ -120,8 +122,7 @@ class _FreeReportTimelineScreenState extends State<FreeReportTimelineScreen> {
             ],
           ),
         ),
-      ),
-    );
+      );
   }
 
 

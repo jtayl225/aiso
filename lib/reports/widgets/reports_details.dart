@@ -1,4 +1,7 @@
 import 'package:aiso/Home/widgets/home_tablet_desktop.dart';
+import 'package:aiso/locator.dart';
+import 'package:aiso/routing/route_names.dart';
+import 'package:aiso/services/navigation_service.dart';
 import 'package:flutter/material.dart';
 
 class ReportsDetails extends StatelessWidget {
@@ -31,10 +34,12 @@ class ReportsDetails extends StatelessWidget {
           ElevatedButton(
           onPressed: () {
 
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => const HomeTabletDesktop()),
-            );
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(builder: (_) => const HomeTabletDesktop()),
+            // );
+
+            locator<NavigationService>().navigateTo(newReportRoute);
 
           },
           child: Text('New Report'),

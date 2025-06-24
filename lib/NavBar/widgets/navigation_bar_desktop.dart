@@ -26,12 +26,8 @@ class NavigationBarDesktop extends StatelessWidget {
 
     // 1️⃣ Define the two separate lists
     final loggedOutItems = <NavBarItem>[
-       NavBarItem(
+      NavBarItem(
         'About',
-        // onTap: () => Navigator.push(
-        //   context,
-        //   MaterialPageRoute(builder: (_) => const HomeTabletDesktop()),
-        // ),
         onTap: () {
           locator<NavigationService>().navigateTo(HomeRoute);
         }
@@ -39,10 +35,6 @@ class NavigationBarDesktop extends StatelessWidget {
 
       NavBarItem(
         'Pricing',
-        // onTap: () => Navigator.push(
-        //   context,
-        //   MaterialPageRoute(builder: (_) => const MyStore()),
-        // ),
         onTap: () {
           locator<NavigationService>().navigateTo(StoreRoute);
         }
@@ -50,43 +42,38 @@ class NavigationBarDesktop extends StatelessWidget {
      
       NavBarItem(
         'Get started',
-        onTap: () => Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => const AuthHome()),
-        ),
+        onTap: () {
+          locator<NavigationService>().navigateTo(GetStartedRoute);
+        }
       ),
     ];
 
     final loggedInItems = <NavBarItem>[
-       NavBarItem(
+      NavBarItem(
         'About',
-        onTap: () => Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => const HomeTabletDesktop()),
-        ),
+        onTap: () {
+          locator<NavigationService>().navigateTo(HomeRoute);
+        }
       ),
 
       NavBarItem(
         'Pricing',
-        onTap: () => Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => const MyStore()),
-        ),
+        onTap: () {
+          locator<NavigationService>().navigateTo(StoreRoute);
+        }
       ),
      
       NavBarItem(
         'Reports',
-        onTap: () => Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => const MyReports()),
-        ),
+        onTap: () {
+          locator<NavigationService>().navigateTo(ReportsRoute);
+        }
       ),
       NavBarItem(
         'Account',
-        onTap: () => Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => const AuthProfile()),
-        ),
+        onTap: () {
+          locator<NavigationService>().navigateTo(ProfileRoute);
+        }
       ),
     ];
 

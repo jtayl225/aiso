@@ -1,4 +1,5 @@
 import 'dart:convert';
+// import 'dart:ffi';
 
 import 'package:aiso/models/entity_model.dart';
 import 'package:aiso/models/industry_model.dart';
@@ -20,18 +21,24 @@ import 'package:flutter/foundation.dart';
 class ReportServiceSupabase {
   final _supabase = Supabase.instance.client;
 
+  // service account //
+  // Service account UUID (hardcoded for now)
+  static const String _serviceAccountId = 'c339cd41-5a8b-48de-b466-812a6acf6b07';
+  /// Returns the service account’s user ID.
+  String fetchServiceAccount() => _serviceAccountId;
+
   // REPORTS //
   Future<Report> createReport(Report newReport) async {
     debugPrint('DEBUG: Service is creating a new report.');
     try {
       final response = await _supabase
-      .from('reports')
-      .insert(newReport.toJson())
-      .select()
-      .single();
-    final Report insertedReport = Report.fromJson(response);
-    debugPrint('DEBUG: inserted report ID: ${insertedReport.id}');
-    return insertedReport;
+        .from('reports')
+        .insert(newReport.toJson())
+        .select()
+        .single();
+      final Report insertedReport = Report.fromJson(response);
+      debugPrint('DEBUG: inserted report ID: ${insertedReport.id}');
+      return insertedReport;
     } catch (e) {
       debugPrint('ERROR: Failed to create report: $e');
       rethrow; // or throw a custom exception
@@ -212,7 +219,7 @@ class ReportServiceSupabase {
   //   }
   // }
 
-  Future<String?> runReport(Report report) async {
+  Future<String?> runReport(Report report, bool isPaid) async {
     final url = Uri.parse('https://app-kyeo.onrender.com/run-task'); // Replace with the correct path if needed
 
     try {
@@ -223,7 +230,7 @@ class ReportServiceSupabase {
         },
         body: jsonEncode({
           'report_id': report.id,
-          'is_paid': report.isPaid,
+          'is_paid': isPaid,
         }),
       );
 
@@ -308,7 +315,11 @@ class ReportServiceSupabase {
     debugPrint('DEBUG: Service is creating a new search target.');
     final response = await _supabase
       .from('search_targets')
-      .insert(newSearchTarget.toJson())
+      // .insert(newSearchTarget.toJson())
+      .upsert(
+        newSearchTarget.toJson(),
+        onConflict: 'user_id,industry_id,entity_type,name,description'
+      )
       .select()
       .single();
     final SearchTarget insertedSearchTarget = SearchTarget.fromJson(response);
@@ -324,8 +335,7 @@ class ReportServiceSupabase {
         'deleted_at': DateTime.now().toUtc().toIso8601String(),
         'updated_at': DateTime.now().toUtc().toIso8601String(),
       })
-      .eq('id', searchTarget.id)
-      .eq('report_id', searchTarget.reportId);
+      .eq('id', searchTarget.id);
     if (response.error != null) {
       throw Exception('Failed to soft delete SearchTarget: ${response.error!.message}');
     }
@@ -336,8 +346,7 @@ class ReportServiceSupabase {
     final response = await _supabase
       .from('search_targets')
       .update(searchTarget.toJson())
-      .eq('id', searchTarget.id)
-      .eq('report_id', searchTarget.reportId);
+      .eq('id', searchTarget.id);
 
     if (response.error != null) {
       throw Exception('Failed to update SearchTarget: ${response.error!.message}');

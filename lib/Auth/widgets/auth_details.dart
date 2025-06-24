@@ -9,7 +9,7 @@ class AuthDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 600,
+      width: 400,
       child: Column(
         crossAxisAlignment: isCentered ? CrossAxisAlignment.center : CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
