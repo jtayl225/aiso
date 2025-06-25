@@ -7,9 +7,8 @@ class NavBarLogo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 150,
-      width: 300,
+    return ConstrainedBox(
+      constraints: BoxConstraints(maxHeight: 150.0, maxWidth: 300.0),
       child: Image.asset(logoImage),
     );
   }

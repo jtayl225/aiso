@@ -21,12 +21,12 @@ class HomeMobile extends StatelessWidget {
                       child: CallToAction(
                         title: 'Generate free report!',
                         onPressed: () {
-
+                    
                           locator<NavigationService>().navigateTo(freeReportFormRoute);
                           
                             // // Your action here
                             // debugPrint("DEBUG: Call to action pressed!");
-
+                    
                             // Navigator.of(context).push(
                             //   MaterialPageRoute(
                             //     builder: (_) => FreeReportWrapper(),

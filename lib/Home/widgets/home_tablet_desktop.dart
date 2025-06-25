@@ -16,6 +16,7 @@ class HomeTabletDesktop extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final authVM = context.watch<AuthViewModel>();
     final vm = context.watch<FreeReportViewModel>();
     return Row(children: [
                 HomeDetails(),
@@ -25,6 +26,7 @@ class HomeTabletDesktop extends StatelessWidget {
                       title: 'Generate free report!',
                       onPressed: () {
 
+                        // authVM.anonSignInIfUnauth();
                         vm.reset();
                         locator<NavigationService>().navigateTo(freeReportFormRoute);
                             // // Your action here

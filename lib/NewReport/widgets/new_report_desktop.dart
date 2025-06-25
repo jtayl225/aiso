@@ -47,7 +47,7 @@ class _NewReportDesktopState extends State<NewReportDesktop> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
               spacing: 0.0,
-              children: _buildSearchTargetChildren(vm),
+              children: _buildSearchTargetChildren(context, vm),
             ),
 
             SizedBox(height: 60),
@@ -72,11 +72,11 @@ class _NewReportDesktopState extends State<NewReportDesktop> {
               children: _buildLocationsChildren(vm),
             ),
 
-            SizedBox(height: 60),
+            if (vm.nearbyLocalities.isNotEmpty) const SizedBox(height: 60),
 
             if (vm.localities.isNotEmpty) const Text('Selected locations:'),
 
-            SizedBox(height: 10),
+            if (vm.localities.isNotEmpty) const SizedBox(height: 10),
 
             Wrap(
               spacing: 4,
@@ -92,11 +92,11 @@ class _NewReportDesktopState extends State<NewReportDesktop> {
                   }).toList(),
             ),
 
-            SizedBox(height: 10),
+            if (vm.nearbyLocalities.isNotEmpty) const SizedBox(height: 10),
 
             if (vm.nearbyLocalities.isNotEmpty) const Text('Suggested nearby locations:'),
 
-            SizedBox(height: 10),
+            if (vm.nearbyLocalities.isNotEmpty) const SizedBox(height: 10),
 
             Wrap(
               spacing: 4,
@@ -152,7 +152,10 @@ Widget _buildDropdownField<T>({
   );
 }
 
-List<Widget> _buildSearchTargetChildren(NewReportViewModel vm) {
+List<Widget> _buildSearchTargetChildren(
+  BuildContext context,
+  NewReportViewModel vm,
+) {
   return [
     ConstrainedBox(
       constraints: BoxConstraints(maxWidth: 600.0),
@@ -177,17 +180,37 @@ List<Widget> _buildSearchTargetChildren(NewReportViewModel vm) {
         ],
       ),
     ),
-    ConstrainedBox(
-      constraints: BoxConstraints(maxWidth: 400.0),
-      child: _buildDropdownField<Industry>(
-        label: 'Search Target',
-        value: vm.selectedIndustry,
-        items:
-            vm.industries
-                .map((i) => DropdownMenuItem(value: i, child: Text(i.name)))
-                .toList(),
-        onChanged: (i) => vm.selectedIndustry = i,
-      ),
+    Column(
+      children: [
+        ConstrainedBox(
+          constraints: BoxConstraints(maxWidth: 400.0),
+          child: _buildDropdownField<Industry>(
+            label: 'Search Target',
+            value: vm.selectedIndustry,
+            items:
+                vm.industries
+                    .map((i) => DropdownMenuItem(value: i, child: Text(i.name)))
+                    .toList(),
+            onChanged: (i) => vm.selectedIndustry = i,
+          ),
+        ),
+        // SizedBox(height: 14),
+        TextButton(
+          onPressed: () => _showCreateTargetDialog(context),
+          child: RichText(
+            text: TextSpan(
+              style: const TextStyle(fontSize: 14.0, color: Colors.black87),
+              children: [
+                TextSpan(text: "Don't have a search target? "),
+                TextSpan(
+                  text: "Create a new one!",
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
     ),
   ];
 }
@@ -304,18 +327,52 @@ List<Widget> _buildLocationsChildren(NewReportViewModel vm) {
         ),
       ],
     ),
-
-    // ConstrainedBox(
-    //   constraints: BoxConstraints(maxWidth: 400.0),
-    //   child: _buildDropdownField<Industry>(
-    //     label: 'Location',
-    //     value: vm.selectedIndustry,
-    //     items:
-    //         vm.industries
-    //             .map((i) => DropdownMenuItem(value: i, child: Text(i.name)))
-    //             .toList(),
-    //     onChanged: (i) => vm.selectedIndustry = i,
-    //   ),
-    // ),
   ];
+}
+
+void _showCreateTargetDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return Dialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        child: Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                "Create a New Search Target",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 16),
+              const Text(
+                "This is where you'd allow the user to create a new target.",
+                style: TextStyle(fontSize: 14),
+              ),
+              const SizedBox(height: 24),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton(
+                    child: const Text("Cancel"),
+                    onPressed: () => Navigator.of(context).pop(),
+                  ),
+                  const SizedBox(width: 8),
+                  TextButton(
+                    child: const Text("Create"),
+                    onPressed: () {
+                      // Add your creation logic here
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
 }

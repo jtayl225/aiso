@@ -25,8 +25,8 @@ class LayoutTemplate extends StatelessWidget {
             children: <Widget>[
               MyNavigationBar(),
               Expanded(
-                  child: child,
-              )
+                child: child
+                )
             ],
           ),
         ),

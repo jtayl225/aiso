@@ -157,6 +157,55 @@ class AuthViewModel extends ChangeNotifier {
     }
   }
 
+  // Sign in
+  Future<String?> anonSignIn() async {
+    _authState = MyAuthState.loading;
+    notifyListeners();
+
+    try {
+      _currentUser = await _authService.anonSignIn();
+    
+      if (_currentUser != null) {
+        _authState = MyAuthState.anon;
+        _isAnonymous = _authService.isAnonymous;
+        return _currentUser!.id;
+      } else {
+        _authState = MyAuthState.unauthenticated;
+        return null;
+      }
+    } catch (e) {
+      _authState = MyAuthState.unauthenticated;
+      debugPrint('Anon sign-in error: $e');
+      return null;
+    } finally {
+      notifyListeners();
+    }
+  }
+
+  Future<void> anonSignInIfUnauth() async {
+
+    try {
+
+      if (_authState == MyAuthState.authenticated) return;
+
+      _currentUser = await _authService.anonSignIn();
+    
+      if (_currentUser != null) {
+        _authState = MyAuthState.anon;
+        _isAnonymous = _authService.isAnonymous;
+      } else {
+        _authState = MyAuthState.unauthenticated;
+      }
+      
+    } catch (e) {
+      _authState = MyAuthState.unauthenticated;
+      debugPrint('Anon sign-in error: $e');
+      return null;
+    } finally {
+      notifyListeners();
+    }
+  }
+
 
   // Sign out
   Future<bool> signOut() async {
@@ -178,37 +227,37 @@ class AuthViewModel extends ChangeNotifier {
     }
   }
 
-  // anonSignIn
-  Future<String?> anonSignIn() async {
-    // _authState = MyAuthState.loading;
-    _errorMessage = null;
-    // notifyListeners();
+  // // anonSignIn
+  // Future<String?> anonSignIn() async {
+  //   // _authState = MyAuthState.loading;
+  //   _errorMessage = null;
+  //   // notifyListeners();
 
-    try {
-      _currentUser = await _authService.anonSignIn();
+  //   try {
+  //     _currentUser = await _authService.anonSignIn();
 
-      if (_currentUser != null) {
-        // _authState = MyAuthState.anon;
-        _isAnonymous = true;
+  //     if (_currentUser != null) {
+  //       // _authState = MyAuthState.anon;
+  //       _isAnonymous = true;
 
-        // final List<Subscription> subs = await _authService.fetchUserSubscriptions();
-        // isSubscribed = subs.isNotEmpty;
-        // subscribeToSubscriptionStatus();
+  //       // final List<Subscription> subs = await _authService.fetchUserSubscriptions();
+  //       // isSubscribed = subs.isNotEmpty;
+  //       // subscribeToSubscriptionStatus();
 
-        return _currentUser!.id;
-      } else {
-        // _authState = MyAuthState.unauthenticated;
-        _errorMessage = 'Anonymous sign-in failed.';
-        return null;
-      }
-    } catch (e) {
-      _authState = MyAuthState.error;
-      _errorMessage = e.toString();
-      return null;
-    } finally {
-      // notifyListeners();
-    }
-  }
+  //       return _currentUser!.id;
+  //     } else {
+  //       // _authState = MyAuthState.unauthenticated;
+  //       _errorMessage = 'Anonymous sign-in failed.';
+  //       return null;
+  //     }
+  //   } catch (e) {
+  //     _authState = MyAuthState.error;
+  //     _errorMessage = e.toString();
+  //     return null;
+  //   } finally {
+  //     // notifyListeners();
+  //   }
+  // }
 
 
 

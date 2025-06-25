@@ -16,22 +16,20 @@ class MyNavigationDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     final authState = context.watch<AuthViewModel>().authState;
     final isLoggedIn = authState == MyAuthState.authenticated;
 
     // 1️⃣ Define the two separate lists
     final loggedOutItems = <NavDrawItem>[
-       NavDrawItem(
+      NavDrawItem(
         'About',
         Icons.help,
         onTap: () {
           // 1. Close the drawer
-          // Navigator.of(context).pop();
-          // Navigator.of(context, rootNavigator: true).pop();
+          Scaffold.of(context).closeDrawer();
           // 2. Then navigate to your Route
           locator<NavigationService>().navigateTo(HomeRoute);
-        }
+        },
       ),
 
       NavDrawItem(
@@ -39,23 +37,21 @@ class MyNavigationDrawer extends StatelessWidget {
         Icons.money,
         onTap: () {
           // 1. Close the drawer
-          // Navigator.of(context).pop();
-          // Navigator.of(context, rootNavigator: true).pop();
+          Scaffold.of(context).closeDrawer();
           // 2. Then navigate to your Route
           locator<NavigationService>().navigateTo(StoreRoute);
-        }
+        },
       ),
-     
+
       NavDrawItem(
         'Get started',
         Icons.airplane_ticket,
         onTap: () {
           // 1. Close the drawer
-          // Navigator.of(context).pop();
-          // Navigator.of(context, rootNavigator: true).pop();
+          Scaffold.of(context).closeDrawer();
           // 2. Then navigate to your Route
           locator<NavigationService>().navigateTo(GetStartedRoute);
-        }
+        },
       ),
     ];
 
@@ -65,10 +61,10 @@ class MyNavigationDrawer extends StatelessWidget {
         Icons.help,
         onTap: () {
           // 1. Close the drawer
-          Navigator.of(context).pop();
+          Scaffold.of(context).closeDrawer();
           // 2. Then navigate to your Route
           locator<NavigationService>().navigateTo(HomeRoute);
-        }
+        },
       ),
 
       NavDrawItem(
@@ -76,21 +72,21 @@ class MyNavigationDrawer extends StatelessWidget {
         Icons.money,
         onTap: () {
           // 1. Close the drawer
-          Navigator.of(context).pop();
+          Scaffold.of(context).closeDrawer();
           // 2. Then navigate to your Route
           locator<NavigationService>().navigateTo(StoreRoute);
-        }
+        },
       ),
-     
+
       NavDrawItem(
         'Reports',
         Icons.document_scanner,
         onTap: () {
           // 1. Close the drawer
-          Navigator.of(context).pop();
+          Scaffold.of(context).closeDrawer();
           // 2. Then navigate to your Route
           locator<NavigationService>().navigateTo(ReportsRoute);
-        }
+        },
       ),
 
       NavDrawItem(
@@ -98,33 +94,37 @@ class MyNavigationDrawer extends StatelessWidget {
         Icons.document_scanner,
         onTap: () {
           // 1. Close the drawer
-          Navigator.of(context).pop();
+          Scaffold.of(context).closeDrawer();
           // 2. Then navigate to your Route
           locator<NavigationService>().navigateTo(ProfileRoute);
-        }
+        },
       ),
     ];
 
     // 2️⃣ Pick the right list
     final navBarItems = isLoggedIn ? loggedInItems : loggedOutItems;
-    
+
     return Container(
-      width: 300,
+      width: 250,
       decoration: BoxDecoration(
         color: Colors.white,
-        boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 16)]
+        boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 16)],
       ),
       child: Column(
         children: [
-          NavBarLogo(),
-      
-          ...navBarItems.map((item) => Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  child: item,
-                )),
-      
-        ]
-      
+          // Center(child: NavBarLogo()),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [NavBarLogo()],
+          ),
+
+          ...navBarItems.map(
+            (item) => Padding(
+              padding: const EdgeInsets.symmetric(vertical: 12),
+              child: item,
+            ),
+          ),
+        ],
       ),
     );
   }
