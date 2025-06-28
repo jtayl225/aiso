@@ -1,6 +1,9 @@
 import 'package:aiso/Home/widgets/centered_view.dart';
 import 'package:aiso/NewReport/view_models/new_report_view_model.dart';
 import 'package:aiso/NewReport/widgets/locality_card.dart';
+import 'package:aiso/models/db_timestamps_model.dart';
+import 'package:aiso/models/entity_model.dart';
+import 'package:aiso/models/search_target_type_enum.dart';
 import 'package:aiso/reports/view_models/free_report_view_model.dart';
 import 'package:aiso/Widgets/flexible_layout.dart';
 import 'package:aiso/Widgets/generic_type_ahead.dart';
@@ -19,10 +22,42 @@ class NewReportDesktop extends StatefulWidget {
 }
 
 class _NewReportDesktopState extends State<NewReportDesktop> {
+  final TextEditingController reportTitleController = TextEditingController();
+  // reportTitleController.text = '';
+  // late NewReportViewModel vm;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Access ViewModel from Provider or another source
+    // vm = context.read<NewReportViewModel>();
+    // vm.init();
+
+    // Set initial text once
+    reportTitleController.text = '';
+  }
+
+  @override
+  void dispose() {
+    // Always dispose controllers
+    reportTitleController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     // final vm = Provider.of<FreeReportViewModel>(context);
+    // final vm = context.watch<NewReportViewModel>();
+
     final vm = context.watch<NewReportViewModel>();
+
+    // final TextEditingController reportTitleController = TextEditingController();
+    // reportTitleController.text = vm.reportTitle ?? '';
+
+    if (vm.isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
 
     return SingleChildScrollView(
       child: Center(
@@ -40,6 +75,43 @@ class _NewReportDesktopState extends State<NewReportDesktop> {
             ),
 
             SizedBox(height: 60),
+
+            FlexibleLayout(
+              layoutType: LayoutType.row,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              spacing: 0.0,
+              children: _buildReportTitleChildren(vm, reportTitleController),
+            ),
+
+            SizedBox(height: 60),
+
+            
+
+            // Text(
+            //   'Title.',
+            //   style: TextStyle(
+            //     fontWeight: FontWeight.w800,
+            //     fontSize: 25,
+            //     height: 0.9,
+            //   ),
+            //   textAlign: TextAlign.start,
+            // ),
+
+            // SizedBox(height: 14),
+
+            // TextField(
+            //   controller: reportTitleController,
+            //   decoration: const InputDecoration(
+            //     labelText: 'Report Title',
+            //     border: OutlineInputBorder(),
+            //   ),
+            //   onChanged: (value) {
+            //     vm.reportTitle = value;
+            //   },
+            // ),
+
+            // SizedBox(height: 14),
 
             /// search target
             FlexibleLayout(
@@ -60,6 +132,20 @@ class _NewReportDesktopState extends State<NewReportDesktop> {
               spacing: 0.0,
               children: _buildPromptChildren(vm),
             ),
+
+            SizedBox(height: 30),
+
+            if (vm.selectedPromptType?.isNotEmpty == true &&
+                vm.selectedSearchTarget != null)
+              Text(
+                '${vm.selectedPromptType} '
+                '${vm.selectedSearchTarget!.entityType == EntityType.business ? 'real estate agencies' : 'real estate agents'} in ...',
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+              ),
 
             SizedBox(height: 60),
 
@@ -94,7 +180,8 @@ class _NewReportDesktopState extends State<NewReportDesktop> {
 
             if (vm.nearbyLocalities.isNotEmpty) const SizedBox(height: 10),
 
-            if (vm.nearbyLocalities.isNotEmpty) const Text('Suggested nearby locations:'),
+            if (vm.nearbyLocalities.isNotEmpty)
+              const Text('Suggested nearby locations:'),
 
             if (vm.nearbyLocalities.isNotEmpty) const SizedBox(height: 10),
 
@@ -123,7 +210,14 @@ class _NewReportDesktopState extends State<NewReportDesktop> {
 
             SizedBox(height: 60),
 
-            ElevatedButton(onPressed: () {}, child: Text('Generate report!')),
+            ElevatedButton(
+              onPressed: () {
+
+                vm.createAndRunPaidReport();
+
+              }, 
+              child: Text('Generate report!')
+            ),
           ],
         ),
       ),
@@ -150,6 +244,52 @@ Widget _buildDropdownField<T>({
       validator: (val) => val == null ? 'Required' : null,
     ),
   );
+}
+
+List<Widget> _buildReportTitleChildren(NewReportViewModel vm, TextEditingController reportTitleController,) {
+
+  // final TextEditingController reportTitleController = TextEditingController();
+  // reportTitleController.text = '';
+
+  return [
+    ConstrainedBox(
+      constraints: BoxConstraints(maxWidth: 600.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Title.',
+            style: TextStyle(
+              fontWeight: FontWeight.w800,
+              fontSize: 25,
+              height: 0.9,
+            ),
+            textAlign: TextAlign.start,
+          ),
+          SizedBox(height: 14),
+          Text(
+            'Give your report a title.',
+            style: TextStyle(fontSize: 14, height: 1.7),
+            textAlign: TextAlign.start,
+          ),
+        ],
+      ),
+    ),
+
+    ConstrainedBox(
+      constraints: BoxConstraints(maxWidth: 400.0),
+      child: TextField(
+              controller: reportTitleController,
+              decoration: const InputDecoration(
+                labelText: 'Report Title',
+                border: OutlineInputBorder(),
+              ),
+              onChanged: (value) {
+                vm.reportTitle = value;
+              },
+            ),
+    ),
+  ];
 }
 
 List<Widget> _buildSearchTargetChildren(
@@ -184,19 +324,19 @@ List<Widget> _buildSearchTargetChildren(
       children: [
         ConstrainedBox(
           constraints: BoxConstraints(maxWidth: 400.0),
-          child: _buildDropdownField<Industry>(
+          child: _buildDropdownField<SearchTarget>(
             label: 'Search Target',
-            value: vm.selectedIndustry,
+            value: vm.selectedSearchTarget,
             items:
-                vm.industries
+                vm.searchTargets
                     .map((i) => DropdownMenuItem(value: i, child: Text(i.name)))
                     .toList(),
-            onChanged: (i) => vm.selectedIndustry = i,
+            onChanged: (i) => vm.selectedSearchTarget = i,
           ),
         ),
         // SizedBox(height: 14),
         TextButton(
-          onPressed: () => _showCreateTargetDialog(context),
+          onPressed: () => _showCreateTargetDialog(context, vm),
           child: RichText(
             text: TextSpan(
               style: const TextStyle(fontSize: 14.0, color: Colors.black87),
@@ -330,46 +470,184 @@ List<Widget> _buildLocationsChildren(NewReportViewModel vm) {
   ];
 }
 
-void _showCreateTargetDialog(BuildContext context) {
+void _showCreateTargetDialog(BuildContext context, NewReportViewModel vm) {
+  final TextEditingController _businessNameController = TextEditingController();
+  final TextEditingController _personNameController = TextEditingController();
+  // final TextEditingController _targetDescriptionController = TextEditingController();
+  final TextEditingController _targetUrlController = TextEditingController();
+  EntityType? _searchTargetType = EntityType.values.first;
+
   showDialog(
     context: context,
-    builder: (BuildContext context) {
+    builder: (BuildContext dialogContext) {
       return Dialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         child: Padding(
           padding: const EdgeInsets.all(24.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                "Create a New Search Target",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 16),
-              const Text(
-                "This is where you'd allow the user to create a new target.",
-                style: TextStyle(fontSize: 14),
-              ),
-              const SizedBox(height: 24),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  TextButton(
-                    child: const Text("Cancel"),
-                    onPressed: () => Navigator.of(context).pop(),
-                  ),
-                  const SizedBox(width: 8),
-                  TextButton(
-                    child: const Text("Create"),
-                    onPressed: () {
-                      // Add your creation logic here
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                ],
-              ),
-            ],
+          child: StatefulBuilder(
+            builder: (context, setState) {
+              return SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "Create a New Search Target",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    const Text(
+                      "This is where you'd allow the user to create a new target.",
+                      style: TextStyle(fontSize: 14),
+                    ),
+                    const SizedBox(height: 8),
+
+                    _buildDropdownField<Industry>(
+                      label: 'Industry',
+                      value: vm.selectedIndustry,
+                      items:
+                          vm.industries
+                              .map(
+                                (i) => DropdownMenuItem(
+                                  value: i,
+                                  child: Text(i.name),
+                                ),
+                              )
+                              .toList(),
+                      onChanged: (i) => vm.selectedIndustry = i,
+                    ),
+
+                    DropdownButtonFormField<EntityType>(
+                      value: _searchTargetType,
+                      decoration: const InputDecoration(
+                        labelText: 'Type',
+                        border: OutlineInputBorder(),
+                      ),
+                      items:
+                          EntityType.values.map((type) {
+                            return DropdownMenuItem<EntityType>(
+                              value: type,
+                              child: Text(type.toValue()),
+                            );
+                          }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          _searchTargetType = value!;
+                        });
+                      },
+                    ),
+
+                    const SizedBox(height: 8),
+
+                    TextField(
+                      controller: _businessNameController,
+                      decoration: const InputDecoration(
+                        labelText: 'Business Name',
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+
+                    const SizedBox(height: 8),
+
+                    if (_searchTargetType == EntityType.person) ...[
+                      TextField(
+                        controller: _personNameController,
+                        decoration: const InputDecoration(
+                          labelText: 'Person Name',
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                    ],
+
+                    // const SizedBox(height: 8),
+
+                    // TextField(
+                    //   controller: _targetDescriptionController,
+                    //   decoration: const InputDecoration(
+                    //     labelText: 'Description',
+                    //     border: OutlineInputBorder(),
+                    //   ),
+                    // ),
+
+                    // const SizedBox(height: 8),
+                    TextField(
+                      controller: _targetUrlController,
+                      decoration: const InputDecoration(
+                        labelText: 'URL (optional)',
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+
+                    const SizedBox(height: 24),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        TextButton(
+                          child: const Text("Cancel"),
+                          onPressed: () => Navigator.of(dialogContext).pop(),
+                        ),
+                        const SizedBox(width: 8),
+                        TextButton(
+                          child: const Text("Create"),
+                          onPressed: () {
+                            final businessName =
+                                _businessNameController.text.trim();
+                            final personName =
+                                _personNameController.text.trim();
+                            final url = _targetUrlController.text.trim();
+                            final type = _searchTargetType;
+                            final industry = vm.selectedIndustry;
+
+                            if (type == null) {
+                              debugPrint("⚠️ Type is required");
+                              return;
+                            }
+
+                            if (type == EntityType.business &&
+                                businessName.isEmpty) {
+                              debugPrint("⚠️ Business name is required");
+                              return;
+                            }
+
+                            if (type == EntityType.person &&
+                                (personName.isEmpty || businessName.isEmpty)) {
+                              debugPrint(
+                                "⚠️ Both person and business names are required",
+                              );
+                              return;
+                            }
+
+                            final newTarget = SearchTarget(
+                              id: '',
+                              userId: '', // Populate later if needed
+                              name:
+                                  type == EntityType.business
+                                      ? businessName
+                                      : personName,
+                              industry: industry,
+                              entityType: type,
+                              description:
+                                  type == EntityType.business
+                                      ? 'Real estate agency.'
+                                      : 'Real estate agent at $businessName.',
+                              url: url,
+                              dbTimestamps: DbTimestamps.now(),
+                            );
+
+                            vm.createSearchTarget(newTarget);
+                            Navigator.of(dialogContext).pop();
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              );
+            },
           ),
         ),
       );

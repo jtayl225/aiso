@@ -101,6 +101,17 @@ class AuthServiceSupabase {
     }
   }
 
+  Future<String?> fetchCurrentUserId() async {
+    try {
+      final user = _supabase.auth.currentUser;
+      if (user == null || user.id.isEmpty) return null;
+      return user.id;
+    } catch (e) {
+      debugPrint('Error fetching current user: $e');
+      return null;
+    }
+  }
+
   Future<List<Subscription>> fetchUserSubscriptions() async {
     try {
       final user = _supabase.auth.currentUser;

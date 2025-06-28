@@ -1,9 +1,7 @@
-/// Auto-generated Dart model for Entity and EntityType, converted from Python definitions.
-
 /// Enumerates the types of entities.
 enum EntityType {
-  product,
-  service,
+  // product,
+  // service,
   business,
   person,
 }

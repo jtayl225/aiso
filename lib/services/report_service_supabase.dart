@@ -196,6 +196,22 @@ class ReportServiceSupabase {
     return searchTarget;
   }
 
+  Future<List<SearchTarget>> fetchSearchTargets(String userId) async {
+    debugPrint('DEBUG: Service is fetching the search target for userId: $userId');
+    final response = await _supabase
+      .from('search_targets')
+      .select()
+      .eq('user_id', userId);
+
+    debugPrint('DEBUG: search targets response: $response');
+
+    final List<SearchTarget> searchTargets = (response as List).map((item) {
+      return SearchTarget.fromJson(item);
+    }).toList();
+
+    return searchTargets;
+  }
+
   // Future<void> runReport(String reportId) async {
   //   final supabase = Supabase.instance.client;
   //   // final session = supabase.auth.currentSession;

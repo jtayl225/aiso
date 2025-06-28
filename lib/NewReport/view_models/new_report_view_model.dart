@@ -9,6 +9,7 @@ import 'package:aiso/models/report_run_results_model.dart';
 import 'package:aiso/models/search_target_model.dart';
 import 'package:aiso/reports/models/report_model.dart';
 import 'package:aiso/reports/views/timeline.dart';
+import 'package:aiso/services/auth_service_supabase.dart';
 import 'package:aiso/services/location_service_supabase.dart';
 import 'package:aiso/services/report_service_supabase.dart';
 import 'package:crypto/crypto.dart';
@@ -33,9 +34,19 @@ class NewReportViewModel extends ChangeNotifier {
     });
 
     try {
+
       countries = await _locationService.fetchCountries();
-      // final fetchedIndustries = await _reportService.fetchIndustries();
-      // industries = fetchedIndustries;
+      selectedCountry = countries.first;
+
+      industries = await _reportService.fetchIndustries();
+      selectedIndustry = industries.first;
+
+      // Fetch current user ID
+      String? userId = await _authService.fetchCurrentUserId();
+      if (userId == null) return;
+      searchTargets = await _reportService.fetchSearchTargets(userId);
+      selectedSearchTarget = searchTargets.first;
+
     } catch (e) {
       errorMessage = 'Failed to initialize: $e';
     } finally {
@@ -65,15 +76,40 @@ class NewReportViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  final AuthServiceSupabase _authService = AuthServiceSupabase();
   final ReportServiceSupabase _reportService = ReportServiceSupabase();
   final LocationServiceSupabase _locationService = LocationServiceSupabase();
 
   List<Industry> industries = [];
   Industry? selectedIndustry;
 
+  // Report Title
+  String? _reportTitle = '';
+  String? get reportTitle => _reportTitle;
+  set reportTitle(String? value) {
+    _reportTitle = value;
+    notifyListeners();
+  }
+
+  // Search Target
+  List<SearchTarget> searchTargets = [];
+  SearchTarget? _selectedSearchTarget;
+  SearchTarget? get selectedSearchTarget => _selectedSearchTarget;
+  set selectedSearchTarget(SearchTarget? value) {
+    _selectedSearchTarget = value;
+    notifyListeners();
+  }
+
   // Prompt
   List<String> promptTypes = ['Best', 'Top rated', 'Top 10'];
-  String? selectedPromptType;
+  String? _selectedPromptType = 'Top 10';
+  String? get selectedPromptType => _selectedPromptType;
+
+  set selectedPromptType(String? value) {
+    _selectedPromptType = value;
+    notifyListeners(); // 👈 this is essential
+  }
+
 
   // Location
   List<Country> countries = [];
@@ -166,36 +202,36 @@ class NewReportViewModel extends ChangeNotifier {
     // - sending logs to remote error tracking services
   }
 
-  /// Listen for realtime changes on report_runs.status
-  void _initSupabaseListener() {
-    final supabase = Supabase.instance.client;
-    // Create a dedicated channel for listening to updates on the 'report_runs' table
-    _subscription =
-        supabase
-            .channel('report_runs')
-            .onPostgresChanges(
-              event: PostgresChangeEvent.update,
-              schema: 'public',
-              table: 'report_runs',
-              filter: PostgresChangeFilter(
-                type: PostgresChangeFilterType.eq,
-                column: 'id',
-                value: reportRunId,
-              ),
-              callback: (payload) {
-                // debugPrint("DEBUG: Received update payload: ${payload.newRecord}");
-                // final newStatus = payload.newRecord['status'] as String;
-                // final statusEnum = ReportRunStatusX.fromString(newStatus);
-                // debugPrint("DEBUG: New status = $statusEnum, Current = $_currentStatus");
-                // if (statusEnum != _currentStatus && statusEnum.index > _currentStatus.index) {
-                //   currentStatus = statusEnum;
-                //   _currentStep = statusEnum.index + 1;
-                //   notifyListeners();
-                // }
-              },
-            )
-            .subscribe();
-  }
+  // /// Listen for realtime changes on report_runs.status
+  // void _initSupabaseListener() {
+  //   final supabase = Supabase.instance.client;
+  //   // Create a dedicated channel for listening to updates on the 'report_runs' table
+  //   _subscription =
+  //       supabase
+  //           .channel('report_runs')
+  //           .onPostgresChanges(
+  //             event: PostgresChangeEvent.update,
+  //             schema: 'public',
+  //             table: 'report_runs',
+  //             filter: PostgresChangeFilter(
+  //               type: PostgresChangeFilterType.eq,
+  //               column: 'id',
+  //               value: reportRunId,
+  //             ),
+  //             callback: (payload) {
+  //               // debugPrint("DEBUG: Received update payload: ${payload.newRecord}");
+  //               // final newStatus = payload.newRecord['status'] as String;
+  //               // final statusEnum = ReportRunStatusX.fromString(newStatus);
+  //               // debugPrint("DEBUG: New status = $statusEnum, Current = $_currentStatus");
+  //               // if (statusEnum != _currentStatus && statusEnum.index > _currentStatus.index) {
+  //               //   currentStatus = statusEnum;
+  //               //   _currentStep = statusEnum.index + 1;
+  //               //   notifyListeners();
+  //               // }
+  //             },
+  //           )
+  //           .subscribe();
+  // }
 
   @override
   void dispose() {
@@ -213,20 +249,18 @@ class NewReportViewModel extends ChangeNotifier {
   }
 
   /// createAndRunFreeReport
-  Report _buildFreeReport(String searchTargetId) {
-    final String serviceAccountId = _reportService.fetchServiceAccount();
+  Report _buildPaidReport(String userId, String searchTargetId, String title) {
 
-    final Report freeReport = Report(
+    final Report paidReport = Report(
       id: '', // generated by supabase
-      userId: serviceAccountId,
+      userId: userId,
       searchTargetId: searchTargetId,
-      title: 'Free report!',
-      // isPaid: false,
-      cadence: Cadence.once,
+      title: title,
+      cadence: Cadence.month,
       dbTimestamps: DbTimestamps.now(),
     );
 
-    return freeReport;
+    return paidReport;
   }
 
   SearchTarget _buildSearchTarget() {
@@ -246,58 +280,67 @@ class NewReportViewModel extends ChangeNotifier {
     return searchTarget;
   }
 
-  String _buildFreePrompt(String basePrompt) {
-    if (selectedLocality == null ||
-        selectedRegion == null ||
+  String _buildBasePrompt() {
+    final entityLabel = selectedSearchTarget?.entityType == EntityType.business
+        ? 'real estate agencies'
+        : 'real estate agents';
+    return '$selectedPromptType $entityLabel';
+  }
+
+
+  String _buildPrompt(String basePrompt, Locality localitity) {
+    if (selectedRegion == null ||
         selectedCountry == null) {
       throw StateError('All location fields must be selected');
     }
 
-    return '$basePrompt in ${selectedLocality!.name}, ${selectedRegion!.code} ${selectedCountry!.name}';
+    return '$basePrompt in ${localitity.name}, ${selectedRegion!.code} ${selectedCountry!.name}';
   }
 
-  Future<bool> createAndRunFreeReport() async {
+  Future<bool> createAndRunPaidReport() async {
     isLoading = true;
     notifyListeners();
     try {
-      debugPrint('DEBUG: createAndRunFreeReport.');
+      debugPrint('DEBUG: createAndRunPaidReport.');
 
       // create search target
-      final SearchTarget insertedSearchTarget = await _reportService
-          .createSearchTarget(_buildSearchTarget());
+      final String? userId = await _authService.fetchCurrentUserId();
+      final String? searchTargetId = selectedSearchTarget?.id;
+      final String? title = reportTitle;
+
+      if (userId == null || searchTargetId == null || title == null) {
+        debugPrint('❌ Missing required inputs: userId, searchTarget, or title');
+        return false;
+      }
 
       // create report
       final Report report = await _reportService.createReport(
-        _buildFreeReport(insertedSearchTarget.id),
+        _buildPaidReport(userId, searchTargetId, title),
       );
 
       // // fetch parent prompt given industry
-      debugPrint('DEBUG: start freePromptText.');
-      final String freePromptText = _buildFreePrompt('Best real estate agency');
-      promptText = freePromptText;
-      debugPrint('DEBUG: end freePromptText.');
+      final String basePrompt = _buildBasePrompt();
 
-      // creates prompt - handles upserts of new prompts
-      debugPrint('DEBUG: start upsertPromptAndAttach.');
-      final Prompt _ = await _reportService.upsertPromptAndAttach(
-        reportId: report.id,
-        promptText: freePromptText,
-      );
-      debugPrint('DEBUG: end upsertPromptAndAttach.');
+      for (final locality in localities) {
+        debugPrint('DEBUG: start _buildPrompt.');
+        final String promptText = _buildPrompt(basePrompt, locality);
+        debugPrint('DEBUG: end _buildPrompt.');
 
-      // init free report run
+        // creates prompt - handles upserts of new prompts
+        debugPrint('DEBUG: start upsertPromptAndAttach.');
+        final Prompt _ = await _reportService.upsertPromptAndAttach(
+          reportId: report.id,
+          promptText: promptText,
+        );
+        debugPrint('DEBUG: end upsertPromptAndAttach.');
+      }
+
+      // init paid report run
       debugPrint('DEBUG: start runReport.');
-      final String? newReportRunId = await _reportService.runReport(
-        report,
-        false,
-      );
+      final String? newReportRunId = await _reportService.runReport(report, true);
       if (newReportRunId == null || newReportRunId.isEmpty) return false;
-      reportRunId = newReportRunId;
       debugPrint('DEBUG: end runReport.');
-      debugPrint('DEBUG: reportRunId: $reportRunId.');
-
-      // setup supabase listener
-      _initSupabaseListener();
+      debugPrint('DEBUG: reportRunId: $newReportRunId.');
 
       return true;
     } catch (e) {
@@ -480,4 +523,35 @@ class NewReportViewModel extends ChangeNotifier {
   //   }
 
   // }
+
+  Future<void> createSearchTarget(SearchTarget newSearchTarget) async {
+  try {
+
+    // Fetch current user ID
+    String? userId = await _authService.fetchCurrentUserId();
+
+    // Handle null user ID safely
+    if (userId == null) {
+      debugPrint('⚠️ Error: userId is null. Cannot fetch search targets.');
+      return;
+    }
+
+    SearchTarget updatedSearchTarget = newSearchTarget.copyWith(userId: userId);
+
+    // Attempt to create the search target
+    await _reportService.createSearchTarget(updatedSearchTarget);
+
+    // Fetch updated list of search targets
+    searchTargets = await _reportService.fetchSearchTargets(userId);
+  } catch (e, stackTrace) {
+    debugPrint('❌ Failed to create search target: $e');
+    debugPrint('StackTrace: $stackTrace');
+
+    // Optionally: set an error state or notify the UI
+    // errorMessage = 'Failed to create search target. Please try again.';
+  }
+}
+
+
+
 }
