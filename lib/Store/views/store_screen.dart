@@ -21,7 +21,8 @@ class _StoreScreenState extends State<StoreScreen> {
       description: 'Get started with a single one-off report.',
       cadence: '/ month (AUD)',
       price: 14.99,
-      reducedFromPrice: 19.99,
+      // reducedFromPrice: 19.99,
+      pctDiscount: 0.1,
       productInclusions: [
         ProductInclusion(isIncluded: true, description: '\$14.99 / report'),
         ProductInclusion(isIncluded: true, description: 'ChatGPT (OpenAI)'),
@@ -39,7 +40,8 @@ class _StoreScreenState extends State<StoreScreen> {
       description: 'All features for growing teams.',
       cadence: '/ month (AUD)',
       price: 9.99,
-      reducedFromPrice: 14.99,
+      // reducedFromPrice: 14.99,
+      pctDiscount: 0.1,
       productInclusions: [
         ProductInclusion(isIncluded: true, description: '\$9.99 / report'),
         ProductInclusion(isIncluded: true, description: 'ChatGPT (OpenAI)'),
@@ -56,7 +58,8 @@ class _StoreScreenState extends State<StoreScreen> {
       description: 'Custom solutions for businesses.',
       cadence: '/ year (AUD)',
       price: 99.99,
-      reducedFromPrice: 179.99,
+      // reducedFromPrice: 179.99,
+      pctDiscount: 0.1,
       productInclusions: [
         ProductInclusion(isIncluded: true, description: '\$8.30 / report'),
         ProductInclusion(isIncluded: true, description: 'ChatGPT (OpenAI)'),

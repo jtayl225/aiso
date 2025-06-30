@@ -11,3 +11,19 @@ CREATE TABLE IF NOT EXISTS report_prompts (
   PRIMARY KEY (report_id, prompt_id)
 
 );
+
+-- --------------------
+-- -- report run recommendations view
+-- --------------------
+-- CREATE OR REPLACE VIEW report_prompts_vw AS
+-- SELECT
+--   a.report_id,
+--   a.prompt_id as id,
+--   a.created_at,
+--   a.updated_at,
+--   a.deleted_at,
+--   b.prompt
+-- FROM report_prompts AS a
+-- INNER JOIN prompts AS b
+--   ON a.recommendation_id = b.id
+-- ;

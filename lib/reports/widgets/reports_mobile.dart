@@ -10,7 +10,7 @@ class ReportsMobile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    final reportViewModel = context.watch<ReportViewModel>();
+    final reportViewModel = context.watch<ReportsViewModel>();
     final reports = reportViewModel.reports;
 
     return SingleChildScrollView(

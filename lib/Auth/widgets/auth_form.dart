@@ -203,7 +203,7 @@ class _AuthFormState extends State<AuthForm> {
 
     try {
       final authVm   = context.read<AuthViewModel>();
-      final reportVm = context.read<ReportViewModel>();
+      // final reportVm = context.read<ReportsViewModel>();
 
       final email    = _emailController.text.trim();
       final password = _passwordController.text;
@@ -215,22 +215,24 @@ class _AuthFormState extends State<AuthForm> {
         return;
       }
 
-      final loaded = await reportVm.signinFetchAll(userId);
-      if (!mounted) return;
-      if (!loaded) {
-        _showErrorSnackBar('Signed in, but failed to load your data.');
-        return;
-      }
+      // final loaded = await reportVm.signinFetchAll(userId);
+      // if (!mounted) return;
+      // if (!loaded) {
+      //   _showErrorSnackBar('Signed in, but failed to load your data.');
+      //   return;
+      // }
 
       // Navigator.of(context).pushAndRemoveUntil(
       //   MaterialPageRoute(builder: (_) => const AuthChecker()),
       //   (_) => false,
       // );
 
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (_) => const MyReports()),
-      );
+      // Navigator.push(
+      //   context,
+      //   MaterialPageRoute(builder: (_) => const MyReports()),
+      // );
+
+      locator<NavigationService>().navigateTo(reportsRoute);
 
     } catch (e) {
       if (mounted) _showErrorSnackBar('Something went wrong. Please try again.');
@@ -245,7 +247,7 @@ class _AuthFormState extends State<AuthForm> {
 
     try {
       final authVm   = context.read<AuthViewModel>();
-      final reportVm = context.read<ReportViewModel>();
+      // final reportVm = context.read<ReportsViewModel>();
 
       final email    = _emailController.text.trim();
       final password = _passwordController.text;
@@ -256,7 +258,7 @@ class _AuthFormState extends State<AuthForm> {
       if (success) {
         _showErrorSnackBar('Signup successful! Check your email to verify.');
         // Optionally clear previous reports:
-        reportVm.clearReports();
+        // reportVm.clearReports();
         // Navigator.of(context).pushAndRemoveUntil(
         //   MaterialPageRoute(builder: (context) => AuthChecker()),
         //   (route) => false,
@@ -277,7 +279,7 @@ class _AuthFormState extends State<AuthForm> {
     } else {
       await _signUp();
     }
-    locator<NavigationService>().navigateTo(ReportsRoute);
+    locator<NavigationService>().navigateTo(reportsRoute);
   }
 
   @override

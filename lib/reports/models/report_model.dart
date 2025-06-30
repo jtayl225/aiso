@@ -45,8 +45,11 @@ class Report {
       prompts: (json['prompts'] as List<dynamic>?)
         ?.map((item) => Prompt.fromJson(item))
         .toList() ?? [],
-      searchTarget: (json['search_targets'] as List<dynamic>?)?.isNotEmpty == true
-        ? SearchTarget.fromJson(json['search_targets'][0])
+      // searchTarget: (json['search_targets'] as List<dynamic>?)?.isNotEmpty == true
+      //   ? SearchTarget.fromJson(json['search_targets'][0])
+      //   : null,
+      searchTarget: json['search_targets'] != null
+        ? SearchTarget.fromJson(json['search_targets'])
         : null,
       dbTimestamps: DbTimestamps(
         createdAt: DateTime.parse(json['created_at']),

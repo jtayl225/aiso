@@ -114,11 +114,12 @@ class AuthServiceSupabase {
 
   Future<List<Subscription>> fetchUserSubscriptions() async {
     try {
+      debugPrint('Service is fetchUserSubscriptions');
       final user = _supabase.auth.currentUser;
       if (user == null) return [];
 
       final response = await _supabase
-        .from('subscriptions')
+        .from('subscriptions_vw')
         .select()
         .eq('user_id', user.id)
         .eq('stripe_status', 'active');

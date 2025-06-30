@@ -132,13 +132,13 @@ class _ReportEditorScreenState extends State<ReportEditorScreen> {
 
   void _createReport(Report report) {
     debugPrint('DEBUG: ReportEditorScreen creating new report: ${report.title}');
-    final reportViewModel = Provider.of<ReportViewModel>(context, listen: false);
+    final reportViewModel = Provider.of<ReportsViewModel>(context, listen: false);
     reportViewModel.createReport(report);
   }
 
   void _updateReport(Report report) {
     debugPrint('DEBUG: ReportEditorScreen updating report: ${report.id}');
-    final reportViewModel = Provider.of<ReportViewModel>(context, listen: false);
+    final reportViewModel = Provider.of<ReportsViewModel>(context, listen: false);
     reportViewModel.updateReport(report);
   }
 

@@ -5,33 +5,69 @@ import 'package:aiso/models/prompt_template_model.dart';
 import 'package:aiso/models/purchase_enum.dart';
 import 'package:aiso/reports/models/report_model.dart';
 import 'package:aiso/models/search_target_model.dart';
+import 'package:aiso/services/auth_service_supabase.dart';
 import 'package:aiso/services/report_service_supabase.dart';
 import 'package:flutter/material.dart';
 
-class ReportViewModel extends ChangeNotifier {
+class ReportsViewModel extends ChangeNotifier {
 
-  // List<Report> reports = [];
-  List<Report> reports = [
-    Report(id: '0', userId: '', searchTargetId: '', title: 'title', cadence: Cadence.month, dbTimestamps: DbTimestamps.now()),
-    Report(id: '1', userId: '', searchTargetId: '', title: 'title2', cadence: Cadence.month, dbTimestamps: DbTimestamps.now()),
-    Report(id: '2', userId: '', searchTargetId: '', title: 'title3', cadence: Cadence.month, dbTimestamps: DbTimestamps.now()),
-    Report(id: '3', userId: '', searchTargetId: '', title: 'title4', cadence: Cadence.month, dbTimestamps: DbTimestamps.now()),
-    Report(id: '4', userId: '', searchTargetId: '', title: 'title4', cadence: Cadence.month, dbTimestamps: DbTimestamps.now()),
-    Report(id: '5', userId: '', searchTargetId: '', title: 'title4', cadence: Cadence.month, dbTimestamps: DbTimestamps.now()),
-    Report(id: '6', userId: '', searchTargetId: '', title: 'title4', cadence: Cadence.month, dbTimestamps: DbTimestamps.now()),
-    Report(id: '7', userId: '', searchTargetId: '', title: 'title4', cadence: Cadence.month, dbTimestamps: DbTimestamps.now()),
-    Report(id: '8', userId: '', searchTargetId: '', title: 'title4', cadence: Cadence.month, dbTimestamps: DbTimestamps.now()),
-    Report(id: '9', userId: '', searchTargetId: '', title: 'title4', cadence: Cadence.month, dbTimestamps: DbTimestamps.now()),
-  ];
+  ReportsViewModel() {
+    init(); // Auto-run when the provider creates this instance
+  }
+
+  Future<void> init() async {
+    // if (_isInitialized) return;
+    // _isInitialized = true;
+
+    // Defer first notification to avoid "called during build"
+    Future.microtask(() {
+      isLoading = true;
+      errorMessage = null;
+      notifyListeners();
+    });
+
+    try {
+
+      // Fetch current user ID
+      String? userId = await _authService.fetchCurrentUserId();
+      if (userId == null) return;
+      reports = await _reportService.fetchReports(userId);
+
+    } catch (e) {
+      errorMessage = 'Failed to initialize: $e';
+    } finally {
+      // Defer again to ensure build is complete
+      Future.microtask(() {
+        isLoading = false;
+        notifyListeners();
+      });
+    }
+  }
+
+  List<Report> reports = [];
+  // List<Report> reports = [
+  //   Report(id: '0', userId: '', searchTargetId: '', title: 'title', cadence: Cadence.month, dbTimestamps: DbTimestamps.now()),
+  //   Report(id: '1', userId: '', searchTargetId: '', title: 'title2', cadence: Cadence.month, dbTimestamps: DbTimestamps.now()),
+  //   Report(id: '2', userId: '', searchTargetId: '', title: 'title3', cadence: Cadence.month, dbTimestamps: DbTimestamps.now()),
+  //   Report(id: '3', userId: '', searchTargetId: '', title: 'title4', cadence: Cadence.month, dbTimestamps: DbTimestamps.now()),
+  //   Report(id: '4', userId: '', searchTargetId: '', title: 'title4', cadence: Cadence.month, dbTimestamps: DbTimestamps.now()),
+  //   Report(id: '5', userId: '', searchTargetId: '', title: 'title4', cadence: Cadence.month, dbTimestamps: DbTimestamps.now()),
+  //   Report(id: '6', userId: '', searchTargetId: '', title: 'title4', cadence: Cadence.month, dbTimestamps: DbTimestamps.now()),
+  //   Report(id: '7', userId: '', searchTargetId: '', title: 'title4', cadence: Cadence.month, dbTimestamps: DbTimestamps.now()),
+  //   Report(id: '8', userId: '', searchTargetId: '', title: 'title4', cadence: Cadence.month, dbTimestamps: DbTimestamps.now()),
+  //   Report(id: '9', userId: '', searchTargetId: '', title: 'title4', cadence: Cadence.month, dbTimestamps: DbTimestamps.now()),
+  // ];
 
   List<PromptTemplate> promptTemplates = [];
   bool isLoading = false;
   String? errorMessage;
+
+  final AuthServiceSupabase _authService = AuthServiceSupabase();
   final ReportServiceSupabase _reportService = ReportServiceSupabase();
 
   void clearReports() {
     reports = [];
-    promptTemplates = [];
+    // promptTemplates = [];
     errorMessage = null;
     isLoading = false;
     notifyListeners();

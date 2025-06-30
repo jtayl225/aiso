@@ -18,6 +18,7 @@ import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class NewReportViewModel extends ChangeNotifier {
+  
   NewReportViewModel() {
     init(); // Auto-run when the provider creates this instance
   }

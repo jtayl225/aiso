@@ -18,6 +18,7 @@ class MyNavigationDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     final authState = context.watch<AuthViewModel>().authState;
     final isLoggedIn = authState == MyAuthState.authenticated;
+    final isSubscribed = context.watch<AuthViewModel>().isSubscribed;
 
     // 1️⃣ Define the two separate lists
     final loggedOutItems = <NavDrawItem>[
@@ -67,7 +68,8 @@ class MyNavigationDrawer extends StatelessWidget {
         },
       ),
 
-      NavDrawItem(
+      if (!isSubscribed) ...[
+        NavDrawItem(
         'Pricing',
         Icons.money,
         onTap: () {
@@ -77,6 +79,7 @@ class MyNavigationDrawer extends StatelessWidget {
           locator<NavigationService>().navigateTo(StoreRoute);
         },
       ),
+      ],     
 
       NavDrawItem(
         'Reports',
@@ -85,7 +88,7 @@ class MyNavigationDrawer extends StatelessWidget {
           // 1. Close the drawer
           Scaffold.of(context).closeDrawer();
           // 2. Then navigate to your Route
-          locator<NavigationService>().navigateTo(ReportsRoute);
+          locator<NavigationService>().navigateTo(reportsRoute);
         },
       ),
 

@@ -28,3 +28,16 @@ CREATE TABLE IF NOT EXISTS subscriptions (
 
 CREATE INDEX idx_subscriptions_status ON subscriptions(stripe_status);
 CREATE INDEX idx_subscriptions_stripe_customer_id ON subscriptions(stripe_customer_id);
+
+
+--------------------
+-- subscriptions_vw
+--------------------
+CREATE OR REPLACE VIEW subscriptions_vw AS
+SELECT
+  a.*,
+  b.user_id
+FROM subscriptions AS a
+INNER JOIN stripe_users AS b
+  ON a.stripe_customer_id = b.stripe_customer_id
+;

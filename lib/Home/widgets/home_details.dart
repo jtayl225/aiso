@@ -1,3 +1,4 @@
+import 'package:aiso/constants/string_constants.dart';
 import 'package:flutter/material.dart';
 
 class HomeDetails extends StatelessWidget {
@@ -11,6 +12,10 @@ class HomeDetails extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
+          // ConstrainedBox(
+          //   constraints: BoxConstraints(maxHeight: 300.0, maxWidth: 300.0),
+          //   child: Image.asset(logoImage),
+          // ),
           Text(
             'GEO.',
             style: TextStyle(

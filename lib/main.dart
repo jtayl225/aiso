@@ -33,7 +33,7 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (_) => AuthViewModel()),
         // ChangeNotifierProvider(create: (_) => MessengerViewModel()),
         ChangeNotifierProvider(create: (_) => FreeReportViewModel()), 
-        ChangeNotifierProvider(create: (_) => ReportViewModel()), 
+        // ChangeNotifierProvider(create: (_) => ReportsViewModel()), 
         ChangeNotifierProvider(create: (_) => StoreViewModel()),
       ],
       child: MyApp(),

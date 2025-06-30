@@ -52,31 +52,3 @@ class StoreDesktop extends StatelessWidget {
       );
   }
 }
-
-
-// Scaffold(
-//       backgroundColor: Colors.white,
-//       body: CenteredView(
-//         child: Column(
-//           children: <Widget>[
-//             MyNavigationBar(),
-//             Expanded(
-//               child: Row(children: [
-//                 HomeDetails(),
-//                 Expanded(
-//                   child: Center(
-//                     child: CallToAction(
-//                       title: 'Generate free report!',
-//                       onPressed: () {
-//                             // Your action here
-//                             debugPrint("DEBUG: Call to action pressed!");
-//                           },
-//                       ),
-//                   ),
-//                 )
-//               ]),
-//             )
-//           ]
-//           ),
-//       ),
-//     );

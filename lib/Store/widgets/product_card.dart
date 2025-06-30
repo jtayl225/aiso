@@ -7,15 +7,15 @@ class ProductCard extends StatelessWidget {
 
   const ProductCard(this.product, {super.key});
 
-  String _calculateDiscountPercent(Product product) {
-    final discount = ((product.reducedFromPrice - product.price) / product.reducedFromPrice) * 100;
-    return discount.toStringAsFixed(0);
-  }
+  // String _calculateDiscountPercent(Product product) {
+  //   final discount = ((product.reducedFromPrice - product.price) / product.reducedFromPrice) * 100;
+  //   return discount.toStringAsFixed(0);
+  // }
 
   @override
   Widget build(BuildContext context) {
     return ConstrainedBox(
-      constraints: BoxConstraints(minWidth: 200, maxWidth: 350, minHeight: 200, maxHeight: 500),
+      constraints: BoxConstraints(minWidth: 200, maxWidth: 350, minHeight: 200, maxHeight: 600),
       child: Stack(
         children: [
         Card(
@@ -30,6 +30,7 @@ class ProductCard extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               spacing: 10,
               children: [
                 Text(
@@ -45,21 +46,21 @@ class ProductCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    if (product.reducedFromPrice > product.price)
+                    if (product.price > product.discountedPrice)
                       Text(
-                        '\$${product.reducedFromPrice.toStringAsFixed(2)}',
+                        '\$${product.price.toStringAsFixed(2)}',
                         style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                               decoration: TextDecoration.lineThrough,
                               color: Colors.black,
                             ),
                       ),
-                    if (product.reducedFromPrice > product.price)
+                    if (product.price > product.discountedPrice)
                       const SizedBox(width: 8),
         
                     Text(
-                      '\$${product.price.toStringAsFixed(2)}',
+                      '\$${product.discountedPrice.toStringAsFixed(2)}',
                       style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                        color: Colors.red,
+                        color: (product.price > product.discountedPrice) ? Colors.red : Colors.black,
                             // fontWeight: FontWeight.bold,
                           ),
                     ),
@@ -67,7 +68,7 @@ class ProductCard extends StatelessWidget {
                     Text(
                       product.cadence,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: AppColors.color1,
+                        color: Colors.black,
                             // fontWeight: FontWeight.bold,
                           ),
                     ),
@@ -122,16 +123,17 @@ class ProductCard extends StatelessWidget {
                 // dotted horizontal line
                 const Divider(color: AppColors.color1),
         
-                const Spacer(),
+                // const Spacer(),
 
-                // const SizedBox(height: 16),
+                const SizedBox(height: 16),
         
                 // call-to-action button 
                 Center(
                   child: ElevatedButton(
-                    onPressed: () {
-                      // Add your action here
-                    },
+                    onPressed: () => product.onPressed?.call(context),
+                    // onPressed: () {
+                    //   // Add your action here
+                    // },
                     // style: ElevatedButton.styleFrom(
                     //   backgroundColor: AppColors.color1,
                     //   foregroundColor: AppColors.color3, // text & icon color
@@ -154,7 +156,7 @@ class ProductCard extends StatelessWidget {
         ),
       
         // Floating Save badge
-        if (product.reducedFromPrice > product.price)
+        if (product.price > product.discountedPrice)
           Positioned(
             top: 24 + 4,
             right: 12 + 4,
@@ -165,7 +167,8 @@ class ProductCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Text(
-                'Save ${_calculateDiscountPercent(product)}%',
+                // 'Save ${_calculateDiscountPercent(product)}%',
+                'Save ${product.pctDiscount*100}%',
                 style: const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,

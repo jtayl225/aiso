@@ -56,7 +56,7 @@ class ReportServiceSupabase {
       .isFilter('search_targets.deleted_at', null);
 
     // Inspect the response to see its structure
-    // debugPrint('Response: $response');
+    // debugPrint('DEBUG: reports response: $response');
 
     final List<Report> reports = (response as List).map((item) {
       return Report.fromJson(item);
@@ -183,12 +183,12 @@ class ReportServiceSupabase {
     return reports;
   }
 
-  Future<SearchTarget> fetchSearchTarget(String reportId) async {
-    debugPrint('DEBUG: Service is fetching the search target for reportId: $reportId');
+  Future<SearchTarget> fetchSearchTarget(String searchTargetId) async {
+    debugPrint('DEBUG: Service is fetching the search target for searchTargetId: $searchTargetId');
     final response = await _supabase
       .from('search_targets')
       .select()
-      .eq('report_id', reportId)
+      .eq('id', searchTargetId)
       .select()
       .single();
     // debugPrint('DEBUG: report results response: $response');
@@ -418,6 +418,32 @@ class ReportServiceSupabase {
     return prompt;
   }
 
+  Future<List<Prompt>> fetchReportPrompts(String reportId) async {
+    debugPrint('DEBUG: Service is fetching prompts for reportId: $reportId');
+
+    final response = await _supabase
+        .from('report_prompts')
+        .select('prompts(*)')
+        .eq('report_id', reportId)
+        .isFilter('deleted_at', null);
+
+    // Validate response type
+    if (response is! List) {
+      debugPrint('❌ Unexpected response type from Supabase: $response');
+      return [];
+    }
+
+    // Extract and flatten prompts from nested rows
+    final List<Prompt> prompts = response
+        .map((row) => row['prompts']) // each row has `prompts` as a Map
+        .where((p) => p != null)
+        .map<Prompt>((p) => Prompt.fromJson(p))
+        .toList();
+
+    return prompts;
+  }
+
+
   Future<List<PromptTemplate>> fetchPromptTemplates() async {
     debugPrint('DEBUG: Service is fetching all prompt templates');
     final response = await _supabase
@@ -558,6 +584,39 @@ class ReportServiceSupabase {
     }).toList();
 
     return industries;
+  }
+
+  Future<String?> generateDashboardUrl(int dashboardNumber, String reportId, {String? reportRunId}) async {
+    final url = Uri.parse('https://app-kyeo.onrender.com/generate-metabase-url'); // Replace with the correct path if needed
+
+    try {
+
+      final response = await http.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          'dashboard': dashboardNumber,
+          'report_id': reportId,
+          'report_run_id': reportRunId,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        debugPrint('DEBUG: Render response: $data');
+        return data['url'] as String;
+      } else {
+        debugPrint('DEBUG: Failed with status ${response.statusCode}, body: ${response.body}');
+        return null;
+    }
+
+    } catch (e, stackTrace) {
+      debugPrint('DEBUG: handlePurchase error: $e');
+      debugPrint('DEBUG: Stack trace: $stackTrace');
+      return null;
+    }
   }
 
 

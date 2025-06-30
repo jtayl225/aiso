@@ -36,7 +36,7 @@ class _ReportsHomeScreenState extends State<ReportsHomeScreen> {
       ],
         ),
       drawer: AppDrawer(),
-      body: Consumer<ReportViewModel>(
+      body: Consumer<ReportsViewModel>(
         builder: (context, reportViewModel, _) {
           final reports = reportViewModel.reports;
 

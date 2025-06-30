@@ -2,10 +2,10 @@ const String HomeRoute = "/home";
 const String AboutRoute = "/about";
 const String StoreRoute = "/store";
 const String GetStartedRoute = "/get-started";
-const String ReportsRoute = "/reports";
+
+const String reportsRoute = "/reports";
 const String newReportRoute = "/reports/new";
-
-
+const String reportRoute = "/reports/";
 
 const String ProfileRoute = "/profile";
 

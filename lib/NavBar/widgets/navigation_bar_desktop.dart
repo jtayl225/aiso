@@ -23,6 +23,7 @@ class NavigationBarDesktop extends StatelessWidget {
 
     final authState = context.watch<AuthViewModel>().authState;
     final isLoggedIn = authState == MyAuthState.authenticated;
+    final isSubscribed = context.watch<AuthViewModel>().isSubscribed;
 
     // 1️⃣ Define the two separate lists
     final loggedOutItems = <NavBarItem>[
@@ -56,17 +57,19 @@ class NavigationBarDesktop extends StatelessWidget {
         }
       ),
 
-      NavBarItem(
-        'Pricing',
-        onTap: () {
-          locator<NavigationService>().navigateTo(StoreRoute);
-        }
-      ),
+      if (!isSubscribed) ...[
+        NavBarItem(
+          'Pricing',
+          onTap: () {
+            locator<NavigationService>().navigateTo(StoreRoute);
+          },
+        ),
+      ],      
      
       NavBarItem(
         'Reports',
         onTap: () {
-          locator<NavigationService>().navigateTo(ReportsRoute);
+          locator<NavigationService>().navigateTo(reportsRoute);
         }
       ),
       NavBarItem(

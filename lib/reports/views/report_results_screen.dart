@@ -287,7 +287,7 @@ class _ReportResultsScreenState extends State<ReportResultsScreen> {
   @override
   Widget build(BuildContext context) {
     final authViewModel = context.watch<AuthViewModel>();
-    final reportViewModel = context.watch<ReportViewModel>();
+    final reportViewModel = context.watch<ReportsViewModel>();
     final resultsViewModel = context.watch<ReportResultsViewModel>();
 
     final Report? report = reportViewModel.getReportById(widget.reportId);

@@ -1,6 +1,7 @@
 import 'package:aiso/Home/widgets/centered_view.dart';
 import 'package:aiso/NewReport/view_models/new_report_view_model.dart';
 import 'package:aiso/NewReport/widgets/locality_card.dart';
+import 'package:aiso/locator.dart';
 import 'package:aiso/models/db_timestamps_model.dart';
 import 'package:aiso/models/entity_model.dart';
 import 'package:aiso/models/search_target_type_enum.dart';
@@ -10,6 +11,8 @@ import 'package:aiso/Widgets/generic_type_ahead.dart';
 import 'package:aiso/models/industry_model.dart';
 import 'package:aiso/models/location_models.dart';
 import 'package:aiso/models/search_target_model.dart';
+import 'package:aiso/routing/route_names.dart';
+import 'package:aiso/services/navigation_service.dart';
 import 'package:aiso/view_models/auth_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -214,6 +217,7 @@ class _NewReportDesktopState extends State<NewReportDesktop> {
               onPressed: () {
 
                 vm.createAndRunPaidReport();
+                locator<NavigationService>().navigateTo(reportsRoute);
 
               }, 
               child: Text('Generate report!')

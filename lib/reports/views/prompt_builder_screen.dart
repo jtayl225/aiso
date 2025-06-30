@@ -100,7 +100,7 @@ class _PromptBuilderScreenState extends State<PromptBuilderScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final _templates = context.watch<ReportViewModel>().promptTemplates;
+    final _templates = context.watch<ReportsViewModel>().promptTemplates;
     return Scaffold(
       appBar: AppBar(
         title: Text('Prompt Builder'),

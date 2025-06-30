@@ -34,7 +34,7 @@ class _SignInScreenState extends State<SignInScreen> {
 
   Future<void> _signIn() async {
     final authViewModel = context.read<AuthViewModel>();
-    final reportViewModel = context.read<ReportViewModel>();
+    final reportViewModel = context.read<ReportsViewModel>();
 
     try {
 

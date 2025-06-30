@@ -1,13 +1,16 @@
 import 'package:aiso/models/subscriptions_model.dart';
 import 'package:aiso/services/auth_service_supabase.dart';
+import 'package:aiso/services/store_service_supabase.dart';
 import 'package:flutter/foundation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../models/auth_state_enum.dart';
 import '../models/user_model.dart';
 
 class AuthViewModel extends ChangeNotifier {
   bool isSubscribed = false;
   final AuthServiceSupabase _authService = AuthServiceSupabase();
+  final StoreServiceSupabase _storeService = StoreServiceSupabase();
   RealtimeChannel? _subscriptionChannel;
 
   // State variables
@@ -32,9 +35,11 @@ class AuthViewModel extends ChangeNotifier {
   }
 
   // subscribe to supabase
-  void subscribeToSubscriptionStatus() {
+  void subscribeToSubscriptionStatus() async {
     final userId = Supabase.instance.client.auth.currentUser?.id;
     if (userId == null) return;
+    final stripeCustomerId = await _storeService.fetchStripeCustomerId(userId);
+    if (stripeCustomerId == null) return;
 
     _subscriptionChannel = Supabase.instance.client
         .channel('public:subscriptions')
@@ -42,7 +47,7 @@ class AuthViewModel extends ChangeNotifier {
           event: PostgresChangeEvent.update,
           schema: 'public',
           table: 'subscriptions',
-          filter: PostgresChangeFilter(type: PostgresChangeFilterType.eq, column: 'user_id', value: userId),
+          filter: PostgresChangeFilter(type: PostgresChangeFilterType.eq, column: 'stripe_customer_id', value: stripeCustomerId),
           callback: (payload) {
             final newValue = payload.newRecord['stripe_status'];
             isSubscribed = newValue == 'active';
@@ -140,6 +145,7 @@ class AuthViewModel extends ChangeNotifier {
         _isAnonymous = _authService.isAnonymous;
 
         final List<Subscription> subs = await _authService.fetchUserSubscriptions();
+        debugPrint('subs: $subs');
         isSubscribed = subs.isNotEmpty;
         subscribeToSubscriptionStatus();
 
@@ -268,6 +274,40 @@ class AuthViewModel extends ChangeNotifier {
     print('DEBUG: _authScreenState updated to: $_authScreenState');
     notifyListeners();
     print('DEBUG: notifyListeners called');
+  }
+
+  Future<void> launchBillingPortalUrl() async {
+
+    try {
+      final String? url = await _storeService.generateBillingPortal();
+
+      if (url == null) {
+        debugPrint('Checkout URL is null');
+        return;
+      }
+
+      final Uri uri = Uri.parse(url);
+
+      if (kIsWeb) {
+        // Open in new browser tab
+        await launchUrl(
+          uri,
+          webOnlyWindowName: '_blank',
+        );
+      } else {
+        // Open in external browser
+        if (await canLaunchUrl(uri)) {
+          await launchUrl(uri, mode: LaunchMode.externalApplication);
+        } else {
+          debugPrint('Could not launch $url');
+        }
+      }
+    } catch (e) {
+      debugPrint('launchCheckoutUrl error: $e');
+    } finally {
+      notifyListeners();
+    }
+
   }
 
 }

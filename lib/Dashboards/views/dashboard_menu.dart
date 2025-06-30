@@ -6,11 +6,13 @@ class Dashboard {
   final IconData icon;
   final String title;
   final String description;
+  final int number;
 
   Dashboard({
     required this.icon,
     required this.title,
     required this.description,
+    required this.number,
   });
 }
 
@@ -26,16 +28,19 @@ class DashboardMenu extends StatelessWidget {
       icon: Icons.analytics,
       title: 'Marketing Overview',
       description: 'Track your advertising campaigns, performance metrics, and ROAS.',
+      number: 0
     ),
     Dashboard(
       icon: Icons.shopping_cart,
       title: 'E-Commerce Sales',
       description: 'Daily and monthly sales summaries, top-performing products, and conversion rates.',
+      number: 1
     ),
     Dashboard(
       icon: Icons.people,
       title: 'User Retention',
       description: 'Monitor user churn, engagement trends, and cohort analysis.',
+      number: 2
     ),
   ];
 
@@ -56,8 +61,9 @@ class DashboardMenu extends StatelessWidget {
 
 class DashboardCard extends StatelessWidget {
   final Dashboard dashboard;
+  final VoidCallback? onTap;
 
-  const DashboardCard({super.key, required this.dashboard});
+  const DashboardCard({super.key, required this.dashboard, this.onTap,});
 
   @override
   Widget build(BuildContext context) {
@@ -65,18 +71,19 @@ class DashboardCard extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 8),
       elevation: 3,
       child: InkWell(
-        onTap: () async {
-          // final viewModel = DashboardViewModel();
-          // final url = await viewModel.generateDashUrl();
-          final url = 'http://metabase-6fvc.onrender.com/embed/dashboard/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZXNvdXJjZSI6eyJkYXNoYm9hcmQiOjJ9LCJwYXJhbXMiOnsicmVwb3J0X2lkIjpbIjFhM2JiYjA3LTRjMDAtNDkxYy1iOTI5LTNiMDY3NDg4MTk2YiJdfSwiZXhwIjoxNzQ5MTA3NTg3fQ.k8z8eW8QDwD0O9VMxd-dKUFoqWb7tPJsHFPkyrH05Pc#bordered=true&titled=true';
-          if (!context.mounted) return;  
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => DashboardScreen(url: url),
-            ),
-          );
-        },
+        onTap: onTap,
+        // onTap: () async {
+        //   // final viewModel = DashboardViewModel();
+        //   // final url = await viewModel.generateDashUrl();
+        //   final url = 'http://metabase-6fvc.onrender.com/embed/dashboard/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZXNvdXJjZSI6eyJkYXNoYm9hcmQiOjJ9LCJwYXJhbXMiOnsicmVwb3J0X2lkIjpbIjFhM2JiYjA3LTRjMDAtNDkxYy1iOTI5LTNiMDY3NDg4MTk2YiJdfSwiZXhwIjoxNzQ5MTA3NTg3fQ.k8z8eW8QDwD0O9VMxd-dKUFoqWb7tPJsHFPkyrH05Pc#bordered=true&titled=true';
+        //   if (!context.mounted) return;  
+        //   Navigator.push(
+        //     context,
+        //     MaterialPageRoute(
+        //       builder: (context) => DashboardScreen(url: url),
+        //     ),
+        //   );
+        // },
         child: Padding(
           padding: const EdgeInsets.all(12),
           child: Row(

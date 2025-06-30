@@ -86,7 +86,12 @@ SELECT
   a.created_at,
   a.updated_at,
   a.deleted_at,
+  b.name,
+  b.description,
   b.cadence,
+  b.category,
+  b.effort,
+  b.reward,
   c.report_id
 FROM report_run_recommendations AS a
 INNER JOIN recommendations AS b

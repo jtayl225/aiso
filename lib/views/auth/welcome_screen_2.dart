@@ -51,7 +51,7 @@ class _WelcomeScreenState2 extends State<WelcomeScreen2> {
   Future<void> _signIn() async {
     debugPrint('Sign in with: ${_emailController.text}, ${_passwordController.text}');
     final authViewModel = context.read<AuthViewModel>();
-    final reportViewModel = context.read<ReportViewModel>();
+    final reportViewModel = context.read<ReportsViewModel>();
 
     try {
 
@@ -89,7 +89,7 @@ class _WelcomeScreenState2 extends State<WelcomeScreen2> {
   Future<void> _signUp() async {
     debugPrint('Sign up with: ${_emailController.text}, ${_passwordController.text}');
     final authViewModel = Provider.of<AuthViewModel>(context, listen: false);
-    final reportViewModel = context.read<ReportViewModel>();
+    final reportViewModel = context.read<ReportsViewModel>();
     final email = _emailController.text.trim();
     final password = _passwordController.text;
 
