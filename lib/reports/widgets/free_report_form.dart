@@ -9,6 +9,8 @@ import 'package:aiso/routing/route_names.dart';
 import 'package:aiso/services/navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart';
+import 'package:aiso/routing/app_router.dart';
 
 class FreeReportForm extends StatefulWidget {
   const FreeReportForm({super.key});
@@ -118,7 +120,9 @@ class _FreeReportFormState extends State<FreeReportForm> {
                         ? () {
                             if (_formKey.currentState!.validate()) {
                               vm.createAndRunFreeReport();
-                              locator<NavigationService>().navigateTo(freeReportTimelineRoute);
+                              // locator<NavigationService>().navigateTo(freeReportTimelineRoute);
+                              appRouter.go(freeReportTimelineRoute);
+
                             }
                           }
                         : null,

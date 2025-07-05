@@ -1,3 +1,4 @@
+import 'package:aiso/constants/font_sizes.dart';
 import 'package:flutter/material.dart';
 
 class FreeReportFormDetails extends StatelessWidget {
@@ -14,14 +15,14 @@ class FreeReportFormDetails extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Text(
-            'Free report.',
-            style: TextStyle(fontWeight: FontWeight.w800, fontSize: 45, height: 0.9),
+            'Get your free report.',
+            style: TextStyle(fontWeight: FontWeight.w800, fontSize: fontSizeDesktopLarge, height: 0.9),
             textAlign: isCentered ? TextAlign.center : TextAlign.start,
           ),
           SizedBox(height: 30,),
           Text(
             'Generate a free report on us and see where your business ranks relative to your competitors.',
-            style: TextStyle(fontSize: 21, height: 1.7),
+            style: TextStyle(fontSize: fontSizeDesktopMedium, height: 1.7),
             textAlign: isCentered ? TextAlign.center : TextAlign.start,
           ),
 

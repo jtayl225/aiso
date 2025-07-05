@@ -1,8 +1,8 @@
 import 'package:aiso/constants/font_sizes.dart';
 import 'package:flutter/material.dart';
 
-class HomeDetails extends StatelessWidget {
-  const HomeDetails({super.key});
+class HomeDetails2 extends StatelessWidget {
+  const HomeDetails2({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,17 +14,17 @@ class HomeDetails extends StatelessWidget {
         children: <Widget>[
 
           Text(
-            'Be Found. Gain Trust. Get Leads.',
+            'How GEO MAX helps.',
             style: TextStyle(
                 fontWeight: FontWeight.w800, fontSize: fontSizeDesktopLarge, height: 0.9),
           ),
 
           SizedBox(
-            height: 60,
+            height: 30,
           ),
-
+          
           Text(
-            'Find out where your business ranks when people ask ChatGPT or Google Gemini who to trust — and unlock a new way to generate leads from AI search.\n\nIt''s the new SEO — smarter, faster, and built for the future.',
+            'GEO MAX gives you a personalized report highlighting how your business ranks in AI-generated results, where your competitors show up — and how to improve your visibility so more customers find and choose you. It''s your roadmap to being the business AI recommends.',
             style: TextStyle(fontSize: fontSizeDesktopMedium, height: 1.7),
           ),
         ],

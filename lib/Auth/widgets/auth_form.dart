@@ -164,6 +164,8 @@ import 'package:aiso/view_models/auth_view_model.dart';
 import 'package:aiso/views/auth/auth_checker_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart';
+import 'package:aiso/routing/app_router.dart';
 
 class AuthForm extends StatefulWidget {
   const AuthForm({super.key});
@@ -215,24 +217,7 @@ class _AuthFormState extends State<AuthForm> {
         return;
       }
 
-      // final loaded = await reportVm.signinFetchAll(userId);
-      // if (!mounted) return;
-      // if (!loaded) {
-      //   _showErrorSnackBar('Signed in, but failed to load your data.');
-      //   return;
-      // }
-
-      // Navigator.of(context).pushAndRemoveUntil(
-      //   MaterialPageRoute(builder: (_) => const AuthChecker()),
-      //   (_) => false,
-      // );
-
-      // Navigator.push(
-      //   context,
-      //   MaterialPageRoute(builder: (_) => const MyReports()),
-      // );
-
-      locator<NavigationService>().navigateTo(reportsRoute);
+      authVm.isSubscribed ? appRouter.go(reportsRoute) : appRouter.go(storeRoute);
 
     } catch (e) {
       if (mounted) _showErrorSnackBar('Something went wrong. Please try again.');
@@ -279,7 +264,6 @@ class _AuthFormState extends State<AuthForm> {
     } else {
       await _signUp();
     }
-    locator<NavigationService>().navigateTo(reportsRoute);
   }
 
   @override

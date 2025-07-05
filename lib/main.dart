@@ -4,6 +4,7 @@ import 'package:aiso/reports/view_models/free_report_view_model.dart';
 import 'package:aiso/Store/view_models/store_view_model.dart';
 // import 'package:aiso/reports/views/example_timeline_screen.dart';
 import 'package:aiso/locator.dart';
+import 'package:aiso/routing/app_router.dart';
 import 'package:aiso/routing/route_names.dart';
 import 'package:aiso/routing/router.dart';
 import 'package:aiso/services/navigation_service.dart';
@@ -47,15 +48,20 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'GEO MAX',
       theme: lightMode,
-      builder: (context, child) => LayoutTemplate(
-        child: child!,
-      ),
-      navigatorKey: locator<NavigationService>().navigatorKey,
-      onGenerateRoute: generateRoute,
-      initialRoute: HomeRoute,
+      routerConfig: appRouter,
+      builder: (context, child) {
+        locator<NavigationService>().setContext(context);
+        return LayoutTemplate(child: child!);
+      },
+      // builder: (context, child) => LayoutTemplate(
+      //   child: child!,
+      // ),
+      // navigatorKey: locator<NavigationService>().navigatorKey,
+      // onGenerateRoute: generateRoute,
+      // initialRoute: HomeRoute,
       // home: const LayoutTemplate(), // MyHome(), //AuthChecker(), // ExampleTimelineScreen(), AuthChecker(), // DashboardMenu(), // DashboardScreen(url: "https://www.wikipedia.org"), // StoreScreen(), //PromptHashScreen(), // AuthChecker(),  https://aiso-seyf.onrender.com 
     );
   }

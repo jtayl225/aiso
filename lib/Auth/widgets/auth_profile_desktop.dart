@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:aiso/view_models/auth_view_model.dart';
 import 'package:aiso/views/auth/auth_checker_screen.dart';
+import 'package:go_router/go_router.dart';
+import 'package:aiso/routing/app_router.dart';
 
 class AuthProfileDesktop extends StatelessWidget {
   const AuthProfileDesktop({super.key});
@@ -85,11 +87,7 @@ class AuthProfileDesktop extends StatelessWidget {
                 OutlinedButton(
                   onPressed: () async {
                     await authVm.signOut();
-                    locator<NavigationService>().navigateTo(HomeRoute);
-                    // Navigator.of(context).pushAndRemoveUntil(
-                    //   MaterialPageRoute(builder: (_) => const AuthChecker()),
-                    //   (_) => false,
-                    // );
+                    appRouter.go(homeRoute);
                   },
                   child: const Text('Sign Out'),
                 ),

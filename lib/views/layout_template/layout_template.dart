@@ -1,5 +1,6 @@
 import 'package:aiso/Home/widgets/centered_view.dart';
-import 'package:aiso/NavBar/views/navgation_bar.dart';
+import 'package:aiso/NavBar/views/nav_bar.dart';
+import 'package:aiso/NavBar/views/nav_footer.dart';
 import 'package:aiso/NavBar/widgets/nav_draw.dart';
 import 'package:aiso/locator.dart';
 import 'package:aiso/routing/route_names.dart';
@@ -16,6 +17,7 @@ class LayoutTemplate extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return ResponsiveBuilder(
       builder: (context, sizingInformation) => Scaffold(
         drawer: sizingInformation.isDesktop ? null : MyNavigationDrawer(),
@@ -26,7 +28,8 @@ class LayoutTemplate extends StatelessWidget {
               MyNavigationBar(),
               Expanded(
                 child: child
-                )
+                ),
+              FooterView(),
             ],
           ),
         ),

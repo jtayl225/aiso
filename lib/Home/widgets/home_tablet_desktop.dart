@@ -1,12 +1,11 @@
 import 'package:aiso/Home/widgets/call_to_action.dart';
-import 'package:aiso/Home/widgets/centered_view.dart';
 import 'package:aiso/Home/widgets/home_details.dart';
-import 'package:aiso/NavBar/views/navgation_bar.dart';
+import 'package:aiso/Home/widgets/home_details_2.dart';
+import 'package:aiso/Home/widgets/home_details_3.dart';
+import 'package:aiso/Home/widgets/home_details_4.dart';
 import 'package:aiso/reports/view_models/free_report_view_model.dart';
-import 'package:aiso/reports/views/free_report_form_view.dart';
-import 'package:aiso/locator.dart';
+import 'package:aiso/routing/app_router.dart';
 import 'package:aiso/routing/route_names.dart';
-import 'package:aiso/services/navigation_service.dart';
 import 'package:aiso/view_models/auth_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -18,30 +17,61 @@ class HomeTabletDesktop extends StatelessWidget {
   Widget build(BuildContext context) {
     final authVM = context.watch<AuthViewModel>();
     final vm = context.watch<FreeReportViewModel>();
-    return Row(children: [
-                HomeDetails(),
-                Expanded(
-                  child: Center(
-                    child: CallToAction(
-                      title: 'Generate free report!',
-                      onPressed: () {
-
-                        // authVM.anonSignInIfUnauth();
-                        vm.reset();
-                        locator<NavigationService>().navigateTo(freeReportFormRoute);
-                            // // Your action here
-                            // debugPrint("DEBUG: Call to action pressed!");
-
-                            // Navigator.of(context).push(
-                            //   MaterialPageRoute(
-                            //     builder: (_) => FreeReportWrapper(),
-                            //   ),
-                            // );
-
-                          },
-                      ),
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          SizedBox(height: 80),
+          Row(
+            children: [
+              HomeDetails(),
+              Expanded(
+                child: Center(
+                  child: CallToAction(
+                    title: 'Generate free report!',
+                    onPressed: () {
+                      // authVM.anonSignInIfUnauth();
+                      vm.reset();
+                      appRouter.go(freeReportFormRoute);
+                    },
                   ),
-                )
-              ]);
+                ),
+              ),
+            ],
+          ),
+
+          SizedBox(height: 80),
+
+          Row(
+            children: [
+              HomeDetails4(),
+              Expanded(child: SizedBox(width: 100, height: 100)),
+            ],
+          ),
+
+          SizedBox(height: 80),
+
+          Row(
+            children: [
+              HomeDetails2(),
+              Expanded(child: SizedBox(width: 100, height: 100)),
+            ],
+          ),
+
+          SizedBox(height: 80),
+
+          Row(
+            children: [
+              Expanded(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(maxHeight: 300.0, maxWidth: 600.0),
+                  child: Image.asset('assets/Google_vs_ChatGPT.png'),
+                ),
+              ),
+              HomeDetails3(),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 }

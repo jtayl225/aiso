@@ -6,6 +6,8 @@ import 'package:aiso/routing/route_names.dart';
 import 'package:aiso/services/navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart';
+import 'package:aiso/routing/app_router.dart';
 
 class ReportsDesktop extends StatelessWidget {
   const ReportsDesktop({super.key});
@@ -27,7 +29,10 @@ class ReportsDesktop extends StatelessWidget {
                       padding: const EdgeInsets.only(bottom: 4),
                       child: InkWell(
                         onTap: () {
-                          locator<NavigationService>().navigateTo(reportRoute, queryParams: {'report_id': report.id});
+                          // locator<NavigationService>().navigateTo(reportRoute, queryParams: {'report_id': report.id});
+                          final uri = Uri(path: reportRoute, queryParameters: {'report_id': report.id});
+                          appRouter.go(uri.toString());
+                          // context.go(uri.toString());
                         },
                         child: ReportCard(
                           leadingIcon: Icons.abc,

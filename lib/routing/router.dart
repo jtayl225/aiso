@@ -16,13 +16,13 @@ Route<dynamic> generateRoute(RouteSettings settings) {
   var routingData = settings.name?.getRoutingData;
 
   switch (routingData?.route) {
-    case HomeRoute:
+    case homeRoute:
       return _getPageRoute(MyHome(), settings.name);
-    case AboutRoute:
+    case aboutRoute:
       return _getPageRoute(MyHome(), settings.name);
-    case StoreRoute:
+    case storeRoute:
       return _getPageRoute(MyStore(), settings.name);
-    case GetStartedRoute:
+    case getStartedRoute:
       return _getPageRoute(AuthHome(), settings.name);
     case reportsRoute:
       return _getPageRoute(MyReports(), settings.name);
@@ -31,7 +31,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return _getPageRoute(MyReportView(reportId: reportId), settings.name);
     case newReportRoute:
       return _getPageRoute(NewReportView(), settings.name);
-    case ProfileRoute:
+    case profileRoute:
       return _getPageRoute(AuthProfile(), settings.name);
     case freeReportFormRoute:
       return _getPageRoute(FreeReport(), settings.name);

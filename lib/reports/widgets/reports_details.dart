@@ -3,6 +3,8 @@ import 'package:aiso/locator.dart';
 import 'package:aiso/routing/route_names.dart';
 import 'package:aiso/services/navigation_service.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:aiso/routing/app_router.dart';
 
 class ReportsDetails extends StatelessWidget {
   final bool isCentered;
@@ -33,13 +35,8 @@ class ReportsDetails extends StatelessWidget {
 
           ElevatedButton(
           onPressed: () {
-
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(builder: (_) => const HomeTabletDesktop()),
-            // );
-
-            locator<NavigationService>().navigateTo(newReportRoute);
+            
+            appRouter.go(newReportRoute);
 
           },
           child: Text('New Report'),

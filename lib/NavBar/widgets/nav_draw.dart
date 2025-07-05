@@ -10,6 +10,8 @@ import 'package:aiso/services/navigation_service.dart';
 import 'package:aiso/view_models/auth_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart';
+import 'package:aiso/routing/app_router.dart';
 
 class MyNavigationDrawer extends StatelessWidget {
   const MyNavigationDrawer({super.key});
@@ -29,7 +31,7 @@ class MyNavigationDrawer extends StatelessWidget {
           // 1. Close the drawer
           Scaffold.of(context).closeDrawer();
           // 2. Then navigate to your Route
-          locator<NavigationService>().navigateTo(HomeRoute);
+          appRouter.go(homeRoute);
         },
       ),
 
@@ -40,7 +42,7 @@ class MyNavigationDrawer extends StatelessWidget {
           // 1. Close the drawer
           Scaffold.of(context).closeDrawer();
           // 2. Then navigate to your Route
-          locator<NavigationService>().navigateTo(StoreRoute);
+          appRouter.go(storeRoute);
         },
       ),
 
@@ -51,7 +53,7 @@ class MyNavigationDrawer extends StatelessWidget {
           // 1. Close the drawer
           Scaffold.of(context).closeDrawer();
           // 2. Then navigate to your Route
-          locator<NavigationService>().navigateTo(GetStartedRoute);
+          appRouter.go(getStartedRoute);
         },
       ),
     ];
@@ -64,7 +66,7 @@ class MyNavigationDrawer extends StatelessWidget {
           // 1. Close the drawer
           Scaffold.of(context).closeDrawer();
           // 2. Then navigate to your Route
-          locator<NavigationService>().navigateTo(HomeRoute);
+          appRouter.go(homeRoute);
         },
       ),
 
@@ -76,7 +78,7 @@ class MyNavigationDrawer extends StatelessWidget {
           // 1. Close the drawer
           Scaffold.of(context).closeDrawer();
           // 2. Then navigate to your Route
-          locator<NavigationService>().navigateTo(StoreRoute);
+          appRouter.go(storeRoute);
         },
       ),
       ],     
@@ -88,7 +90,7 @@ class MyNavigationDrawer extends StatelessWidget {
           // 1. Close the drawer
           Scaffold.of(context).closeDrawer();
           // 2. Then navigate to your Route
-          locator<NavigationService>().navigateTo(reportsRoute);
+          appRouter.go(reportsRoute);
         },
       ),
 
@@ -99,7 +101,7 @@ class MyNavigationDrawer extends StatelessWidget {
           // 1. Close the drawer
           Scaffold.of(context).closeDrawer();
           // 2. Then navigate to your Route
-          locator<NavigationService>().navigateTo(ProfileRoute);
+          appRouter.go(profileRoute);
         },
       ),
     ];

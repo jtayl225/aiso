@@ -1,5 +1,8 @@
+import 'package:aiso/locator.dart';
 import 'package:aiso/models/subscriptions_model.dart';
+import 'package:aiso/routing/route_names.dart';
 import 'package:aiso/services/auth_service_supabase.dart';
+import 'package:aiso/services/navigation_service.dart';
 import 'package:aiso/services/store_service_supabase.dart';
 import 'package:flutter/foundation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -8,7 +11,7 @@ import '../models/auth_state_enum.dart';
 import '../models/user_model.dart';
 
 class AuthViewModel extends ChangeNotifier {
-  bool isSubscribed = false;
+
   final AuthServiceSupabase _authService = AuthServiceSupabase();
   final StoreServiceSupabase _storeService = StoreServiceSupabase();
   RealtimeChannel? _subscriptionChannel;
@@ -26,6 +29,8 @@ class AuthViewModel extends ChangeNotifier {
   bool _isAnonymous = false;
   bool get isAnonymous => _isAnonymous;
 
+  bool _isSubscribed = false;
+  bool get isSubscribed => _isSubscribed;
 
   String? _errorMessage;
   String? get errorMessage => _errorMessage;
@@ -50,7 +55,7 @@ class AuthViewModel extends ChangeNotifier {
           filter: PostgresChangeFilter(type: PostgresChangeFilterType.eq, column: 'stripe_customer_id', value: stripeCustomerId),
           callback: (payload) {
             final newValue = payload.newRecord['stripe_status'];
-            isSubscribed = newValue == 'active';
+            _isSubscribed = newValue == 'active';
             notifyListeners();
           },
         )
@@ -112,7 +117,7 @@ class AuthViewModel extends ChangeNotifier {
         _authState = MyAuthState.authenticated;
 
         final List<Subscription> subs = await _authService.fetchUserSubscriptions();
-        isSubscribed = subs.isNotEmpty;
+        _isSubscribed = subs.isNotEmpty;
         subscribeToSubscriptionStatus();
         
         return true;
@@ -146,7 +151,7 @@ class AuthViewModel extends ChangeNotifier {
 
         final List<Subscription> subs = await _authService.fetchUserSubscriptions();
         debugPrint('subs: $subs');
-        isSubscribed = subs.isNotEmpty;
+        _isSubscribed = subs.isNotEmpty;
         subscribeToSubscriptionStatus();
 
         return _currentUser!.id;

@@ -13,76 +13,40 @@ import 'package:aiso/services/navigation_service.dart';
 import 'package:aiso/view_models/auth_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart';
+import 'package:aiso/routing/app_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class NavigationBarDesktop extends StatelessWidget {
-  
   const NavigationBarDesktop({super.key});
+
+  void _launchBlog() async {
+    final url = Uri.parse('https://medium.com/generative-engine-optimization/generative-engine-optimization-geo-2d78a01f8313');
+
+    if (!await launchUrl(url, webOnlyWindowName: '_blank')) {
+      throw 'Could not launch $url';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-
     final authState = context.watch<AuthViewModel>().authState;
     final isLoggedIn = authState == MyAuthState.authenticated;
     final isSubscribed = context.watch<AuthViewModel>().isSubscribed;
 
-    // 1️⃣ Define the two separate lists
-    final loggedOutItems = <NavBarItem>[
-      NavBarItem(
-        'About',
-        onTap: () {
-          locator<NavigationService>().navigateTo(HomeRoute);
-        }
-      ),
+    final navBarItems = <NavBarItem>[
+      NavBarItem('About', onTap: () => appRouter.go(aboutRoute)),
+      NavBarItem('Pricing', onTap: () => appRouter.go(storeRoute)),
+      NavBarItem('News', onTap: _launchBlog),
+      NavBarItem('FAQ''s', onTap: () => appRouter.go(faqRoute)),
 
-      NavBarItem(
-        'Pricing',
-        onTap: () {
-          locator<NavigationService>().navigateTo(StoreRoute);
-        }
-      ),
-     
-      NavBarItem(
-        'Get started',
-        onTap: () {
-          locator<NavigationService>().navigateTo(GetStartedRoute);
-        }
-      ),
+      if (isLoggedIn)
+        NavBarItem('Account', onTap: () => appRouter.go(profileRoute))
+      else
+        NavBarItem('Sign in', onTap: () => appRouter.go(signInRoute)),
+
     ];
 
-    final loggedInItems = <NavBarItem>[
-      NavBarItem(
-        'About',
-        onTap: () {
-          locator<NavigationService>().navigateTo(HomeRoute);
-        }
-      ),
-
-      if (!isSubscribed) ...[
-        NavBarItem(
-          'Pricing',
-          onTap: () {
-            locator<NavigationService>().navigateTo(StoreRoute);
-          },
-        ),
-      ],      
-     
-      NavBarItem(
-        'Reports',
-        onTap: () {
-          locator<NavigationService>().navigateTo(reportsRoute);
-        }
-      ),
-      NavBarItem(
-        'Account',
-        onTap: () {
-          locator<NavigationService>().navigateTo(ProfileRoute);
-        }
-      ),
-    ];
-
-    // 2️⃣ Pick the right list
-    final navBarItems = isLoggedIn ? loggedInItems : loggedOutItems;
-    
     return SizedBox(
       height: 100,
       child: Row(
@@ -93,12 +57,14 @@ class NavigationBarDesktop extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             mainAxisSize: MainAxisSize.min,
             children: [
-              ...navBarItems.map((item) => Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                child: item,
-              )),
+              ...navBarItems.map(
+                (item) => Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  child: item,
+                ),
+              ),
             ],
-          )
+          ),
         ],
       ),
     );

@@ -1,13 +1,21 @@
-const String HomeRoute = "/home";
-const String AboutRoute = "/about";
-const String StoreRoute = "/store";
-const String GetStartedRoute = "/get-started";
+const String homeRoute = "/home";
+const String aboutRoute = "/about";
+const String storeRoute = "/store";
+const String newsRoute = '/news';
+const String faqRoute = '/faq';
+const String signUpRoute = '/sign-up';
+const String signInRoute = '/sign-in';
+const String termsRoute = '/terms-and-conditions';
+const String privacyRoute = '/privacy-policy';
+
+
+const String getStartedRoute = '/get-started';
 
 const String reportsRoute = "/reports";
 const String newReportRoute = "/reports/new";
-const String reportRoute = "/reports/";
+const String reportRoute = "/reports/report";
 
-const String ProfileRoute = "/profile";
+const String profileRoute = "/profile";
 
 const String freeReportFormRoute = "/free/form";
 const String freeReportTimelineRoute = "/free/timeline";
