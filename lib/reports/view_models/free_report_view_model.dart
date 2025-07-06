@@ -185,10 +185,10 @@ class FreeReportViewModel extends ChangeNotifier {
     });
 
     try {
-      final fetchedCountries = await _locationService.fetchCountries();
-      countries = fetchedCountries;
-      final fetchedIndustries = await _reportService.fetchIndustries();
-      industries = fetchedIndustries;
+      countries = await _locationService.fetchCountries();
+      selectedCountry = countries.first;
+      industries = await _reportService.fetchIndustries();
+      selectedIndustry = industries.first;
     } catch (e) {
       errorMessage = 'Failed to initialize: $e';
     } finally {
@@ -332,13 +332,13 @@ class FreeReportViewModel extends ChangeNotifier {
 
       // // fetch parent prompt given industry
       debugPrint('DEBUG: start freePromptText.');
-      final String freePromptText = _buildFreePrompt('Best real estate agency');
+      final String freePromptText = _buildFreePrompt('Top 10 real estate agencies');
       promptText = freePromptText;
       debugPrint('DEBUG: end freePromptText.');
 
       // creates prompt - handles upserts of new prompts
       debugPrint('DEBUG: start upsertPromptAndAttach.');
-      final Prompt _ = await _reportService.upsertPromptAndAttach(reportId: report.id, promptText: freePromptText);
+      final Prompt _ = await _reportService.upsertPromptAndAttach(reportId: report.id, promptText: freePromptText, localityId: selectedLocality!.id);
       debugPrint('DEBUG: end upsertPromptAndAttach.');
 
       // init free report run

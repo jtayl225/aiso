@@ -1,6 +1,8 @@
 import 'package:aiso/Store/models/product_model.dart';
 import 'package:aiso/Store/widgets/buy_report_dialog.dart';
+import 'package:aiso/Store/widgets/signin_dialog.dart';
 import 'package:aiso/Store/widgets/store_desktop.dart';
+import 'package:aiso/Store/widgets/verify_email_dialog.dart';
 import 'package:aiso/models/purchase_enum.dart';
 import 'package:aiso/services/store_service_supabase.dart';
 import 'package:flutter/foundation.dart';
@@ -41,7 +43,7 @@ class StoreViewModel extends ChangeNotifier {
           ProductInclusion(isIncluded: false, description: 'Automated monthly report updates'),
         ],
         callToAction: 'Buy Now',
-        onPressed: (context) => showBuyReportDialog(context)
+        onPressed: (context) => handleProductAction(context, ProductType.PURCHASE)
       ),
       Product(
         id: '2',
@@ -60,7 +62,7 @@ class StoreViewModel extends ChangeNotifier {
           ProductInclusion(isIncluded: true, description: 'Automated monthly report updates'),
         ],
         callToAction: 'Subscribe',
-        onPressed: (context) => launchCheckoutUrl(ProductType.SUBSCRIBE_MONTHLY),
+        onPressed: (context) => handleProductAction(context, ProductType.SUBSCRIBE_MONTHLY),
       ),
       Product(
         id: '3',
@@ -79,7 +81,7 @@ class StoreViewModel extends ChangeNotifier {
           ProductInclusion(isIncluded: true, description: 'Automated monthly report updates'),
         ],
         callToAction: 'Subscribe',
-        onPressed: (context) => launchCheckoutUrl(ProductType.SUBSCRIBE_YEARLY),
+        onPressed: (context) => handleProductAction(context, ProductType.SUBSCRIBE_YEARLY),
 
       ),
     ];
@@ -101,6 +103,36 @@ class StoreViewModel extends ChangeNotifier {
     // - showing user-friendly messages
     // - sending logs to remote error tracking services
   }
+
+  void handleProductAction(BuildContext context, ProductType productType) {
+    final user = Supabase.instance.client.auth.currentUser;
+
+    if (user == null) {
+      showSignInDialog(context);
+      return;
+    }
+
+    if (user.emailConfirmedAt == null) {
+      showVerifyEmailDialog(context);
+      return;
+    }
+
+    switch (productType) {
+      case ProductType.PURCHASE:
+        showBuyReportDialog(context);
+        break;
+
+      case ProductType.SUBSCRIBE_MONTHLY:
+      case ProductType.SUBSCRIBE_YEARLY:
+        launchCheckoutUrl(productType);
+        break;
+
+      default:
+        debugPrint("DEBUG: Unhandled product type in handleProductAction: $productType");
+    }
+  }
+
+
 
   Future<void> launchCheckoutUrl(ProductType productType) async {
 

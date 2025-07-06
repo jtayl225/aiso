@@ -6,25 +6,30 @@ import 'package:aiso/models/db_timestamps_model.dart';
 import 'package:aiso/models/entity_model.dart';
 import 'package:aiso/models/search_target_type_enum.dart';
 import 'package:aiso/reports/view_models/free_report_view_model.dart';
-import 'package:aiso/Widgets/flexible_layout.dart';
+import 'package:aiso/Widgets/row_col.dart';
 import 'package:aiso/Widgets/generic_type_ahead.dart';
 import 'package:aiso/models/industry_model.dart';
 import 'package:aiso/models/location_models.dart';
 import 'package:aiso/models/search_target_model.dart';
+import 'package:aiso/routing/app_router.dart';
 import 'package:aiso/routing/route_names.dart';
 import 'package:aiso/services/navigation_service.dart';
 import 'package:aiso/view_models/auth_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class NewReportDesktop extends StatefulWidget {
-  const NewReportDesktop({super.key});
+class NewReportForm extends StatefulWidget {
+  final RowColType rowColType;
+  const NewReportForm({
+    super.key,
+    required this.rowColType,
+    });
 
   @override
-  State<NewReportDesktop> createState() => _NewReportDesktopState();
+  State<NewReportForm> createState() => _NewReportFormState();
 }
 
-class _NewReportDesktopState extends State<NewReportDesktop> {
+class _NewReportFormState extends State<NewReportForm> {
   final TextEditingController reportTitleController = TextEditingController();
   // reportTitleController.text = '';
   // late NewReportViewModel vm;
@@ -52,6 +57,8 @@ class _NewReportDesktopState extends State<NewReportDesktop> {
   Widget build(BuildContext context) {
     // final vm = Provider.of<FreeReportViewModel>(context);
     // final vm = context.watch<NewReportViewModel>();
+    final rowColType = widget.rowColType;
+    final double spacing = 40;
 
     final vm = context.watch<NewReportViewModel>();
 
@@ -77,19 +84,19 @@ class _NewReportDesktopState extends State<NewReportDesktop> {
               textAlign: TextAlign.start,
             ),
 
+            // if (vm.isLoading)
+            //   SizedBox(height: 60), 
+            //   const Center(child: CircularProgressIndicator()),
+
             SizedBox(height: 60),
 
-            FlexibleLayout(
-              layoutType: LayoutType.row,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              spacing: 0.0,
+            RowCol(
+              layoutType: rowColType,
+              spacing: spacing,
               children: _buildReportTitleChildren(vm, reportTitleController),
             ),
 
             SizedBox(height: 60),
-
-            
 
             // Text(
             //   'Title.',
@@ -117,47 +124,43 @@ class _NewReportDesktopState extends State<NewReportDesktop> {
             // SizedBox(height: 14),
 
             /// search target
-            FlexibleLayout(
-              layoutType: LayoutType.row,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              spacing: 0.0,
+            RowCol(
+              layoutType: rowColType,
+              spacing: spacing,
               children: _buildSearchTargetChildren(context, vm),
             ),
 
             SizedBox(height: 60),
 
-            /// Prompt
-            FlexibleLayout(
-              layoutType: LayoutType.row,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              spacing: 0.0,
-              children: _buildPromptChildren(vm),
-            ),
+            // /// Prompt
+            // FlexibleLayout(
+            //   layoutType: LayoutType.row,
+            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //   crossAxisAlignment: CrossAxisAlignment.start,
+            //   spacing: 0.0,
+            //   children: _buildPromptChildren(vm),
+            // ),
 
-            SizedBox(height: 30),
+            // SizedBox(height: 30),
 
-            if (vm.selectedPromptType?.isNotEmpty == true &&
-                vm.selectedSearchTarget != null)
-              Text(
-                '${vm.selectedPromptType} '
-                '${vm.selectedSearchTarget!.entityType == EntityType.business ? 'real estate agencies' : 'real estate agents'} in ...',
-                style: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
-              ),
+            // if (vm.selectedPromptType?.isNotEmpty == true &&
+            //     vm.selectedSearchTarget != null)
+            //   Text(
+            //     '${vm.selectedPromptType} '
+            //     '${vm.selectedSearchTarget!.entityType == EntityType.business ? 'real estate agencies' : 'real estate agents'} in ...',
+            //     style: const TextStyle(
+            //       fontSize: 14,
+            //       fontWeight: FontWeight.bold,
+            //       color: Colors.black,
+            //     ),
+            //   ),
 
-            SizedBox(height: 60),
+            // SizedBox(height: 60),
 
             /// Location
-            FlexibleLayout(
-              layoutType: LayoutType.row,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              spacing: 0.0,
+            RowCol(
+              layoutType: rowColType,
+              spacing: spacing,
               children: _buildLocationsChildren(vm),
             ),
 
@@ -214,13 +217,14 @@ class _NewReportDesktopState extends State<NewReportDesktop> {
             SizedBox(height: 60),
 
             ElevatedButton(
-              onPressed: () {
-
-                vm.createAndRunPaidReport();
-                locator<NavigationService>().navigateTo(reportsRoute);
-
-              }, 
-              child: Text('Generate report!')
+              onPressed:
+                  vm.isFormValid
+                      ? () async {
+                        await vm.createAndRunPaidReport();
+                        appRouter.go(reportsRoute);
+                      }
+                      : null, // disables the button
+              child: Text('Generate report!'),
             ),
           ],
         ),
@@ -250,8 +254,10 @@ Widget _buildDropdownField<T>({
   );
 }
 
-List<Widget> _buildReportTitleChildren(NewReportViewModel vm, TextEditingController reportTitleController,) {
-
+List<Widget> _buildReportTitleChildren(
+  NewReportViewModel vm,
+  TextEditingController reportTitleController,
+) {
   // final TextEditingController reportTitleController = TextEditingController();
   // reportTitleController.text = '';
 
@@ -280,18 +286,21 @@ List<Widget> _buildReportTitleChildren(NewReportViewModel vm, TextEditingControl
       ),
     ),
 
-    ConstrainedBox(
-      constraints: BoxConstraints(maxWidth: 400.0),
-      child: TextField(
-              controller: reportTitleController,
-              decoration: const InputDecoration(
-                labelText: 'Report Title',
-                border: OutlineInputBorder(),
-              ),
-              onChanged: (value) {
-                vm.reportTitle = value;
-              },
-            ),
+    Align(
+      alignment: Alignment.center,
+      child: ConstrainedBox(
+        constraints: BoxConstraints(maxWidth: 400.0),
+        child: TextField(
+          controller: reportTitleController,
+          decoration: const InputDecoration(
+            labelText: 'Report Title',
+            border: OutlineInputBorder(),
+          ),
+          onChanged: (value) {
+            vm.reportTitle = value;
+          },
+        ),
+      ),
     ),
   ];
 }
@@ -307,7 +316,7 @@ List<Widget> _buildSearchTargetChildren(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Search Target.',
+            'Business details.',
             style: TextStyle(
               fontWeight: FontWeight.w800,
               fontSize: 25,
@@ -317,44 +326,47 @@ List<Widget> _buildSearchTargetChildren(
           ),
           SizedBox(height: 14),
           Text(
-            'The "search target" is the business or person (e.g., real estate agency or real estate agent) that you wish to monitor.',
+            'Add your business details. This can be a either business or person (e.g., real estate agency or real estate agent).',
             style: TextStyle(fontSize: 14, height: 1.7),
             textAlign: TextAlign.start,
           ),
         ],
       ),
     ),
-    Column(
-      children: [
-        ConstrainedBox(
-          constraints: BoxConstraints(maxWidth: 400.0),
-          child: _buildDropdownField<SearchTarget>(
-            label: 'Search Target',
-            value: vm.selectedSearchTarget,
-            items:
-                vm.searchTargets
-                    .map((i) => DropdownMenuItem(value: i, child: Text(i.name)))
-                    .toList(),
-            onChanged: (i) => vm.selectedSearchTarget = i,
-          ),
-        ),
-        // SizedBox(height: 14),
-        TextButton(
-          onPressed: () => _showCreateTargetDialog(context, vm),
-          child: RichText(
-            text: TextSpan(
-              style: const TextStyle(fontSize: 14.0, color: Colors.black87),
-              children: [
-                TextSpan(text: "Don't have a search target? "),
-                TextSpan(
-                  text: "Create a new one!",
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                ),
-              ],
+    Align(
+      alignment: Alignment.center,
+      child: Column(
+        children: [
+          ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: 400.0),
+            child: _buildDropdownField<SearchTarget>(
+              label: 'Business',
+              value: vm.selectedSearchTarget,
+              items:
+                  vm.searchTargets
+                      .map((i) => DropdownMenuItem(value: i, child: Text(i.name)))
+                      .toList(),
+              onChanged: (i) => vm.selectedSearchTarget = i,
             ),
           ),
-        ),
-      ],
+          // SizedBox(height: 14),
+          TextButton(
+            onPressed: () => _showCreateTargetDialog(context, vm),
+            child: RichText(
+              text: TextSpan(
+                style: const TextStyle(fontSize: 14.0, color: Colors.black87),
+                children: [
+                  TextSpan(text: "Can't see your business? "),
+                  TextSpan(
+                    text: "Add your business here!",
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     ),
   ];
 }
@@ -418,58 +430,74 @@ List<Widget> _buildLocationsChildren(NewReportViewModel vm) {
           ),
           SizedBox(height: 14),
           Text(
-            'The locations that you wish to report on.',
+            'The locations that you wish to report on (you can select up to 10). Each location will be added to the below AI prompt.',
             style: TextStyle(fontSize: 14, height: 1.7),
             textAlign: TextAlign.start,
+          ),
+
+          if (vm.selectedPromptType?.isNotEmpty == true &&
+              vm.selectedSearchTarget != null)
+            SizedBox(height: 28),
+          Text(
+            '${vm.selectedPromptType} '
+            '${vm.selectedSearchTarget!.entityType == EntityType.business ? 'real estate agencies' : 'real estate agents'} in ...',
+            style: const TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            ),
           ),
         ],
       ),
     ),
 
-    Column(
-      children: [
-        ConstrainedBox(
-          constraints: BoxConstraints(maxWidth: 400.0),
-          child: _buildDropdownField<Country>(
-            label: 'Country',
-            value: vm.selectedCountry,
-            items:
-                vm.countries
-                    .map((c) => DropdownMenuItem(value: c, child: Text(c.name)))
-                    .toList(),
-            onChanged: (c) => vm.selectedCountry = c,
+    Align(
+      alignment: Alignment.center,
+      child: Column(
+        children: [
+          ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: 400.0),
+            child: _buildDropdownField<Country>(
+              label: 'Country',
+              value: vm.selectedCountry,
+              items:
+                  vm.countries
+                      .map((c) => DropdownMenuItem(value: c, child: Text(c.name)))
+                      .toList(),
+              onChanged: (c) => vm.selectedCountry = c,
+            ),
           ),
-        ),
-
-        ConstrainedBox(
-          constraints: BoxConstraints(maxWidth: 400.0),
-          child: _buildDropdownField<Region>(
-            label: 'State',
-            value: vm.selectedRegion,
-            items:
-                (vm.selectedCountry?.regions ?? [])
-                    .map((r) => DropdownMenuItem(value: r, child: Text(r.name)))
-                    .toList(),
-            onChanged: (r) => vm.selectedRegion = r,
+      
+          ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: 400.0),
+            child: _buildDropdownField<Region>(
+              label: 'State',
+              value: vm.selectedRegion,
+              items:
+                  (vm.selectedCountry?.regions ?? [])
+                      .map((r) => DropdownMenuItem(value: r, child: Text(r.name)))
+                      .toList(),
+              onChanged: (r) => vm.selectedRegion = r,
+            ),
           ),
-        ),
-
-        ConstrainedBox(
-          constraints: BoxConstraints(maxWidth: 400.0),
-          child: GenericTypeAheadField<Locality>(
-            label: 'Suburb',
-            selected: vm.selectedLocality,
-            suggestionsCallback: vm.fetchLocalitySuggestions,
-            displayString: (loc) => loc.name,
-            onSelected: (loc) => vm.selectedLocality = loc,
-            validator:
-                () =>
-                    vm.selectedLocality == null
-                        ? 'Please pick a locality'
-                        : null,
+      
+          ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: 400.0),
+            child: GenericTypeAheadField<Locality>(
+              label: 'Suburb',
+              selected: vm.selectedLocality,
+              suggestionsCallback: vm.fetchLocalitySuggestions,
+              displayString: (loc) => loc.name,
+              onSelected: (loc) => vm.selectedLocality = loc,
+              validator:
+                  () =>
+                      vm.selectedLocality == null
+                          ? 'Please pick a locality'
+                          : null,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     ),
   ];
 }
@@ -496,7 +524,7 @@ void _showCreateTargetDialog(BuildContext context, NewReportViewModel vm) {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
-                      "Create a New Search Target",
+                      "Add your business details",
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -504,7 +532,7 @@ void _showCreateTargetDialog(BuildContext context, NewReportViewModel vm) {
                     ),
                     const SizedBox(height: 16),
                     const Text(
-                      "This is where you'd allow the user to create a new target.",
+                      "Complete the form below to add your business details.",
                       style: TextStyle(fontSize: 14),
                     ),
                     const SizedBox(height: 8),

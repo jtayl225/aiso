@@ -101,6 +101,24 @@ class AuthServiceSupabase {
     }
   }
 
+  Future<bool> isCurrentUserVerified() async {
+    try {
+      // Refresh session to get the most up-to-date user data
+      await _supabase.auth.refreshSession();
+
+      final user = _supabase.auth.currentUser;
+
+      if (user != null && user.emailConfirmedAt != null) {
+        return true;
+      }
+
+      return false;
+    } catch (e) {
+      debugPrint('Error verifying user email: $e');
+      return false;
+    }
+  }
+
   Future<String?> fetchCurrentUserId() async {
     try {
       final user = _supabase.auth.currentUser;

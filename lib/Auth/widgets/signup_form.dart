@@ -41,6 +41,8 @@ class _SignUpFormState extends State<SignUpForm> {
       final password = _passwordController.text;
 
       final success = await authVm.signUp(email, password);
+      appRouter.go(verifyEmailRoute);
+      
       if (!mounted) return;
 
       if (success) {

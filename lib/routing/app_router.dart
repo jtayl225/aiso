@@ -1,5 +1,6 @@
 import 'package:aiso/Auth/views/signin_view.dart';
 import 'package:aiso/Auth/views/signup_view.dart';
+import 'package:aiso/Auth/views/verify_email_view.dart';
 import 'package:aiso/NavBar/views/faq_view.dart';
 import 'package:aiso/NavBar/views/privacy_policy_view.dart';
 import 'package:aiso/NavBar/views/terms_and_conditions_view.dart';
@@ -18,8 +19,9 @@ import 'package:aiso/Store/views/store_view.dart';
 import 'package:aiso/routing/route_names.dart';
 
 final GoRouter appRouter = GoRouter(
-  initialLocation: homeRoute,
+  initialLocation: initRoute,
   routes: [
+    GoRoute(path: initRoute, pageBuilder: (context, state) => NoTransitionPage(child: const MyHome())),
     GoRoute(path: homeRoute, pageBuilder: (context, state) => NoTransitionPage(child: const MyHome())),
     GoRoute(path: aboutRoute, pageBuilder: (context, state) => NoTransitionPage(child: const MyHome())),
     GoRoute(path: storeRoute, pageBuilder: (context, state) => NoTransitionPage(child: const MyStore())),
@@ -28,6 +30,7 @@ final GoRouter appRouter = GoRouter(
     GoRoute(path: termsRoute, pageBuilder: (context, state) => NoTransitionPage(child: const TermsAndConditionsView())),
     GoRoute(path: privacyRoute, pageBuilder: (context, state) => NoTransitionPage(child: const PrivacyPolicyView())),
     GoRoute(path: faqRoute, pageBuilder: (context, state) => NoTransitionPage(child: const FAQView())),
+    GoRoute(path: verifyEmailRoute, pageBuilder: (context, state) => NoTransitionPage(child: const VerifyEmailView())),
 
     GoRoute(path: getStartedRoute, pageBuilder: (context, state) => NoTransitionPage(child: const AuthHome())),
     GoRoute(path: reportsRoute, pageBuilder: (context, state) => NoTransitionPage(child: const MyReports())),

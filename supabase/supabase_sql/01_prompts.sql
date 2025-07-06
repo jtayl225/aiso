@@ -2,6 +2,7 @@ CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
 CREATE TABLE IF NOT EXISTS prompts (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  locality_id UUID REFERENCES public.localities(id) ON DELETE SET NULL,
   prompt text NOT NULL,
 
   -- automatically generated hash of normalised prompt

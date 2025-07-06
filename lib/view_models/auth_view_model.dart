@@ -26,6 +26,9 @@ class AuthViewModel extends ChangeNotifier {
   UserModel? _currentUser;
   UserModel? get currentUser => _currentUser;
 
+  bool _isVerified = false;
+  bool get isVerified => _isVerified;
+
   bool _isAnonymous = false;
   bool get isAnonymous => _isAnonymous;
 
@@ -146,8 +149,10 @@ class AuthViewModel extends ChangeNotifier {
       _currentUser = await _authService.signInWithEmailAndPassword(email, password);
     
       if (_currentUser != null) {
+
         _authState = MyAuthState.authenticated;
         _isAnonymous = _authService.isAnonymous;
+        _isVerified = await _authService.isCurrentUserVerified();
 
         final List<Subscription> subs = await _authService.fetchUserSubscriptions();
         debugPrint('subs: $subs');

@@ -1,3 +1,4 @@
+const String initRoute = '/';
 const String homeRoute = "/home";
 const String aboutRoute = "/about";
 const String storeRoute = "/store";
@@ -7,6 +8,7 @@ const String signUpRoute = '/sign-up';
 const String signInRoute = '/sign-in';
 const String termsRoute = '/terms-and-conditions';
 const String privacyRoute = '/privacy-policy';
+const String verifyEmailRoute = '/verify-email';
 
 
 const String getStartedRoute = '/get-started';

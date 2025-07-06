@@ -478,7 +478,7 @@ class ReportServiceSupabase {
     debugPrint('DEBUG: Service is fetching prompt for promptId: $promptId');
     final response = await _supabase
       .from('prompts')
-      .select()
+      .select('*, localities(*)')
       .eq('id', promptId)
       .isFilter('deleted_at', null)
       .single();
@@ -491,7 +491,7 @@ class ReportServiceSupabase {
 
     final response = await _supabase
         .from('report_prompts')
-        .select('prompts(*)')
+        .select('prompts(*, localities(*))')
         .eq('report_id', reportId)
         .isFilter('deleted_at', null);
 
@@ -559,14 +559,14 @@ class ReportServiceSupabase {
   }
 
   /// Ensure a prompt exists for [text], attach it to [reportId], and return its Prompt record.
-  Future<Prompt> upsertPromptAndAttach({required String reportId, required String promptText,}) async {
+  Future<Prompt> upsertPromptAndAttach({required String reportId, required String promptText, required String localityId}) async {
     // 1. Hash the normalized prompt
     // final promptHash = _hashString(promptText);
 
     // 2) Upsert into the prompts table directly by hash
     final response = await _supabase
         .from('prompts')
-        .upsert({'prompt': promptText.trim()},  onConflict: 'prompt_hash')
+        .upsert({'prompt': promptText.trim(), 'locality_id': localityId},  onConflict: 'prompt_hash')
         .select()
         .single();
 

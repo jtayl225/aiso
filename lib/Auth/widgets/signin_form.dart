@@ -47,7 +47,13 @@ class _SignInFormState extends State<SignInForm> {
         return;
       }
 
-      authVm.isSubscribed ? appRouter.go(reportsRoute) : appRouter.go(storeRoute);
+      if (!authVm.isVerified) {
+        appRouter.go(verifyEmailRoute);
+      } else if (authVm.isSubscribed) {
+        appRouter.go(reportsRoute);
+      } else {
+        appRouter.go(storeRoute);
+      }
 
     } catch (e) {
       if (mounted) _showErrorSnackBar('Something went wrong. Please try again.');

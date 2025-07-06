@@ -41,6 +41,9 @@ class NavigationBarDesktop extends StatelessWidget {
       NavBarItem('FAQ''s', onTap: () => appRouter.go(faqRoute)),
 
       if (isLoggedIn)
+        NavBarItem('Reports', onTap: () => appRouter.go(reportsRoute)),
+
+      if (isLoggedIn)
         NavBarItem('Account', onTap: () => appRouter.go(profileRoute))
       else
         NavBarItem('Sign in', onTap: () => appRouter.go(signInRoute)),

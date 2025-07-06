@@ -1,7 +1,10 @@
 import 'package:aiso/models/db_timestamps_model.dart';
+import 'package:aiso/models/location_models.dart';
 
 class Prompt {
   final String id;
+  final String? localityId;
+  final Locality? locality;
   // final String templateId;
   // final String reportId;
   final String prompt;
@@ -10,6 +13,8 @@ class Prompt {
 
   Prompt({
     required this.id,
+    this.localityId,
+    this.locality,
     // required this.templateId, 
     // required this.reportId, 
     required this.prompt, 
@@ -20,6 +25,10 @@ class Prompt {
   factory Prompt.fromJson(Map<String, dynamic> json) {
     return Prompt(
       id: json['id'] as String,
+      localityId: json['locality_id'] as String,
+      locality: json['localities'] != null
+        ? Locality.fromJson(json['localities'] as Map<String, dynamic>)
+        : null,
       // templateId: json['template_id'] as String,
       // reportId: json['report_id'] as String,
       prompt: json['prompt'] as String,
@@ -37,12 +46,15 @@ class Prompt {
       // 'id': id, // handled by supabase
       // 'template_id': templateId,
       // 'report_id': reportId,
+      'locality_id': localityId,
       'prompt': prompt,
     };
   }
 
   Prompt copyWith({
     String? id,
+    String? localityId,
+    Locality? locality,
     // String? templateId,
     String? reportId,
     String? prompt,
@@ -51,6 +63,8 @@ class Prompt {
   }) {
     return Prompt(
       id: id ?? this.id,
+      localityId: localityId ?? this.localityId,
+      locality: locality ?? this.locality,
       // templateId: templateId ?? this.templateId,
       // reportId: reportId ?? this.reportId,
       prompt: prompt ?? this.prompt,
