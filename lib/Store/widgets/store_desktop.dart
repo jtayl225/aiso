@@ -16,6 +16,9 @@ class StoreDesktop extends StatelessWidget {
 
     return SingleChildScrollView(
         child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+    mainAxisAlignment: MainAxisAlignment.center,
           children: [
             StoreDetails(),
             const SizedBox(height: 16),

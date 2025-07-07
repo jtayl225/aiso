@@ -3,6 +3,7 @@ import 'package:aiso/Home/widgets/home_details.dart';
 import 'package:aiso/Home/widgets/home_details_2.dart';
 import 'package:aiso/Home/widgets/home_details_3.dart';
 import 'package:aiso/Home/widgets/home_details_4.dart';
+import 'package:aiso/Widgets/figure.dart';
 import 'package:aiso/reports/view_models/free_report_view_model.dart';
 import 'package:aiso/routing/app_router.dart';
 import 'package:aiso/routing/route_names.dart';
@@ -62,9 +63,11 @@ class HomeTabletDesktop extends StatelessWidget {
           Row(
             children: [
               Expanded(
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(maxHeight: 300.0, maxWidth: 600.0),
-                  child: Image.asset('assets/Google_vs_ChatGPT.png'),
+                child: Figure(
+                  imagePath: 'assets/Google_vs_ChatGPT.png',
+                  caption: 'Figure 1: Interest in Google vs ChatGPT over time.',
+                  imageHeight: 600,
+                  imageWidth: 600,
                 ),
               ),
               HomeDetails3(),

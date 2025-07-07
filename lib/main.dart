@@ -3,14 +3,14 @@
 import 'package:aiso/reports/view_models/free_report_view_model.dart';
 import 'package:aiso/Store/view_models/store_view_model.dart';
 // import 'package:aiso/reports/views/example_timeline_screen.dart';
-import 'package:aiso/locator.dart';
+// import 'package:aiso/locator.dart';
 import 'package:aiso/routing/app_router.dart';
-import 'package:aiso/routing/route_names.dart';
-import 'package:aiso/routing/router.dart';
-import 'package:aiso/services/navigation_service.dart';
+// import 'package:aiso/routing/route_names.dart';
+// import 'package:aiso/routing/router.dart';
+// import 'package:aiso/services/navigation_service.dart';
 import 'package:aiso/themes/light_mode.dart';
 import 'package:aiso/view_models/auth_view_model.dart';
-import 'package:aiso/reports/view_models/reports_view_model.dart';
+// import 'package:aiso/reports/view_models/reports_view_model.dart';
 // import 'package:aiso/views/auth/auth_checker_screen.dart';
 import 'package:aiso/views/layout_template/layout_template.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +25,7 @@ Future<void> main() async {
     anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV2ZWtiZGZwYXBrZHNtc3huaGNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDc0Mzk3NjMsImV4cCI6MjA2MzAxNTc2M30.7bL6wXGb6PqyFCLvlgC3Ug_xJE4ReejddA3XuPrYV24',
   );
 
-  setupLocator();
+  // setupLocator();
   usePathUrlStrategy();
 
   runApp(
@@ -53,7 +53,7 @@ class MyApp extends StatelessWidget {
       theme: lightMode,
       routerConfig: appRouter,
       builder: (context, child) {
-        locator<NavigationService>().setContext(context);
+        // locator<NavigationService>().setContext(context);
         return LayoutTemplate(child: child!);
       },
       // builder: (context, child) => LayoutTemplate(

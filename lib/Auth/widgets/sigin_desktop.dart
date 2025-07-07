@@ -7,10 +7,13 @@ class SignInDesktop extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [SignInDetails(isCentered: false), Spacer(), SignInForm()],
+    return ConstrainedBox(
+      constraints: BoxConstraints(maxWidth: 1000, minHeight: 600),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [SignInDetails(isCentered: false), Spacer(), SignInForm()],
+      ),
     );
   }
 }

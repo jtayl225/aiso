@@ -1,6 +1,7 @@
 import 'package:aiso/models/cadence_enum.dart';
 import 'package:aiso/models/db_timestamps_model.dart';
 import 'package:aiso/models/prompt_model.dart';
+import 'package:aiso/models/recommendation.dart';
 import 'package:aiso/models/report_results.dart';
 import 'package:aiso/models/search_target_model.dart';
 
@@ -15,6 +16,7 @@ class Report {
   List<Prompt>? prompts;
   SearchTarget? searchTarget;
   List<ReportResult>? results;
+  List<Recommendation>? recommendations;
   final DbTimestamps dbTimestamps;
   final DateTime? lastRunAt;
 
@@ -29,6 +31,7 @@ class Report {
     this.prompts,
     this.searchTarget,
     this.results,
+    this.recommendations,
     required this.dbTimestamps,
     this.lastRunAt
     });
@@ -51,6 +54,9 @@ class Report {
       searchTarget: json['search_targets'] != null
         ? SearchTarget.fromJson(json['search_targets'])
         : null,
+      recommendations: (json['report_run_recommendations_vw'] as List<dynamic>?)
+        ?.map((item) => Recommendation.fromJson(item))
+        .toList() ?? [],
       dbTimestamps: DbTimestamps(
         createdAt: DateTime.parse(json['created_at']),
         updatedAt: DateTime.parse(json['updated_at']),
@@ -83,6 +89,7 @@ class Report {
     List<Prompt>? prompts,
     SearchTarget? searchTarget,
     List<ReportResult>? results,
+    List<Recommendation>? recommendations,
     DbTimestamps? dbTimestamps,
     DateTime? lastRunAt,
   }) {
@@ -98,6 +105,7 @@ class Report {
       prompts: prompts ?? (this.prompts != null ? List<Prompt>.from(this.prompts!) : null),
       searchTarget: searchTarget ?? this.searchTarget,
       results: results ?? (this.results != null ? List<ReportResult>.from(this.results!) : null),
+      recommendations: recommendations ?? (this.recommendations != null ? List<Recommendation>.from(this.recommendations!) : null),
       dbTimestamps: dbTimestamps ?? this.dbTimestamps,
       lastRunAt: lastRunAt ?? this.lastRunAt,
     );

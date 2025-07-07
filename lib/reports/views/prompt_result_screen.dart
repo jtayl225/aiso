@@ -48,11 +48,11 @@ class _PromptResultsScreenState extends State<PromptResultsScreen> {
 
         final filtered = allResults
             .where((e) =>
-                (selectedRunId == null || e.runId == selectedRunId) &&
+                (selectedRunId == null || e.reportRunId == selectedRunId) &&
                 (selectedEpoch == null || e.epoch == selectedEpoch) &&
-                (selectedLlm == null || e.llm == selectedLlm))
+                (selectedLlm == null || e.llmGeneration == selectedLlm))
             .toList()
-          ..sort((a, b) => a.rank.compareTo(b.rank));
+          ..sort((a, b) => a.entityRank.compareTo(b.entityRank));
 
         return Scaffold(
           appBar: AppBar(title: const Text('Prompt Results')),
@@ -189,9 +189,9 @@ class _PromptResultsScreenState extends State<PromptResultsScreen> {
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                                 child: ListTile(
-                                  title: Text(result.name, style: Theme.of(context).textTheme.titleMedium),
-                                  subtitle: Text(result.description),
-                                  trailing: Text('Rank: ${result.rank}'),
+                                  title: Text(result.entityName, style: Theme.of(context).textTheme.titleMedium),
+                                  subtitle: Text(result.entityDescription),
+                                  trailing: Text('Rank: ${result.entityRank}'),
                                 ),
                               );
                             },

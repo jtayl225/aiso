@@ -132,9 +132,9 @@ The interpretation, construction and effect of these Terms and Conditions of Use
   @override
   Widget build(BuildContext context) {
     return ScreenTypeLayout.builder(
-      mobile: (BuildContext context) => MarkdownViewer(markdownText: termsText),
-      tablet: (BuildContext context) => MarkdownViewer(markdownText: termsText),
-      desktop: (BuildContext context) => MarkdownViewer(markdownText: termsText),
+      mobile: (BuildContext context) => MarkdownContent(markdownText: termsText, deviceType: DeviceScreenType.mobile),
+      tablet: (BuildContext context) => MarkdownContent(markdownText: termsText, deviceType: DeviceScreenType.mobile),
+      desktop: (BuildContext context) => MarkdownContent(markdownText: termsText, deviceType: DeviceScreenType.desktop,),
     );
   }
 }

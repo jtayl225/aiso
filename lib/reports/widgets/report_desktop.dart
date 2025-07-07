@@ -2,8 +2,12 @@ import 'package:aiso/Dashboards/views/dashboard_menu.dart';
 import 'package:aiso/reports/models/report_run_model.dart';
 import 'package:aiso/reports/view_models/report_view_model.dart';
 import 'package:aiso/reports/widgets/prompt_card.dart';
+import 'package:aiso/reports/widgets/recommendation_card.dart';
 import 'package:aiso/reports/widgets/search_target_card.dart';
+import 'package:aiso/routing/app_router.dart';
+import 'package:aiso/routing/route_names.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class ReportDesktop extends StatelessWidget {
@@ -27,20 +31,32 @@ class ReportDesktop extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
 
-          Row(
-            children: [
+          // Row(
+          //   children: [
 
-              const Text(
-                "Report title: ",
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              ),
+          //     const Text(
+          //       "Report title: ",
+          //       style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          //     ),
 
-              Text(
+          //     Text(
+          //       vm.report!.title,
+          //       style: const TextStyle(fontSize: 24, fontWeight: FontWeight.normal),
+          //     ),
+
+          //   ],
+          // ),
+
+          Text(
                 vm.report!.title,
-                style: const TextStyle(fontSize: 24, fontWeight: FontWeight.normal),
+                style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
 
-            ],
+          SizedBox(height: 30.0,),
+
+          const Text(
+            "Report date:",
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
 
           SizedBox(height: 14.0,),
@@ -56,7 +72,7 @@ class ReportDesktop extends StatelessWidget {
                   return DropdownMenuItem<ReportRun>(
                     value: run,
                     child: Text(
-                      run.dbTimestamps.createdAt.toIso8601String(),
+                      DateFormat('d MMMM y').format(run.dbTimestamps.createdAt), // run.dbTimestamps.createdAt
                       overflow: TextOverflow.ellipsis,
                     ),
                   );
@@ -68,27 +84,48 @@ class ReportDesktop extends StatelessWidget {
             },
           ),
 
-          SizedBox(height: 14.0,),
+          SizedBox(height: 20.0,),
       
           const Text(
-            "Search Target:",
+            "Business details:",
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
       
           if (vm.searchTarget != null)
-            SearchTargetCard(target: vm.searchTarget!),
+            SizedBox(width: double.infinity, child: SearchTargetCard(target: vm.searchTarget!)),
 
-          SizedBox(height: 14.0,),
+          SizedBox(height: 20.0,),
+
+          const Text(
+            "Recommendations:",
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+
+          // recommendation List
+          if (vm.reportRunRecommendations != null && vm.reportRunRecommendations!.isNotEmpty)
+            ...vm.reportRunRecommendations!.map((reco) => Padding(
+              padding: const EdgeInsets.symmetric(vertical: 2),
+              child: RecoCard(
+                reco: reco,
+                onTap: () => debugPrint('DEBUG'),
+                onMarkDone: () => vm.toggleRecommendationDone(
+                    recommendationId: reco.id,
+                    reportRunId: reco.reportRunId,
+                  ),
+                ),)
+          ),
+
+          SizedBox(height: 20.0,),
 
           const Text(
             "Dashboards:",
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
       
-          // Prompts List
+          // dashboard List
           if (vm.dashboards != null && vm.dashboards!.isNotEmpty)
             ...vm.dashboards!.map((dash) => Padding(
-              padding: const EdgeInsets.only(bottom: 16),
+              padding: const EdgeInsets.symmetric(vertical: 2),
               child: DashboardCard(
                 dashboard: dash, 
                 onTap: () async {
@@ -100,7 +137,7 @@ class ReportDesktop extends StatelessWidget {
           if (vm.dashboards == null || vm.dashboards!.isEmpty)
             const Text('No dashboards available for this report run.'),
 
-          SizedBox(height: 14.0,),
+          SizedBox(height: 20.0,),
       
           const Text(
             "Prompts:",
@@ -110,20 +147,26 @@ class ReportDesktop extends StatelessWidget {
           // Prompts List
           if (vm.prompts != null && vm.prompts!.isNotEmpty)
             ...vm.prompts!.map((prompt) => Padding(
-              padding: const EdgeInsets.only(bottom: 16),
-              child: ConstrainedBox(
-                constraints: BoxConstraints(minWidth: 600.0),
-                child: PromptCard(prompt: prompt)),
+              padding: const EdgeInsets.symmetric(vertical: 2),
+              child: SizedBox(
+                width: double.infinity, 
+                child: PromptCard(
+                  prompt: prompt,
+                  onTap: () {
+                    debugPrint('DEBUG: about to navigate to prompt results');
+                    if (vm.selectedReportRun?.id == null) {
+                      debugPrint('❌ Cannot navigate: selectedReportRun.id is null');
+                      return;
+                    }
+                    final uri = Uri(path: promptRoute, queryParameters: {'report_id': vm.reportId, 'report_run_id': vm.selectedReportRun?.id, 'prompt_id': prompt.id});
+                    appRouter.go(uri.toString());
+                  }
+                  )),
             )),
             
           if (vm.prompts == null || vm.prompts!.isEmpty)
             const Text('No prompts available for this report run.'),
 
-
-      
-      
-      
-      
         ],
       ),
     );

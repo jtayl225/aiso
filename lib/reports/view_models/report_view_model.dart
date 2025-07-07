@@ -42,10 +42,17 @@ class ReportViewModel extends ChangeNotifier {
   SearchTarget? searchTarget;
   
   List<Prompt>? prompts = [];
+
   List<Recommendation>? recommendations = [];
+  List<Recommendation>? get reportRunRecommendations {
+  if (selectedReportRun == null || recommendations == null) return [];
+    return recommendations!.where((r) => r.reportRunId == selectedReportRun!.id).toList();
+  }
+
   List<Dashboard>? dashboards = [
     Dashboard(icon: Icons.analytics, title: 'Summary', description: 'High-level summary averaging across all of the prompts in your report.', number: 11),
-    Dashboard(icon: Icons.analytics, title: 'Location', description: 'Prompt results by location.', number: 12),
+    Dashboard(icon: Icons.analytics, title: 'Location', description: 'Prompt results by location.', number: 13),
+    Dashboard(icon: Icons.analytics, title: 'Timeseries', description: 'Prompt results over time.', number: 12),
   ];
 
   Future<void> _init() async {
@@ -75,6 +82,7 @@ class ReportViewModel extends ChangeNotifier {
     // prompts = await _reportService.fetchReportPrompts(reportId);
     prompts = report!.prompts;
     // dashboards = await _reportService.fetchMetabaseDashboards();
+    recommendations = report?.recommendations ?? [];
 
     // // Only load recommendations if a run is selected
     // if (selectedReportRun != null) {
@@ -157,6 +165,48 @@ class ReportViewModel extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Future<void> toggleRecommendationDone({
+    required String recommendationId,
+    required String reportRunId,
+  }) async {
+    debugPrint('🔄 Toggling isDone for $recommendationId');
+
+    try {
+      final index = recommendations?.indexWhere(
+        (r) => r.id == recommendationId && r.reportRunId == reportRunId,
+      );
+
+      if (index == null || index == -1) {
+        debugPrint('❌ Recommendation not found');
+        return;
+      }
+
+      final current = recommendations![index];
+      final newIsDone = !current.isDone;
+
+      // Update local state
+      recommendations![index] = current.copyWith(isDone: newIsDone);
+      notifyListeners();
+
+      // // Update backend
+      // final response = await _supabase
+      //     .from('recommendations')
+      //     .update({
+      //       'is_done': newIsDone,
+      //       'updated_at': DateTime.now().toIso8601String(),
+      //     })
+      //     .match({
+      //       'id': recommendationId,
+      //       'report_run_id': reportRunId,
+      //     });
+
+      // debugPrint('✅ Supabase update response: $response');
+    } catch (e, st) {
+      debugPrint('❌ Error toggling isDone: $e\n$st');
+    }
+  }
+
 
 
   

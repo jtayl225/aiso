@@ -27,7 +27,15 @@ class LayoutTemplate extends StatelessWidget {
             children: <Widget>[
               MyNavigationBar(),
               Expanded(
-                child: child
+                child: SingleChildScrollView(
+                  child: Align(
+                    alignment: Alignment.topCenter,
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(maxWidth: 1400,),
+                      child: child,
+                      ),
+                  ),
+                ),
                 ),
               FooterView(),
             ],

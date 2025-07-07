@@ -79,9 +79,9 @@ Email: justin@reai.au
   @override
   Widget build(BuildContext context) {
     return ScreenTypeLayout.builder(
-      mobile: (BuildContext context) => MarkdownViewer(markdownText: privacyText),
-      tablet: (BuildContext context) => MarkdownViewer(markdownText: privacyText),
-      desktop: (BuildContext context) => MarkdownViewer(markdownText: privacyText),
+      mobile: (BuildContext context) => MarkdownContent(markdownText: privacyText, deviceType: DeviceScreenType.mobile),
+      tablet: (BuildContext context) => MarkdownContent(markdownText: privacyText, deviceType: DeviceScreenType.mobile),
+      desktop: (BuildContext context) => MarkdownContent(markdownText: privacyText, deviceType: DeviceScreenType.desktop),
     );
   }
 }

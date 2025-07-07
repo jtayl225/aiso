@@ -18,9 +18,11 @@ SELECT
   c.llm_generation,
 
   d.report_id,
-  d.created_at as report_run_date,
+  d.created_at AS report_run_date,
 
-  e.prompt
+  e.prompt,
+
+  f.name AS locality_name
 
 FROM public.report_results AS a
 INNER JOIN public.llm_epochs AS b
@@ -31,33 +33,8 @@ INNER JOIN public.report_runs AS d
   ON a.report_run_id = d.id
 INNER JOIN prompts AS e
  ON a.prompt_id = e.id
+LEFT JOIN localities AS f
+ ON e.locality_id = f.id
 WHERE
   a.status = 'completed'
 ;
-
-
---------------------
--- report_results
---------------------
-
-CREATE TABLE IF NOT EXISTS report_results (
-  -- IDs
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  report_run_id uuid REFERENCES public.report_runs(id) ON DELETE CASCADE,
-  prompt_id uuid REFERENCES public.prompts(id) ON DELETE CASCADE,
-  llm_epoch_id uuid REFERENCES public.llm_epochs(id) ON DELETE CASCADE,
-
-  -- data
-  status text NOT NULL CHECK (status IN ('running', 'completed', 'failed')),
-  target_found BOOL NOT NULL,
-  target_rank INT NULL,
-
-  -- timestamps
-  created_at timestamp with time zone DEFAULT now(),
-  updated_at timestamp with time zone DEFAULT now(),
-  deleted_at timestamp with time zone
-);
-
-ALTER TABLE report_results
-ADD CONSTRAINT report_results_unique_key
-UNIQUE (report_run_id, prompt_id, llm_epoch_id);

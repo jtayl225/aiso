@@ -43,3 +43,19 @@ class IframeView extends StatelessWidget {
         : const Center(child: Text('This screen is only available on the web.'));
   }
 }
+
+String convertYouTubeToEmbedUrl(String url) {
+  final uri = Uri.parse(url);
+  
+  // Handle youtu.be short links
+  if (uri.host.contains('youtu.be')) {
+    return 'https://www.youtube.com/embed/${uri.pathSegments.first}';
+  }
+
+  // Handle watch?v= style
+  if (uri.queryParameters.containsKey('v')) {
+    return 'https://www.youtube.com/embed/${uri.queryParameters['v']}';
+  }
+
+  return url; // fallback, not ideal
+}

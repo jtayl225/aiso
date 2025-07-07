@@ -75,13 +75,13 @@ class ProductCard extends StatelessWidget {
                   ],
                 ),
         
-                // description
-                Text(
-                  product.description,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: Colors.black, // or any color you want
-                  ),
-                ),
+                // // description
+                // Text(
+                //   product.description,
+                //   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                //     color: Colors.black, // or any color you want
+                //   ),
+                // ),
         
                 // dotted horizontal line
                 const Divider(color: AppColors.color1),
@@ -125,7 +125,7 @@ class ProductCard extends StatelessWidget {
         
                 // const Spacer(),
 
-                const SizedBox(height: 16),
+                // const SizedBox(height: 8),
         
                 // call-to-action button 
                 Center(

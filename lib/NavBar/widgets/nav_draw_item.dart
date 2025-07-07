@@ -1,4 +1,6 @@
+import 'package:aiso/themes/typography.dart';
 import 'package:flutter/material.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 
 class NavDrawItem extends StatelessWidget {
   final String title;
@@ -19,7 +21,8 @@ class NavDrawItem extends StatelessWidget {
             SizedBox(width: 16),
             Text(
               title,
-              style: const TextStyle(fontSize: 18),
+              // style: const TextStyle(fontSize: 18),
+              style: AppTextStyles.h3(DeviceScreenType.mobile),
             ),
           ],
         ),

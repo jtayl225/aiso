@@ -69,7 +69,7 @@ class ReportServiceSupabase {
     debugPrint('DEBUG: Service is fetching report with ID: $reportId');
     final response = await _supabase
       .from('reports')
-      .select('*, prompts(*), search_targets(*)')
+      .select('*, prompts(*), search_targets(*), report_run_recommendations_vw(*)')
       .eq('id', reportId)
       .isFilter('deleted_at', null)
       .isFilter('prompts.deleted_at', null)
@@ -538,18 +538,19 @@ class ReportServiceSupabase {
       .eq('id', prompt.id);
   }
 
-  Future<List<PromptResult>> fetchPromptResults(String reportId, String runId, String promptId) async {
-    debugPrint('DEBUG: Service is fetching all prompt results for reportId: $reportId, runId: $runId');
+  Future<List<PromptResult>> fetchPromptResults(String reportId, String reportRunId, String promptId, int epoch) async {
+    debugPrint('DEBUG: Service is fetching all prompt results for reportId: $reportId, runId: $reportRunId');
     final response = await _supabase
       .from('prompt_results_vw')
       .select()
       .eq('report_id', reportId)
-      .eq('run_id', runId)
+      .eq('report_run_id', reportRunId)
       .eq('prompt_id', promptId)
+      .eq('epoch', epoch)
       .isFilter('deleted_at', null);
 
     // Inspect the response to see its structure
-    // debugPrint('Response: $response');
+    debugPrint('Response: $response');
 
     final List<PromptResult> promptResults = (response as List).map((item) {
       return PromptResult.fromJson(item);

@@ -1,11 +1,7 @@
-// import 'package:aiso/reports/view_models/free_report_view_model.dart';
 import 'package:aiso/reports/view_models/report_view_model.dart';
-import 'package:aiso/reports/widgets/free_report_form_desktop.dart';
-import 'package:aiso/reports/widgets/free_report_form_mobile.dart';
 import 'package:aiso/reports/widgets/report_desktop.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-// import 'package:provider/provider.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
 class MyReportView extends StatelessWidget {
@@ -19,8 +15,8 @@ class MyReportView extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (_) => ReportViewModel(reportId: reportId),
       child: ScreenTypeLayout.builder(
-        mobile: (BuildContext context) => FreeReportMobile(),
-        tablet: (BuildContext context) => FreeReportMobile(),
+        mobile: (BuildContext context) => ReportDesktop(),
+        tablet: (BuildContext context) => ReportDesktop(),
         desktop: (BuildContext context) => ReportDesktop(),
       ),
     );

@@ -8,8 +8,8 @@ class FooterView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScreenTypeLayout.builder(
-      mobile: (BuildContext context) => FooterDesktop(),
-      tablet: (BuildContext context) => FooterDesktop(), // FooterMobile
+      mobile: (BuildContext context) => const SizedBox.shrink(),
+      tablet: (BuildContext context) => const SizedBox.shrink(),
       desktop: (BuildContext context) => FooterDesktop(),
     );
   }

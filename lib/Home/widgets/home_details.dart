@@ -1,11 +1,16 @@
 import 'package:aiso/constants/font_sizes.dart';
+import 'package:aiso/themes/typography.dart';
 import 'package:flutter/material.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 
 class HomeDetails extends StatelessWidget {
   const HomeDetails({super.key});
 
   @override
   Widget build(BuildContext context) {
+
+    final DeviceScreenType device = DeviceScreenType.desktop;
+
     return SizedBox(
       width: 800,
       child: Column(
@@ -15,12 +20,13 @@ class HomeDetails extends StatelessWidget {
 
           Text(
             'Be Found. Gain Trust. Get Leads.',
-            style: TextStyle(
-                fontWeight: FontWeight.w800, fontSize: fontSizeDesktopLarge, height: 0.9),
+            style: AppTextStyles.h1(device),
+            // style: TextStyle(
+            //     fontWeight: FontWeight.w800, fontSize: fontSizeDesktopLarge, height: 0.9),
           ),
 
           SizedBox(
-            height: 60,
+            height: ResponsiveSpacing.headingMarginBottom(device),
           ),
 
           Text(

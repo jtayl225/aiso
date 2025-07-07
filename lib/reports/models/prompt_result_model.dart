@@ -3,31 +3,34 @@ import 'package:aiso/models/db_timestamps_model.dart';
 class PromptResult {
   final String id;
   final String reportId;
-  final String runId;
+  final String reportRunId;
   final String promptId;
   final int epoch;
-  final String llm;
+  final String llmGeneration;
+
   final String entityType;
-  final int rank;
-  final String name;
-  final String description;
+  final int entityRank;
+  final String entityName;
+  final String entityDescription;
+  final String? entityUrl;
+
   final bool isTarget;
-  final String? url;
+  
   final DbTimestamps dbTimestamps;
 
   PromptResult({
     required this.id,
     required this.reportId,
-    required this.runId,
+    required this.reportRunId,
     required this.promptId,
     required this.epoch,
-    required this.llm,
+    required this.llmGeneration,
     required this.entityType,
-    required this.rank,
-    required this.name,
-    required this.description,
+    required this.entityRank,
+    required this.entityName,
+    required this.entityDescription,
+    this.entityUrl,
     required this.isTarget,
-    this.url,
     required this.dbTimestamps,
   });
 
@@ -35,16 +38,16 @@ class PromptResult {
     return PromptResult(
       id: json['id'] as String,
       reportId: json['report_id'] as String,
-      runId: json['run_id'] as String,
+      reportRunId: json['report_run_id'] as String,
       promptId: json['prompt_id'] as String,
       epoch: json['epoch'] as int,
-      llm: json['llm'] as String,
+      llmGeneration: json['llm_generation'] as String ?? 'unknown',
       entityType: json['entity_type'] as String,
-      rank: json['rank'] as int,
-      name: json['name'] as String,
-      description: json['description'] as String,
+      entityRank: json['entity_rank'] as int,
+      entityName: json['entity_name'] as String,
+      entityDescription: json['entity_description'] as String,
+      entityUrl: json['entity_url'] as String?,
       isTarget: json['is_target'] as bool,
-      url: json['url'] as String?,
       dbTimestamps: DbTimestamps.fromJson(json),
     );
   }
@@ -53,16 +56,16 @@ class PromptResult {
     return {
       'id': id,
       'report_id': reportId,
-      'run_id': runId,
+      'report_run_id': reportRunId,
       'prompt_id': promptId,
       'epoch': epoch,
-      'llm': llm,
+      'llm_generation': llmGeneration,
       'entity_type': entityType,
-      'rank': rank,
-      'name': name,
-      'description': description,
+      'entity_rank': entityRank,
+      'entity_name': entityName,
+      'entity_description': entityDescription,
+      'entity_url': entityUrl,
       'is_target': isTarget,
-      'url': url,
       // ...dbTimestamps.toJson(),
     };
   }

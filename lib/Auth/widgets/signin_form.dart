@@ -64,59 +64,62 @@ class _SignInFormState extends State<SignInForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: _maxWidth),
-            child: TextFormField(
-              controller: _emailController,
-              decoration: const InputDecoration(
-                labelText: 'Email',
-                border: OutlineInputBorder(),
-                contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+    return AutofillGroup(
+      child: Form(
+        key: _formKey,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: _maxWidth),
+              child: TextFormField(
+                controller: _emailController,
+                decoration: const InputDecoration(
+                  labelText: 'Email',
+                  border: OutlineInputBorder(),
+                  contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                ),
+                keyboardType: TextInputType.emailAddress,
+                autofillHints: const [AutofillHints.email],
+                validator: (val) {
+                  if (val == null || val.isEmpty) return 'Email required';
+                  if (!val.contains('@')) return 'Enter a valid email';
+                  return null;
+                },
               ),
-              autofillHints: const [AutofillHints.email],
-              validator: (val) {
-                if (val == null || val.isEmpty) return 'Email required';
-                if (!val.contains('@')) return 'Enter a valid email';
-                return null;
-              },
             ),
-          ),
-          const SizedBox(height: 16),
-          ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: _maxWidth),
-            child: TextFormField(
-              controller: _passwordController,
-              decoration: const InputDecoration(
-                labelText: 'Password',
-                border: OutlineInputBorder(),
-                contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+            const SizedBox(height: 16),
+            ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: _maxWidth),
+              child: TextFormField(
+                controller: _passwordController,
+                decoration: const InputDecoration(
+                  labelText: 'Password',
+                  border: OutlineInputBorder(),
+                  contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                ),
+                obscureText: true,
+                validator: (val) {
+                  if (val == null || val.isEmpty) return 'Password required';
+                  if (val.length < 6)               return 'Min 6 characters';
+                  return null;
+                },
               ),
-              obscureText: true,
-              validator: (val) {
-                if (val == null || val.isEmpty) return 'Password required';
-                if (val.length < 6)               return 'Min 6 characters';
-                return null;
-              },
             ),
-          ),
-          const SizedBox(height: 16),
-          SizedBox(
-            width: _maxWidth,
-            height: 48,
-            child: ElevatedButton(
-              onPressed: _isLoading ? null : _signIn,
-              child: _isLoading
-                  ? const CircularProgressIndicator(color: Colors.white)
-                  : Text('Sign In'),
+            const SizedBox(height: 16),
+            SizedBox(
+              width: _maxWidth,
+              height: 48,
+              child: ElevatedButton(
+                onPressed: _isLoading ? null : _signIn,
+                child: _isLoading
+                    ? const CircularProgressIndicator(color: Colors.white)
+                    : Text('Sign In'),
+              ),
             ),
-          ),
-          const SizedBox(height: 16),
-        ],
+            const SizedBox(height: 16),
+          ],
+        ),
       ),
     );
   }

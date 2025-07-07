@@ -4,6 +4,7 @@ import 'package:aiso/Auth/views/verify_email_view.dart';
 import 'package:aiso/NavBar/views/faq_view.dart';
 import 'package:aiso/NavBar/views/privacy_policy_view.dart';
 import 'package:aiso/NavBar/views/terms_and_conditions_view.dart';
+import 'package:aiso/reports/views/prompt_view.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:aiso/Auth/views/auth_home_view.dart';
@@ -34,13 +35,25 @@ final GoRouter appRouter = GoRouter(
 
     GoRoute(path: getStartedRoute, pageBuilder: (context, state) => NoTransitionPage(child: const AuthHome())),
     GoRoute(path: reportsRoute, pageBuilder: (context, state) => NoTransitionPage(child: const MyReports())),
+
     GoRoute(
       path: reportRoute,
-      builder: (context, state) {
+      pageBuilder: (context, state) {
         final reportId = state.uri.queryParameters['report_id']!;
-        return MyReportView(reportId: reportId);
+        return  NoTransitionPage(child: MyReportView(reportId: reportId));
       },
     ),
+
+    GoRoute(
+      path: promptRoute,
+      pageBuilder: (context, state) {
+        final reportId = state.uri.queryParameters['report_id']!;
+        final reportRunId = state.uri.queryParameters['report_run_id']!;
+        final promptId = state.uri.queryParameters['prompt_id']!;
+        return NoTransitionPage(child: MyPromptView(reportId: reportId, reportRunId: reportRunId, promptId: promptId)); 
+      },
+    ),
+
     GoRoute(path: newReportRoute, pageBuilder: (context, state) => NoTransitionPage(child: const NewReportView())),
     GoRoute(path: profileRoute, pageBuilder: (context, state) => NoTransitionPage(child: const AuthProfile())),
     GoRoute(path: freeReportFormRoute, pageBuilder: (context, state) => NoTransitionPage(child: const FreeReport())),

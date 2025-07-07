@@ -47,7 +47,8 @@ class PromptResultsViewModel extends ChangeNotifier {
       }
 
       final String runId = reportRuns.first.id; // assumes sorted DESC
-      promptResults = await _reportService.fetchPromptResults(reportId, runId, promptId);
+      final int epoch = 0;
+      promptResults = await _reportService.fetchPromptResults(reportId, runId, promptId, epoch);
       prompt = await _reportService.fetchPrompt(promptId);
 
       debugPrint('DEBUG: ${promptResults.length} prompt results fetched for runId: $runId');
@@ -67,7 +68,8 @@ class PromptResultsViewModel extends ChangeNotifier {
     isLoading = true;
     notifyListeners();
     try {
-      promptResults = await _reportService.fetchPromptResults(reportId, runId, promptId);
+      final int epoch = 0;
+      promptResults = await _reportService.fetchPromptResults(reportId, runId, promptId, epoch);
       debugPrint('DEBUG: ${promptResults.length} prompt results fetched for runId: $runId');
       return true;
     } catch (e) {
@@ -86,7 +88,7 @@ class PromptResultsViewModel extends ChangeNotifier {
   }
 
   List<String> get availableLlms {
-  final llms = promptResults.map((e) => e.llm).toSet().toList();
+  final llms = promptResults.map((e) => e.llmGeneration).toSet().toList();
   llms.sort(); // optional: sort alphabetically
   return llms;
 }
