@@ -65,9 +65,9 @@ GEO MAX is developed by the team at **Real Estate Ai**, founded by Justin Hodgso
   @override
   Widget build(BuildContext context) {
     return ScreenTypeLayout.builder(
-      mobile: (BuildContext context) => MarkdownViewer(markdownText: faqText, deviceType: DeviceScreenType.mobile),
-      tablet: (BuildContext context) => MarkdownViewer(markdownText: faqText, deviceType: DeviceScreenType.mobile),
-      desktop: (BuildContext context) => MarkdownViewer(markdownText: faqText, deviceType: DeviceScreenType.desktop),
+      mobile: (BuildContext context) => MarkdownContent(markdownText: faqText, deviceType: DeviceScreenType.mobile),
+      tablet: (BuildContext context) => MarkdownContent(markdownText: faqText, deviceType: DeviceScreenType.mobile),
+      desktop: (BuildContext context) => MarkdownContent(markdownText: faqText, deviceType: DeviceScreenType.desktop),
     );
   }
 }
