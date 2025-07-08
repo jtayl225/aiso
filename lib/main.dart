@@ -41,7 +41,11 @@ Future<void> main() async {
 
   // authResponse.session != null ? ReportsPage() : LoginPage()
 
-  final currentUrl = web.window.location.href;
+  final rawUrl = web.window.location.href;
+
+  // Convert # to ? so Supabase can parse it
+  final currentUrl = rawUrl.replaceFirst('#', '?');
+
   debugPrint('DEBUG URL: $currentUrl');
 
   if (currentUrl.contains("access_token") && currentUrl.contains("refresh_token")) {
