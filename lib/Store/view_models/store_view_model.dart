@@ -124,7 +124,7 @@ class StoreViewModel extends ChangeNotifier {
   // }
 
 
-  // void handleProductAction(BuildContext context, ProductType productType) {
+  // void handlePopUp(BuildContext context, ProductType productType) {
   //   final user = Supabase.instance.client.auth.currentUser;
 
   //   if (user == null) {
@@ -137,19 +137,9 @@ class StoreViewModel extends ChangeNotifier {
   //     return;
   //   }
 
-  //   switch (productType) {
-  //     case ProductType.PURCHASE:
-  //       showBuyReportDialog(context);
-  //       break;
+  //   showBuyReportDialog(context);
+  //   return;
 
-  //     case ProductType.SUBSCRIBE_MONTHLY:
-  //     case ProductType.SUBSCRIBE_YEARLY:
-  //       launchCheckoutUrl(productType);
-  //       break;
-
-  //     default:
-  //       debugPrint("DEBUG: Unhandled product type in handleProductAction: $productType");
-  //   }
   // }
 
   Future<String?> handleProductAction(BuildContext context, ProductType productType) async {

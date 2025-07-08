@@ -4,6 +4,7 @@ import 'package:aiso/routing/route_names.dart';
 import 'package:aiso/services/auth_service_supabase.dart';
 import 'package:aiso/services/navigation_service.dart';
 import 'package:aiso/services/store_service_supabase.dart';
+import 'package:aiso/services/url_launcher_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -286,38 +287,45 @@ class AuthViewModel extends ChangeNotifier {
     print('DEBUG: notifyListeners called');
   }
 
-  Future<void> launchBillingPortalUrl() async {
+  // Future<void> launchBillingPortalUrl() async {
 
-    try {
-      final String? url = await _storeService.generateBillingPortal();
+  //   try {
+  //     final String? url = await _storeService.generateBillingPortal();
 
-      if (url == null) {
-        debugPrint('Checkout URL is null');
-        return;
-      }
+  //     if (url == null) {
+  //       debugPrint('Checkout URL is null');
+  //       return;
+  //     }
 
-      final Uri uri = Uri.parse(url);
+  //     final Uri uri = Uri.parse(url);
 
-      if (kIsWeb) {
-        // Open in new browser tab
-        await launchUrl(
-          uri,
-          webOnlyWindowName: '_blank',
-        );
-      } else {
-        // Open in external browser
-        if (await canLaunchUrl(uri)) {
-          await launchUrl(uri, mode: LaunchMode.externalApplication);
-        } else {
-          debugPrint('Could not launch $url');
-        }
-      }
-    } catch (e) {
-      debugPrint('launchCheckoutUrl error: $e');
-    } finally {
-      notifyListeners();
-    }
+  //     if (kIsWeb) {
+  //       // Open in new browser tab
+  //       await launchUrl(
+  //         uri,
+  //         webOnlyWindowName: '_blank',
+  //       );
+  //     } else {
+  //       // Open in external browser
+  //       if (await canLaunchUrl(uri)) {
+  //         await launchUrl(uri, mode: LaunchMode.externalApplication);
+  //       } else {
+  //         debugPrint('Could not launch $url');
+  //       }
+  //     }
+  //   } catch (e) {
+  //     debugPrint('launchCheckoutUrl error: $e');
+  //   } finally {
+  //     notifyListeners();
+  //   }
 
+  // }
+
+  void launchBillingPortalUrl() {
+    UrlLauncherService.launchFromAsyncSource(() {
+      return _storeService.generateBillingPortal();
+    });
   }
+
 
 }

@@ -75,9 +75,10 @@ class AuthProfileDesktop extends StatelessWidget {
 
                 // — Manage Billing button
                 ElevatedButton(
-                  onPressed: () async {
+                  onPressed: () {
                     // TODO: Navigate to billing/subscription page
-                    await authVm.launchBillingPortalUrl();
+                    
+                    authVm.launchBillingPortalUrl();
                   },
                   child: const Text('Manage Billing'),
                 ),
