@@ -47,6 +47,9 @@ Future<void> main() async {
     try {
       final response = await Supabase.instance.client.auth
           .getSessionFromUrl(Uri.parse(currentUrl));
+
+      final user = Supabase.instance.client.auth.currentUser;
+      print('Logged in as: ${user?.email}');
       
       // Clean up URL
       final cleanUrl = currentUrl.split('#').first;

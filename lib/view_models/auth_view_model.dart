@@ -72,16 +72,16 @@ class AuthViewModel extends ChangeNotifier {
     notifyListeners();
     _authState = MyAuthState.unauthenticated;
 
-    // // Use local session
-    // final UserModel? currentUser = await _authService.getCurrentUser(); 
-    // if (currentUser != null) {
-    //   _currentUser = currentUser;
-    //   _isAnonymous = _authService.isAnonymous;
-    //   debugPrint('DEBUG: is anon? $_isAnonymous'); 
-    //   _authState = AuthState.authenticated;
-    //   notifyListeners();
-    //   return;
-    // }
+    // Use local session
+    final UserModel? currentUser = await _authService.getCurrentUser(); 
+    if (currentUser != null) {
+      _currentUser = currentUser;
+      _isAnonymous = _authService.isAnonymous;
+      debugPrint('DEBUG: is anon? $_isAnonymous'); 
+      _authState = MyAuthState.authenticated;
+      notifyListeners();
+      return;
+    }
 
     // // signIn('jdtay.90+aiso00@gmail.com', '123456');
     // _currentUser = await _authService.signInWithEmailAndPassword('jdtay.90+aiso00@gmail.com', '123456');
