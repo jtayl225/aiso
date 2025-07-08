@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:web/web.dart' as web;
 
 /// A ChangeNotifier ViewModel to handle state & logic for the FreeReport flow.
 /// It listens to supabase realtime on report_runs for status updates,
@@ -148,10 +149,8 @@ class StoreViewModel extends ChangeNotifier {
 
       if (kIsWeb) {
         // Open in new browser tab
-        await launchUrl(
-          uri,
-          webOnlyWindowName: '_blank',
-        );
+        // await launchUrl(uri, webOnlyWindowName: '_blank',);
+        web.window.open(url, '_blank');
       } else {
         // Open in external browser
         if (await canLaunchUrl(uri)) {

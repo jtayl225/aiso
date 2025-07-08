@@ -34,9 +34,9 @@ If you continue to experience issues, please contact our support team at [Suppor
   @override
   Widget build(BuildContext context) {
     return ScreenTypeLayout.builder(
-      mobile: (BuildContext context) => MarkdownViewer(markdownText: verifyEmailText, deviceType: DeviceScreenType.mobile),
-      tablet: (BuildContext context) => MarkdownViewer(markdownText: verifyEmailText, deviceType: DeviceScreenType.mobile),
-      desktop: (BuildContext context) => MarkdownViewer(markdownText: verifyEmailText, deviceType: DeviceScreenType.desktop),
+      mobile: (BuildContext context) => MarkdownContent(markdownText: verifyEmailText, deviceType: DeviceScreenType.mobile),
+      tablet: (BuildContext context) => MarkdownContent(markdownText: verifyEmailText, deviceType: DeviceScreenType.mobile),
+      desktop: (BuildContext context) => MarkdownContent(markdownText: verifyEmailText, deviceType: DeviceScreenType.desktop),
     );
   }
 }
