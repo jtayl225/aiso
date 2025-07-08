@@ -54,6 +54,7 @@ Future<void> main() async {
       //     .getSessionFromUrl(Uri.parse(currentUrl));
 
       final params = Uri.splitQueryString(currentUrl.replaceFirst('#', ''));
+      debugPrint('DEBUG params: $params');
       final refreshToken = params['refresh_token'];
 
       if (refreshToken != null) {
