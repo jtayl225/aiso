@@ -17,6 +17,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:web/web.dart' as web;
+
 
 Future<void> main() async {
 
@@ -24,6 +26,20 @@ Future<void> main() async {
     url: 'https://evekbdfpapkdsmsxnhcc.supabase.co',
     anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV2ZWtiZGZwYXBrZHNtc3huaGNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDc0Mzk3NjMsImV4cCI6MjA2MzAxNTc2M30.7bL6wXGb6PqyFCLvlgC3Ug_xJE4ReejddA3XuPrYV24',
   );
+
+  // Handle magic link login (only needed on web)
+  final currentUrl = web.window.location.href;
+  final authResponse = await Supabase.instance.client.auth
+      .getSessionFromUrl(Uri.parse(currentUrl));
+
+  // Remove query params from URL after login
+  // Clean up URL
+  if (web.window.location.hash.isNotEmpty) {
+    final cleanUrl = currentUrl.split('#').first;
+    web.window.history.replaceState(null, '', cleanUrl);
+  }
+
+  // authResponse.session != null ? ReportsPage() : LoginPage()
 
   // setupLocator();
   usePathUrlStrategy();
