@@ -42,6 +42,7 @@ Future<void> main() async {
   // authResponse.session != null ? ReportsPage() : LoginPage()
 
   final currentUrl = web.window.location.href;
+  debugPrint('DEBUG URL: $currentUrl');
 
   if (currentUrl.contains("access_token") && currentUrl.contains("refresh_token")) {
     try {
