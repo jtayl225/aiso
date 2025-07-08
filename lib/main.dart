@@ -27,19 +27,40 @@ Future<void> main() async {
     anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV2ZWtiZGZwYXBrZHNtc3huaGNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDc0Mzk3NjMsImV4cCI6MjA2MzAxNTc2M30.7bL6wXGb6PqyFCLvlgC3Ug_xJE4ReejddA3XuPrYV24',
   );
 
-  // Handle magic link login (only needed on web)
-  final currentUrl = web.window.location.href;
-  final authResponse = await Supabase.instance.client.auth
-      .getSessionFromUrl(Uri.parse(currentUrl));
+  // // Handle magic link login (only needed on web)
+  // final currentUrl = web.window.location.href;
+  // final authResponse = await Supabase.instance.client.auth
+  //     .getSessionFromUrl(Uri.parse(currentUrl));
 
-  // Remove query params from URL after login
-  // Clean up URL
-  if (web.window.location.hash.isNotEmpty) {
-    final cleanUrl = currentUrl.split('#').first;
-    web.window.history.replaceState(null, '', cleanUrl);
-  }
+  // // Remove query params from URL after login
+  // // Clean up URL
+  // if (web.window.location.hash.isNotEmpty) {
+  //   final cleanUrl = currentUrl.split('#').first;
+  //   web.window.history.replaceState(null, '', cleanUrl);
+  // }
 
   // authResponse.session != null ? ReportsPage() : LoginPage()
+
+  final currentUrl = web.window.location.href;
+
+  if (currentUrl.contains("access_token") && currentUrl.contains("refresh_token")) {
+    try {
+      final response = await Supabase.instance.client.auth
+          .getSessionFromUrl(Uri.parse(currentUrl));
+      
+      // Clean up URL
+      final cleanUrl = currentUrl.split('#').first;
+      web.window.history.replaceState(null, '', cleanUrl);
+      
+      // Use session
+      if (response.session != null) {
+        // startPage = ReportsPage();
+      }
+    } catch (e) {
+      debugPrint("❌ Error during magic link login: $e");
+    }
+  }
+
 
   // setupLocator();
   usePathUrlStrategy();
