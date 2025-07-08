@@ -41,29 +41,36 @@ Future<void> main() async {
 
   // authResponse.session != null ? ReportsPage() : LoginPage()
 
-  final rawUrl = web.window.location.href;
+  final currentUrl = web.window.location.href;
 
   // Convert # to ? so Supabase can parse it
-  final currentUrl = rawUrl.replaceFirst('#', '?');
+  // final currentUrl = rawUrl.replaceFirst('#', '?');
 
   debugPrint('DEBUG URL: $currentUrl');
 
   if (currentUrl.contains("access_token") && currentUrl.contains("refresh_token")) {
     try {
-      final response = await Supabase.instance.client.auth
-          .getSessionFromUrl(Uri.parse(currentUrl));
+      // final response = await Supabase.instance.client.auth
+      //     .getSessionFromUrl(Uri.parse(currentUrl));
 
+      final params = Uri.splitQueryString(currentUrl.replaceFirst('#', ''));
+      final refreshToken = params['refresh_token'];
+
+      if (refreshToken != null) {
+        await Supabase.instance.client.auth.setSession(refreshToken);
+      }
+      
       final user = Supabase.instance.client.auth.currentUser;
-      print('Logged in as: ${user?.email}');
+      debugPrint('Logged in as: ${user?.email}');
       
       // Clean up URL
       final cleanUrl = currentUrl.split('#').first;
       web.window.history.replaceState(null, '', cleanUrl);
       
-      // Use session
-      if (response.session != null) {
-        // startPage = ReportsPage();
-      }
+      // // Use session
+      // if (response.session != null) {
+      //   // startPage = ReportsPage();
+      // }
     } catch (e) {
       debugPrint("❌ Error during magic link login: $e");
     }
