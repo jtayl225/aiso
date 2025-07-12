@@ -41,9 +41,9 @@ class Prompt {
     );
   }
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toJson({bool includeId = false}) {
     return {
-      // 'id': id, // handled by supabase
+      if (includeId) 'id': id,
       // 'template_id': templateId,
       // 'report_id': reportId,
       'locality_id': localityId,

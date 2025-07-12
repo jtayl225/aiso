@@ -4,12 +4,10 @@ import 'package:aiso/NavBar/widgets/markdown_viewer.dart';
 import 'package:aiso/Widgets/figure.dart';
 import 'package:aiso/Widgets/row_col.dart';
 import 'package:aiso/constants/string_constants.dart';
-import 'package:aiso/reports/view_models/free_report_view_model.dart';
+import 'package:aiso/free_reports/widgets/powered_by_logos.dart';
 import 'package:aiso/routing/app_router.dart';
 import 'package:aiso/routing/route_names.dart';
-import 'package:aiso/themes/typography.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
 class HomeRowCol extends StatelessWidget {
@@ -21,7 +19,6 @@ class HomeRowCol extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final vm = context.watch<FreeReportViewModel>();
     final RowColType layoutType = deviceType == DeviceScreenType.desktop ? RowColType.row : RowColType.column;
     final double spacing = deviceType == DeviceScreenType.desktop ? 100.0 : 50.0;
     
@@ -48,29 +45,11 @@ class HomeRowCol extends StatelessWidget {
                   CallToAction(
                     title: 'Generate free report!',
                     onPressed: () {
-                      // authVM.anonSignInIfUnauth();
-                      vm.reset();
                       appRouter.go(freeReportFormRoute);
                     },
                   ),
                   SizedBox(height: 10,),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text('Powered by: ',
-                        style: AppTextStyles.body(deviceType)
-                      ),
-                      ConstrainedBox(
-                        constraints: BoxConstraints(maxHeight: 30, maxWidth: 30),
-                        child: Image.asset(logoChatGPT)
-                      ),
-                      ConstrainedBox(
-                        constraints: BoxConstraints(maxHeight: 30, maxWidth: 30),
-                        child: Image.asset(logoGemini)
-                      ),
-
-                    ],
-                  )
+                  PoweredByLogos(deviceType: deviceType),
                 ],
               ),
             ),
@@ -87,7 +66,7 @@ class HomeRowCol extends StatelessWidget {
           layoutType: layoutType,
           flexes: [1,1],
           spacing: spacing,
-          crossAxisAlignment: deviceType == DeviceScreenType.desktop ? CrossAxisAlignment.start : null,
+          rowCrossAxisAlignment: CrossAxisAlignment.start,
           children: [
     
             MarkdownContent(

@@ -35,7 +35,7 @@ class ReportsRowCol extends StatelessWidget {
               RowCol(
                 layoutType: layoutType,
                 spacing: spacing,
-                crossAxisAlignment: isDesktop ? null : CrossAxisAlignment.center,
+                colCrossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Column(
                     crossAxisAlignment: isDesktop ? CrossAxisAlignment.start : CrossAxisAlignment.center,

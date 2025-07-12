@@ -13,6 +13,7 @@ import 'package:aiso/models/report_results.dart';
 import 'package:aiso/reports/models/prompt_result_model.dart';
 import 'package:aiso/reports/models/report_run_model.dart';
 import 'package:aiso/models/search_target_model.dart';
+import 'package:aiso/utils/logger.dart';
 // import 'package:crypto/crypto.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:http/http.dart' as http;
@@ -684,6 +685,40 @@ class ReportServiceSupabase {
     } catch (e, stackTrace) {
       debugPrint('DEBUG: handlePurchase error: $e');
       debugPrint('DEBUG: Stack trace: $stackTrace');
+      return null;
+    }
+  }
+
+  Future<String?> processFreeReport(String email, Prompt prompt, SearchTarget searchTarget, Report report) async {
+    final url = Uri.parse('https://app-kyeo.onrender.com/free-report');
+
+    try {
+
+      final response = await http.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          'email': email,
+          'report': report.toJson(includeId: true),
+          'search_target': searchTarget.toJson(includeId: true),
+          'prompt': prompt.toJson(includeId: true)
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        printDebug('Render response: $data');
+        return data['message'] as String;
+      } else {
+        printDebug('Failed with status ${response.statusCode}, body: ${response.body}');
+        return null;
+      }
+
+    } catch (e, stackTrace) {
+      printError('[processFreeReport]: $e');
+      printDebug('Stack trace: $stackTrace');
       return null;
     }
   }

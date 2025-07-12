@@ -248,6 +248,7 @@ class NewReportViewModel extends ChangeNotifier {
       userId: userId,
       searchTargetId: searchTargetId,
       title: title,
+      isPaid: true,
       cadence: Cadence.month,
       dbTimestamps: DbTimestamps.now(),
     );

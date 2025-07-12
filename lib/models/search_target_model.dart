@@ -45,9 +45,9 @@ class SearchTarget {
     );
   }
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toJson({bool includeId = false}) {
     return {
-      // 'id': id,
+      if (includeId) 'id': id,
       // 'report_id': reportId,
       'user_id': userId,
       'industry_id': industry?.id,

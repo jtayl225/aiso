@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS reports (
   user_id uuid NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
   search_target_id NOT NULL REFERENCES public.search_targets(id) ON DELETE CASCADE,
   title text NOT NULL,
-  -- is_paid BOOLEAN NOT NULL DEFAULT false,
+  is_paid BOOLEAN NOT NULL DEFAULT false,
   cadence cadence, -- 👈 enum column
 
   -- timestamps

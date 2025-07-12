@@ -6,8 +6,10 @@ class RowCol extends StatelessWidget {
   final RowColType layoutType;
   final List<Widget> children;
   final List<int>? flexes;
-  final MainAxisAlignment? mainAxisAlignment;
-  final CrossAxisAlignment? crossAxisAlignment;
+  final MainAxisAlignment rowMainAxisAlignment;
+  final CrossAxisAlignment rowCrossAxisAlignment;
+  final MainAxisAlignment colMainAxisAlignment;
+  final CrossAxisAlignment colCrossAxisAlignment;
   final double spacing;
 
   const RowCol({
@@ -15,23 +17,15 @@ class RowCol extends StatelessWidget {
     required this.layoutType,
     required this.children,
     this.flexes,
-    this.mainAxisAlignment,
-    this.crossAxisAlignment,
+    this.rowMainAxisAlignment = MainAxisAlignment.start,
+    this.rowCrossAxisAlignment = CrossAxisAlignment.center,
+    this.colMainAxisAlignment = MainAxisAlignment.start,
+    this.colCrossAxisAlignment = CrossAxisAlignment.start,
     this.spacing = 0.0,
   });
 
   @override
   Widget build(BuildContext context) {
-
-    final resolvedMainAxisAlignment = mainAxisAlignment ??
-        (layoutType == RowColType.row
-            ? MainAxisAlignment.start
-            : MainAxisAlignment.center);
-
-    final resolvedCrossAxisAlignment = crossAxisAlignment ??
-        (layoutType == RowColType.row
-            ? CrossAxisAlignment.center
-            : CrossAxisAlignment.start);
 
     final wrappedChildren = _wrapChildrenForLayout(children);
     final spacedChildren = _addSpacing(wrappedChildren, spacing);
@@ -39,14 +33,14 @@ class RowCol extends StatelessWidget {
     switch (layoutType) {
       case RowColType.row:
         return Row(
-          mainAxisAlignment: resolvedMainAxisAlignment,
-          crossAxisAlignment: resolvedCrossAxisAlignment,
+          mainAxisAlignment: rowMainAxisAlignment,
+          crossAxisAlignment: rowCrossAxisAlignment,
           children: spacedChildren,
         );
       case RowColType.column:
         return Column(
-          mainAxisAlignment: resolvedMainAxisAlignment,
-          crossAxisAlignment: resolvedCrossAxisAlignment,
+          mainAxisAlignment: colMainAxisAlignment,
+          crossAxisAlignment: colCrossAxisAlignment,
           children: spacedChildren,
         );
     }

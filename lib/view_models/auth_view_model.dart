@@ -1,10 +1,8 @@
-import 'package:aiso/locator.dart';
 import 'package:aiso/models/subscriptions_model.dart';
-import 'package:aiso/routing/route_names.dart';
 import 'package:aiso/services/auth_service_supabase.dart';
-import 'package:aiso/services/navigation_service.dart';
 import 'package:aiso/services/store_service_supabase.dart';
 import 'package:aiso/services/url_launcher_service.dart';
+import 'package:aiso/utils/logger.dart';
 import 'package:flutter/foundation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -90,8 +88,8 @@ class AuthViewModel extends ChangeNotifier {
     //   _isAnonymous = _authService.isAnonymous;
     // }
 
-    debugPrint('DEBUG: is anon? $_isAnonymous'); 
-    debugPrint('DEBUG: current user ID: ${_currentUser?.id}'); 
+    printDebug('is anon? $_isAnonymous'); 
+    printDebug('current user ID: ${_currentUser?.id}'); 
 
     // // If no session, sign in anonymously
     // _currentUser = await _authService.anonSignin();
@@ -174,7 +172,7 @@ class AuthViewModel extends ChangeNotifier {
     }
   }
 
-  // Sign in
+  // anon Sign in
   Future<String?> anonSignIn() async {
     _authState = MyAuthState.loading;
     notifyListeners();
@@ -280,11 +278,11 @@ class AuthViewModel extends ChangeNotifier {
 
   // Auth Screen Setter method:
   void setAuthScreenState(AuthScreenState state) {
-    print('DEBUG: setAuthScreenState called. New state: $state');
+    printDebug('setAuthScreenState called. New state: $state');
     _authScreenState = state;
-    print('DEBUG: _authScreenState updated to: $_authScreenState');
+    printDebug('_authScreenState updated to: $_authScreenState');
     notifyListeners();
-    print('DEBUG: notifyListeners called');
+    printDebug('notifyListeners called');
   }
 
   // Future<void> launchBillingPortalUrl() async {

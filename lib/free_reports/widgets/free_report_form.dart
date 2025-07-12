@@ -1,19 +1,19 @@
-import 'package:aiso/constants/string_constants.dart';
-import 'package:aiso/locator.dart';
+import 'package:aiso/free_reports/view_models/free_report_view_model.dart';
+import 'package:aiso/free_reports/widgets/powered_by_logos.dart';
 import 'package:aiso/models/industry_model.dart';
 import 'package:aiso/models/location_models.dart';
-import 'package:aiso/reports/view_models/free_report_view_model.dart';
-import 'package:aiso/reports/views/free_report_timeline_screen.dart';
-import 'package:aiso/reports/views/locality_type_ahead.dart';
+import 'package:aiso/free_reports/widgets/locality_type_ahead.dart';
 import 'package:aiso/routing/route_names.dart';
-import 'package:aiso/services/navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:go_router/go_router.dart';
 import 'package:aiso/routing/app_router.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 
 class FreeReportForm extends StatefulWidget {
-  const FreeReportForm({super.key});
+
+  final DeviceScreenType deviceType;
+
+  const FreeReportForm({super.key, required this.deviceType});
 
   @override
   State<FreeReportForm> createState() => _FreeReportFormState();
@@ -42,8 +42,6 @@ class _FreeReportFormState extends State<FreeReportForm> {
   Widget build(BuildContext context) {
 
     final vm = Provider.of<FreeReportViewModel>(context);
-    // final authViewModel = Provider.of<AuthViewModel>(context, listen: false);
-    // final currentUserId = authViewModel.anonSignIn();
 
     return Padding(
         padding: const EdgeInsets.only(bottom: 80.0),
@@ -115,21 +113,29 @@ class _FreeReportFormState extends State<FreeReportForm> {
                     
                     const SizedBox(height: 20),
       
-                    ElevatedButton(
-                      onPressed: vm.isFormValid
-                        ? () {
-                            if (_formKey.currentState!.validate()) {
-                              vm.createAndRunFreeReport();
-                              // locator<NavigationService>().navigateTo(freeReportTimelineRoute);
-                              appRouter.go(freeReportTimelineRoute);
-
-                            }
-                          }
-                        : null,
-                      style: ElevatedButton.styleFrom(
-                        minimumSize: Size(double.infinity, 50),
-                      ),
-                      child: Text("Generate free report!"),
+                    Column(
+                      children: [
+                        ElevatedButton(
+                          onPressed: vm.isFormValid
+                            ? () async {
+                                if (_formKey.currentState!.validate()) {
+                                  
+                                  vm.isLoading = true;
+                                  await vm.processFreeReport();
+                                  vm.isLoading = false;
+                                  appRouter.go(freeReportConfirmationRoute);
+                        
+                                }
+                              }
+                            : null,
+                          style: ElevatedButton.styleFrom(
+                            minimumSize: Size(double.infinity, 50),
+                          ),
+                          child: Text("Generate free report!"),
+                        ),
+                        SizedBox(height: 10,),
+                        PoweredByLogos(deviceType: widget.deviceType),
+                      ],
                     ),
       
                   ],

@@ -10,7 +10,6 @@ const String termsRoute = '/terms-and-conditions';
 const String privacyRoute = '/privacy-policy';
 const String verifyEmailRoute = '/verify-email';
 
-
 const String getStartedRoute = '/get-started';
 
 const String reportsRoute = "/reports";
@@ -21,5 +20,6 @@ const String promptRoute = "/reports/report/prompt";
 const String profileRoute = "/profile";
 
 const String freeReportFormRoute = "/free/form";
+const String freeReportConfirmationRoute = "/free/confirmation";
 const String freeReportTimelineRoute = "/free/timeline";
 const String freeReportResultsRoute = "/free/results";

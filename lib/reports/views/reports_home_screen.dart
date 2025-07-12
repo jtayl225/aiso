@@ -1,6 +1,6 @@
 import 'package:aiso/reports/view_models/report_results_view_model.dart';
 import 'package:aiso/reports/view_models/reports_view_model.dart';
-import 'package:aiso/views/app_drawer.dart';
+// import 'package:aiso/views/app_drawer.dart';
 import 'package:aiso/reports/views/report_results_screen.dart';
 import 'package:aiso/reports/views/reports_editor_screen.dart';
 import 'package:flutter/material.dart';
@@ -35,7 +35,7 @@ class _ReportsHomeScreenState extends State<ReportsHomeScreen> {
         )
       ],
         ),
-      drawer: AppDrawer(),
+      // drawer: AppDrawer(),
       body: Consumer<ReportsViewModel>(
         builder: (context, reportViewModel, _) {
           final reports = reportViewModel.reports;

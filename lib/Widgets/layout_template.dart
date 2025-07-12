@@ -2,10 +2,6 @@ import 'package:aiso/Home/widgets/centered_view.dart';
 import 'package:aiso/NavBar/views/nav_bar.dart';
 import 'package:aiso/NavBar/views/nav_footer.dart';
 import 'package:aiso/NavBar/widgets/nav_draw.dart';
-import 'package:aiso/locator.dart';
-import 'package:aiso/routing/route_names.dart';
-import 'package:aiso/routing/router.dart';
-import 'package:aiso/services/navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 

@@ -11,7 +11,7 @@ class Report {
   final String searchTargetId;
   final String title;
   // final String description;
-  // final bool isPaid;
+  final bool isPaid;
   final Cadence cadence;
   List<Prompt>? prompts;
   SearchTarget? searchTarget;
@@ -26,7 +26,7 @@ class Report {
     required this.searchTargetId, 
     required this.title, 
     // required this.description,
-    // required this.isPaid, 
+    required this.isPaid, 
     required this.cadence,
     this.prompts,
     this.searchTarget,
@@ -43,7 +43,7 @@ class Report {
       searchTargetId: json['search_target_id'] as String,
       title: json['title'] as String,
       // description: json['description'] as String,
-      // isPaid: json['is_paid'] as bool,
+      isPaid: json['is_paid'] as bool,
       cadence: CadenceExtension.fromString(json['cadence'] as String),
       prompts: (json['prompts'] as List<dynamic>?)
         ?.map((item) => Prompt.fromJson(item))
@@ -66,14 +66,14 @@ class Report {
     );
   }
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toJson({bool includeId = false}) {
     return {
-      // 'id': id, // handled by supabase
+      if (includeId) 'id': id,
       'user_id': userId,
       'search_target_id': searchTargetId,
       'title': title,
       // 'description': description,
-      // 'is_paid': isPaid,
+      'is_paid': isPaid,
       'cadence': cadence.toJson()
     };
   }
@@ -84,7 +84,7 @@ class Report {
     String? searchTargetId,
     String? title,
     // String? description,
-    // bool? isPaid,
+    bool? isPaid,
     Cadence? cadence,
     List<Prompt>? prompts,
     SearchTarget? searchTarget,
@@ -99,7 +99,7 @@ class Report {
       searchTargetId: searchTargetId ?? this.searchTargetId,
       title: title ?? this.title,
       // description: description ?? this.description,
-      // isPaid: isPaid ?? this.isPaid,
+      isPaid: isPaid ?? this.isPaid,
       cadence: cadence ?? this.cadence,
       // Clone the list if provided, else clone current if not null, else null
       prompts: prompts ?? (this.prompts != null ? List<Prompt>.from(this.prompts!) : null),

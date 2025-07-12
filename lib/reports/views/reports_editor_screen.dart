@@ -49,7 +49,7 @@ class _ReportEditorScreenState extends State<ReportEditorScreen> {
         userId: creatorUserId,
         searchTargetId: '',
         title: '', 
-        // isPaid: true,
+        isPaid: true,
         // description: '', 
         cadence: Cadence.month, 
         dbTimestamps: DbTimestamps.now()
@@ -104,7 +104,7 @@ class _ReportEditorScreenState extends State<ReportEditorScreen> {
       searchTargetId: '',
       title: _titleController.text.trim(),
       // description: _descriptionController.text.trim(),
-      // isPaid: true,
+      isPaid: true,
       cadence: _cadence,
       prompts: _report.prompts,
       searchTarget: searchTarget,

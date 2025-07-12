@@ -2,9 +2,9 @@ import 'package:aiso/Auth/views/auth_home_view.dart';
 import 'package:aiso/Auth/views/auth_profile_view.dart';
 import 'package:aiso/Home/views/home_view.dart';
 import 'package:aiso/extensions/string_extensions.dart';
-import 'package:aiso/reports/views/free_report_form_view.dart';
-import 'package:aiso/reports/views/free_report_results_screen.dart';
-import 'package:aiso/reports/views/free_report_timeline_screen.dart';
+import 'package:aiso/free_reports/views/free_report_view.dart';
+// import 'package:aiso/free_reports/views/free_report_results_screen.dart';
+// import 'package:aiso/free_reports/views/free_report_timeline_screen.dart';
 import 'package:aiso/NewReport/views/new_report_view.dart';
 import 'package:aiso/reports/views/report_view.dart';
 import 'package:aiso/reports/views/reports_view.dart';
@@ -35,10 +35,10 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return _getPageRoute(AuthProfile(), settings.name);
     case freeReportFormRoute:
       return _getPageRoute(FreeReport(), settings.name);
-    case freeReportTimelineRoute:
-      return _getPageRoute(FreeReportTimelineScreen(), settings.name);
-    case freeReportResultsRoute:
-      return _getPageRoute(FreeReportResultScreen(), settings.name);
+    // case freeReportTimelineRoute:
+    //   return _getPageRoute(FreeReportTimelineScreen(), settings.name);
+    // case freeReportResultsRoute:
+    //   return _getPageRoute(FreeReportResultScreen(), settings.name);
     default:
       return _getPageRoute(MyHome(), settings.name);
   }
