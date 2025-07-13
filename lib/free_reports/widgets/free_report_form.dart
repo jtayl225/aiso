@@ -43,7 +43,7 @@ class _FreeReportFormState extends State<FreeReportForm> {
     final vm = Provider.of<FreeReportViewModel>(context);
 
     return Padding(
-        padding: const EdgeInsets.only(bottom: 80.0),
+        padding: const EdgeInsets.only(top: 40.0, bottom: 40.0),
         child: AutofillGroup(
           child: Form(
             key: _formKey,
