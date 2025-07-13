@@ -184,7 +184,8 @@ class FreeReportViewModel extends ChangeNotifier {
 
       final SearchTarget searchTarget = _buildSearchTarget();
       final Report report = _buildFreeReport();
-      final Prompt prompt = _buildPrompt(_buildPromptText('Top 10 real estate agencies'));
+      final String pt = entityPersonName.isNotEmpty ? 'Top 10 real estate agents' : 'Top 10 real estate agencies';
+      final Prompt prompt = _buildPrompt(_buildPromptText(pt));
 
       final String? _ = await _reportService.processFreeReport(email, prompt, searchTarget, report);
       
