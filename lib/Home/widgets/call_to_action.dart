@@ -40,21 +40,21 @@ class CallToAction extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: onPressed,
-      // style: ElevatedButton.styleFrom(
+      style: ElevatedButton.styleFrom(
       //   backgroundColor: const Color.fromARGB(255, 31, 229, 146),
-      //   padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 15),
+        padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 25),
       //   shape: RoundedRectangleBorder(
       //     borderRadius: BorderRadius.circular(5),
       //   ),
       //   elevation: 2,
-      // ),
+      ),
       child: Text(
         title,
-        // style: const TextStyle(
-        //   fontSize: 18,
-        //   fontWeight: FontWeight.w800,
-        //   color: Colors.white,
-        // ),
+        style: const TextStyle(
+          fontSize: 20,
+          // fontWeight: FontWeight.w800,
+          color: Colors.white,
+        ),
       ),
     );
   }

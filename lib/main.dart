@@ -1,5 +1,4 @@
 import 'package:aiso/Store/view_models/store_view_model.dart';
-import 'package:aiso/free_reports/view_models/free_report_view_model.dart';
 import 'package:aiso/routing/app_router.dart';
 import 'package:aiso/routing/route_names.dart';
 import 'package:aiso/themes/light_mode.dart';

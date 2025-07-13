@@ -6,7 +6,7 @@ class PrivacyPolicyView extends StatelessWidget {
   const PrivacyPolicyView({super.key});
 
   final String privacyText = """
-# **GEO MAX - PRIVACY POLICY**
+# **GEOMAX - PRIVACY POLICY**
 
 This Privacy Policy sets out our commitment to protecting the privacy of personal information provided to us, or otherwise collected by us, offline or online, including through our Website www.geomax.digital. In this Privacy Policy we, us or our means Real Estate Ai (ABN:  46 685 295 283). 
 

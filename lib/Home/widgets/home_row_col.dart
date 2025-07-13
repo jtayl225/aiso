@@ -7,6 +7,7 @@ import 'package:aiso/constants/string_constants.dart';
 import 'package:aiso/free_reports/widgets/powered_by_logos.dart';
 import 'package:aiso/routing/app_router.dart';
 import 'package:aiso/routing/route_names.dart';
+import 'package:aiso/themes/h1_heading.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
@@ -27,6 +28,8 @@ class HomeRowCol extends StatelessWidget {
       children: [
     
         SizedBox(height: spacing),
+
+        
     
         RowCol(
           layoutType: layoutType,
@@ -34,10 +37,20 @@ class HomeRowCol extends StatelessWidget {
           spacing: 16.0,
           children: [
     
-            MarkdownContent(
-              markdownText: homeMarkdown1,
-              deviceType: deviceType
-              ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+
+                H1Heading(deviceType: deviceType, text: 'Be Found. Gain Trust. Get Leads.'),
+
+                SizedBox(height: 32),
+
+                MarkdownContent(
+                  markdownText: homeMarkdown1,
+                  deviceType: deviceType
+                  ),
+              ],
+            ),
     
             Center(
               child: Column(

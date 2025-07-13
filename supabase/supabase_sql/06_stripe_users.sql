@@ -1,6 +1,7 @@
 CREATE TABLE IF NOT EXISTS stripe_users (
   user_id uuid PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
   stripe_customer_id text UNIQUE NOT NULL,
+  env TEXT CHECK (env IN ('test', 'prod')) NOT NULL DEFAULT 'test',
   -- timestamps
   created_at timestamp with time zone DEFAULT now(),
   updated_at timestamp with time zone DEFAULT now(),

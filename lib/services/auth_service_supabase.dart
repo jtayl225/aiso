@@ -7,6 +7,8 @@ class AuthServiceSupabase {
 
   final SupabaseClient _supabase = Supabase.instance.client;
 
+  bool get isAuthenticated => _supabase.auth.currentSession != null;
+
   bool get isAnonymous {
     debugPrint('DEBUG: serivce is checking if anon.');
     final user = _supabase.auth.currentUser;

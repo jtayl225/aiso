@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:aiso/constants/api_endpoints.dart';
 import 'package:aiso/models/purchase_enum.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter/foundation.dart';
@@ -9,13 +9,14 @@ class StoreServiceSupabase {
 
   final _supabase = Supabase.instance.client;
 
-  Future<String?> fetchStripeCustomerId(String userId) async {
+  Future<String?> fetchStripeCustomerId(String userId, String env) async {
     debugPrint('DEBUG: Service is fetching Stripe customer ID for userId: $userId');
 
     final response = await _supabase
         .from('stripe_users')
         .select('stripe_customer_id')
         .eq('user_id', userId)
+        .eq('env', env)
         .isFilter('deleted_at', null)
         .maybeSingle();
 
@@ -28,40 +29,10 @@ class StoreServiceSupabase {
     return response['stripe_customer_id'] as String?;
   }
 
-
-
-  // Future<String?> generateCheckoutUrl(ProductType purchaseType, {String? reportId}) async {
-  //   try {
-  //     final accessToken = _supabase.auth.currentSession?.accessToken;
-  //     if (accessToken == null) {
-  //       debugPrint('DEBUG: No access token found. User might not be logged in.');
-  //       return null;
-  //     }
-
-  //     final response = await _supabase.functions.invoke(
-  //       'stripe-generate-checkout-url',
-  //       body: {'productType': purchaseType.value, 'report_id': reportId},
-  //       headers: {
-  //         'Authorization': 'Bearer $accessToken',
-  //       },
-  //     );
-
-  //     final data = response.data;
-  //     final checkoutUrl = data?['checkout_url'] as String?;
-
-  //     debugPrint('DEBUG: stripe-generate-checkout-url response: $data');
-  //     debugPrint('DEBUG: stripe-generate-checkout-url URL: $checkoutUrl');
-
-  //     return checkoutUrl;
-  //   } catch (e, stackTrace) {
-  //     debugPrint('DEBUG: handlePurchase error: $e');
-  //     debugPrint('DEBUG: Stack trace: $stackTrace');
-  //     return null;
-  //   }
-  // }
-
   Future<String?>  generateCheckoutUrl(ProductType purchaseType, {String? reportId}) async {
-    final url = Uri.parse('https://app-kyeo.onrender.com/generate-checkout-url'); // Replace with the correct path if needed
+
+    final String endpoint = '$fastAPI/generate-checkout-url-test';
+    final url = Uri.parse(endpoint); // Replace with the correct path if needed
 
     try {
 
@@ -94,38 +65,10 @@ class StoreServiceSupabase {
     }
   }
 
-  // Future<String?> generateBillingPortal() async {
-  //   try {
-  //     final accessToken = _supabase.auth.currentSession?.accessToken;
-  //     if (accessToken == null) {
-  //       debugPrint('DEBUG: No access token found. User might not be logged in.');
-  //       return null;
-  //     }
-
-  //     final response = await _supabase.functions.invoke(
-  //       'stripe-billing-portal',
-  //       body: {},
-  //       headers: {
-  //         'Authorization': 'Bearer $accessToken',
-  //       },
-  //     );
-
-  //     final data = response.data;
-  //     final url = data?['url'] as String?;
-
-  //     debugPrint('DEBUG: stripe-billing-portal response: $data');
-  //     debugPrint('DEBUG: stripe-billing-portal URL: $url');
-
-  //     return url;
-  //   } catch (e, stackTrace) {
-  //     debugPrint('DEBUG: billing portal error: $e');
-  //     debugPrint('DEBUG: Stack trace: $stackTrace');
-  //     return null;
-  //   }
-  // }
-
   Future<String?> generateBillingPortal() async {
-    final url = Uri.parse('https://app-kyeo.onrender.com/billing-portal'); // Replace with the correct path if needed
+
+    final String endpoint = '$fastAPI/billing-portal-test';
+    final url = Uri.parse(endpoint); // Replace with the correct path if needed
 
     try {
 

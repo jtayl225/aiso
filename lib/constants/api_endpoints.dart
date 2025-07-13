@@ -1,0 +1,1 @@
+const String fastAPI = 'https://app-kyeo.onrender.com';

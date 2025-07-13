@@ -16,6 +16,8 @@ class AuthViewModel extends ChangeNotifier {
   RealtimeChannel? _subscriptionChannel;
 
   // State variables
+  bool get isAuthenticated => _authService.isAuthenticated;
+
   AuthScreenState _authScreenState = AuthScreenState.welcome;
   AuthScreenState get authScreenState => _authScreenState;
 
@@ -45,7 +47,8 @@ class AuthViewModel extends ChangeNotifier {
   void subscribeToSubscriptionStatus() async {
     final userId = Supabase.instance.client.auth.currentUser?.id;
     if (userId == null) return;
-    final stripeCustomerId = await _storeService.fetchStripeCustomerId(userId);
+    final String env = 'test';
+    final stripeCustomerId = await _storeService.fetchStripeCustomerId(userId, env);
     if (stripeCustomerId == null) return;
 
     _subscriptionChannel = Supabase.instance.client
