@@ -83,7 +83,9 @@ class _FreeReportFormState extends State<FreeReportForm> {
                       onChanged: (i) => vm.selectedIndustry = i,
                     ),
                 
-                    _buildTextField("Business Name", (val) => _updateField(val, (v) => vm.entityName = v)),
+                    _buildTextField("Agent Name", (val) => _updateField(val, (v) => vm.entityPersonName = v)),
+
+                    _buildTextField("Agency Name", (val) => _updateField(val, (v) => vm.entityBusinessName = v)),
       
                     const SizedBox(height: 16),
                 
@@ -120,9 +122,7 @@ class _FreeReportFormState extends State<FreeReportForm> {
                             ? () async {
                                 if (_formKey.currentState!.validate()) {
                                   
-                                  vm.isLoading = true;
                                   await vm.processFreeReport();
-                                  vm.isLoading = false;
                                   appRouter.go(freeReportConfirmationRoute);
                         
                                 }
