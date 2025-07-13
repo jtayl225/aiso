@@ -334,6 +334,7 @@ List<Widget> _buildSearchTargetChildren(
       alignment: Alignment.center,
       child: Column(
         children: [
+
           ConstrainedBox(
             constraints: BoxConstraints(maxWidth: 400.0),
             child: _buildDropdownField<SearchTarget>(
@@ -346,6 +347,7 @@ List<Widget> _buildSearchTargetChildren(
               onChanged: (i) => vm.selectedSearchTarget = i,
             ),
           ),
+
           // SizedBox(height: 14),
           TextButton(
             onPressed: () => _showCreateTargetDialog(context, vm),
@@ -433,17 +435,20 @@ List<Widget> _buildLocationsChildren(NewReportViewModel vm) {
           ),
 
           if (vm.selectedPromptType?.isNotEmpty == true &&
-              vm.selectedSearchTarget != null)
+              vm.selectedSearchTarget != null) ...[
+
             SizedBox(height: 28),
-          Text(
-            '${vm.selectedPromptType} '
-            '${vm.selectedSearchTarget!.entityType == EntityType.business ? 'real estate agencies' : 'real estate agents'} in ...',
-            style: const TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
+            
+            Text(
+              '${vm.selectedPromptType} '
+              '${vm.selectedSearchTarget!.entityType == EntityType.business ? 'real estate agencies' : 'real estate agents'} in ...',
+              style: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
             ),
-          ),
+              ]
         ],
       ),
     ),

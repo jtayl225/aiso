@@ -46,7 +46,7 @@ class NewReportViewModel extends ChangeNotifier {
       String? userId = await _authService.fetchCurrentUserId();
       if (userId == null) return;
       searchTargets = await _reportService.fetchSearchTargets(userId);
-      selectedSearchTarget = searchTargets.first;
+      selectedSearchTarget = searchTargets.isNotEmpty ? searchTargets.first : null;
 
     } catch (e) {
       errorMessage = 'Failed to initialize: $e';
