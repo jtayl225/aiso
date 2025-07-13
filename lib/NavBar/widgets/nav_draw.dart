@@ -35,7 +35,7 @@ class MyNavigationDrawer extends StatelessWidget {
           // 1. Close the drawer
           Scaffold.of(context).closeDrawer();
           // 2. Then navigate to your Route
-          appRouter.go(homeRoute);
+          appRouter.go(aboutRoute);
         },
       ),
 

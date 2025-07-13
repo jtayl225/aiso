@@ -55,6 +55,6 @@ const String aboutJesse = '''## Jesse Taylor - Co-Founder GEOMAX
 Jesse is a full-stack developer and AI enthusiast with a passion for building smart, scalable web applications. As the technical lead on GEOMAX, Jesse is responsible for bringing the platform to life — from user experience to backend systems and everything in between.
 ''';
 
-const String aboutJustinImage = 'justin.png';
-const String aboutBlairImage = 'blair.png';
-const String aboutJesseImage = 'jesse.png';
+const String aboutJustinImage = 'assets/justin.png';
+const String aboutBlairImage = 'assets/blair.png';
+const String aboutJesseImage = 'assets/jesse.png';
