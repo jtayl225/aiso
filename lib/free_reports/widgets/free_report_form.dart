@@ -30,7 +30,6 @@ class _FreeReportFormState extends State<FreeReportForm> {
   }
 
   final _formKey = GlobalKey<FormState>();
-  final _scrollController = ScrollController();
 
   void _updateField(String value, void Function(String) updateFn) {
     setState(() {
@@ -45,9 +44,7 @@ class _FreeReportFormState extends State<FreeReportForm> {
 
     return Padding(
         padding: const EdgeInsets.only(bottom: 80.0),
-        child: SingleChildScrollView(
-          controller: _scrollController,
-          padding: const EdgeInsets.all(16.0),
+        child: AutofillGroup(
           child: Form(
             key: _formKey,
             child: Center(
@@ -70,7 +67,7 @@ class _FreeReportFormState extends State<FreeReportForm> {
                       autofillHints: [AutofillHints.email],
                       isEmail: true
                     ),
-      
+                
                     const SizedBox(height: 16),
                 
                     _buildDropdownField<Industry>(
@@ -84,9 +81,9 @@ class _FreeReportFormState extends State<FreeReportForm> {
                     ),
                 
                     _buildTextField("Agent Name", (val) => _updateField(val, (v) => vm.entityPersonName = v)),
-
+          
                     _buildTextField("Agency Name", (val) => _updateField(val, (v) => vm.entityBusinessName = v)),
-      
+                
                     const SizedBox(height: 16),
                 
                     _buildDropdownField<Country>(
@@ -114,7 +111,7 @@ class _FreeReportFormState extends State<FreeReportForm> {
                     // _buildTextField("Suburb", (val) => _updateField(val, (v) => localityName = v)),
                     
                     const SizedBox(height: 20),
-      
+                
                     Column(
                       children: [
                         ElevatedButton(
@@ -137,7 +134,7 @@ class _FreeReportFormState extends State<FreeReportForm> {
                         PoweredByLogos(deviceType: widget.deviceType),
                       ],
                     ),
-      
+                
                   ],
                 ),
               ),
