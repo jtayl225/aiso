@@ -107,16 +107,23 @@ class _SignInFormState extends State<SignInForm> {
               ),
             ),
             const SizedBox(height: 16),
-            SizedBox(
-              width: _maxWidth,
-              height: 48,
-              child: ElevatedButton(
-                onPressed: _isLoading ? null : _signIn,
-                child: _isLoading
-                    ? const CircularProgressIndicator(color: Colors.white)
-                    : Text('Sign In'),
+            // SizedBox(
+            //   width: _maxWidth,
+            //   height: 48,
+              // child: 
+              ConstrainedBox(
+                constraints: BoxConstraints(minWidth: _maxWidth, minHeight: 48, maxHeight: 60),
+                child: ElevatedButton(
+                  onPressed: _isLoading ? null : _signIn,
+                  // style: ElevatedButton.styleFrom(
+                  //   padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 25),
+                  // ),
+                  child: _isLoading
+                      ? const CircularProgressIndicator(color: Colors.white)
+                      : Text('Sign In'),
+                ),
               ),
-            ),
+            // ),
             const SizedBox(height: 16),
           ],
         ),

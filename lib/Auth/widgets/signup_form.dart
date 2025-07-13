@@ -100,16 +100,20 @@ class _SignUpFormState extends State<SignUpForm> {
             ),
           ),
           const SizedBox(height: 16),
-          SizedBox(
-            width: _maxWidth,
-            height: 48,
-            child: ElevatedButton(
-              onPressed: _isLoading ? null : _signUp,
-              child: _isLoading
-                  ? const CircularProgressIndicator(color: Colors.white)
-                  : Text('Sign Up'),
+          // SizedBox(
+          //   width: _maxWidth,
+          //   height: 48,
+          //   child: 
+            ConstrainedBox(
+              constraints: BoxConstraints(minWidth: _maxWidth, minHeight: 48, maxHeight: 60),
+              child: ElevatedButton(
+                onPressed: _isLoading ? null : _signUp,
+                child: _isLoading
+                    ? const CircularProgressIndicator(color: Colors.white)
+                    : Text('Sign Up'),
+              ),
             ),
-          ),
+          // ),
           const SizedBox(height: 16),
         ],
       ),
