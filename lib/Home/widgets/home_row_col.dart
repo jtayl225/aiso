@@ -21,7 +21,7 @@ class HomeRowCol extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final RowColType layoutType = deviceType == DeviceScreenType.desktop ? RowColType.row : RowColType.column;
-    final double spacing = deviceType == DeviceScreenType.desktop ? 100.0 : 50.0;
+    final double spacing = deviceType == DeviceScreenType.desktop ? 64.0 : 32.0;
     
     return Column(
       // mainAxisSize: MainAxisSize.min,
@@ -76,24 +76,38 @@ class HomeRowCol extends StatelessWidget {
         // SizedBox(height: 80),
     
         RowCol(
-          layoutType: layoutType,
+          layoutType: RowColType.column, //layoutType,
           flexes: [1,1],
+          spacing: spacing,
+          colCrossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+
+            IframeView(
+              url: convertYouTubeToEmbedUrl(youTubeLink),
+              width: 500,
+              height: 500,
+            ),
+
+            SizedBox(height: 16,)
+
+          ],
+        ),
+
+        RowCol(
+          layoutType: layoutType,
+          flexes: [2,3],
           spacing: spacing,
           rowCrossAxisAlignment: CrossAxisAlignment.start,
           children: [
+
+            if (layoutType == RowColType.row)
+              SizedBox(width: 100, height: 100),
     
             MarkdownContent(
               markdownText: homeMarkdown2,
               deviceType: deviceType
               ),
-    
-            // SizedBox(width: 50, height: 50),
-            
-            IframeView(
-              url: convertYouTubeToEmbedUrl(youTubeLink),
-              width: 400,
-              height: 400,),
-            
+
           ],
         ),
     
@@ -103,16 +117,17 @@ class HomeRowCol extends StatelessWidget {
     
         RowCol(
           layoutType: layoutType,
-          flexes: [1,1],
+          flexes: [3,2],
           children: [
-            
+
             MarkdownContent(
               markdownText: homeMarkdown3,
               deviceType: deviceType
               ),
+
+            if (layoutType == RowColType.row)
+              SizedBox(width: 100, height: 100),
     
-            SizedBox(width: 100, height: 100),
-            
           ],
         ),
     

@@ -10,7 +10,7 @@ const String homeMarkdown1 = '''Find out where your business ranks when people a
 It's the new SEO — smarter, faster, and built for the future.
 ''';
 
-const String homeMarkdown2 = '''# What is Generative Engine Optimization (GEO)?
+const String homeMarkdown2 = '''## What is Generative Engine Optimization (GEO)?
 When people search “Which real estate agent should I use to sell my home in Bondi”, GEO is the way you make sure that it's you who's recommended.
 
 GEO isn't just for real estate agents — it's for any business people ask AI tools like ChatGPT or Google Gemini about.
@@ -18,11 +18,11 @@ GEO isn't just for real estate agents — it's for any business people ask AI to
 Whether you're a plumber, dentist, accountant, or hairdresser, more and more people are turning to AI to help them decide who to trust.
 ''';
 
-const String homeMarkdown3 = '''# How GEOMAX helps.
+const String homeMarkdown3 = '''## How GEOMAX helps.
 GEOMAX gives you a personalized report highlighting how your business ranks in AI-generated results, where your competitors show up — and how to improve your visibility so more customers find and choose you. It's your roadmap to being the business AI recommends.
 ''';
 
-const String homeMarkdown4 = '''# Why it matters NOW.
+const String homeMarkdown4 = '''## Why it matters NOW.
 GEO is important because millions of potential customers are bypassing Google, preferring instead to get instant answers from AI tools.
 
 As more customers turn to AI to ask, “Who should I hire near me?”, businesses that understand how to show up in those answers will win.
