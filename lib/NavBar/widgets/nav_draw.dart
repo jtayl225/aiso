@@ -124,10 +124,17 @@ class MyNavigationDrawer extends StatelessWidget {
       child: Column(
         children: [
           // Center(child: NavBarLogo()),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [NavBarLogo()],
-          ),
+
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.center,
+          //   children: [NavBarLogo()],
+          // ),
+
+          SizedBox(height: 28,),
+
+          NavBarLogo(),
+
+          SizedBox(height: 24,),
 
           Expanded(
             child: SingleChildScrollView(
