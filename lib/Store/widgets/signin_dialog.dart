@@ -8,21 +8,21 @@ void showSignInDialog(BuildContext context) {
     builder: (ctx) => AlertDialog(
       title: const Text('Sign in'),
       content: const Text(
-        'Please sign in, or sign up, to continue to payment.',
+        'Please sign in to continue to payment.',
       ),
       actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(ctx),
-          child: const Text('Cancel'),
-        ),
+        // TextButton(
+        //   onPressed: () => Navigator.pop(ctx),
+        //   child: const Text('Cancel'),
+        // ),
 
-        ElevatedButton(
-          onPressed: () {
-            Navigator.pop(ctx);
-            appRouter.go(signUpRoute);
-          },
-          child: const Text('Sign up'),
-        ),
+        // ElevatedButton(
+        //   onPressed: () {
+        //     Navigator.pop(ctx);
+        //     appRouter.go(signUpRoute);
+        //   },
+        //   child: const Text('Sign up'),
+        // ),
 
         ElevatedButton(
           onPressed: () {

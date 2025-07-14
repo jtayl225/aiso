@@ -55,43 +55,52 @@ class AuthProfileDesktop extends StatelessWidget {
                 ),
                 const SizedBox(height: 24),
 
-                // — Change Email button
-                ElevatedButton(
-                  onPressed: () {
-                    // TODO: Navigate to change-email flow
-                  },
-                  child: const Text('Change Email'),
-                ),
-                const SizedBox(height: 12),
+                // // — Change Email button
+                // ElevatedButton(
+                //   onPressed: () {
+                //     // TODO: Navigate to change-email flow
+                //   },
+                //   child: const Text('Change Email'),
+                // ),
+                // const SizedBox(height: 12),
 
-                // — Change Password button
-                ElevatedButton(
-                  onPressed: () {
-                    // TODO: Navigate to change-password flow
-                  },
-                  child: const Text('Change Password'),
-                ),
-                const SizedBox(height: 12),
+                // // — Change Password button
+                // ElevatedButton(
+                //   onPressed: () {
+                //     // TODO: Navigate to change-password flow
+                //   },
+                //   child: const Text('Change Password'),
+                // ),
+                // const SizedBox(height: 12),
 
                 // — Manage Billing button
                 ElevatedButton(
-                  onPressed: () {
-                    // TODO: Navigate to billing/subscription page
-                    
+                  onPressed: () {                 
                     authVm.launchBillingPortalUrl();
                   },
                   child: const Text('Manage Billing'),
                 ),
-                const SizedBox(height: 24),
+
+                const SizedBox(height: 12),
 
                 // — Sign Out
-                OutlinedButton(
+
+                // OutlinedButton(
+                //   onPressed: () async {
+                //     await authVm.signOut();
+                //     appRouter.go(homeRoute);
+                //   },
+                //   child: const Text('Sign Out'),
+                // ),
+
+                 ElevatedButton(
                   onPressed: () async {
                     await authVm.signOut();
                     appRouter.go(homeRoute);
                   },
                   child: const Text('Sign Out'),
                 ),
+
               ],
             ),
           ),

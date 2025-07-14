@@ -25,6 +25,7 @@ import 'package:provider/provider.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: initRoute,
+  
   routes: [
     
     GoRoute(path: initRoute, pageBuilder: (context, state) => NoTransitionPage(child: const MyHome())),

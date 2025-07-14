@@ -8,6 +8,7 @@ import 'package:aiso/free_reports/widgets/powered_by_logos.dart';
 import 'package:aiso/routing/app_router.dart';
 import 'package:aiso/routing/route_names.dart';
 import 'package:aiso/themes/h1_heading.dart';
+import 'package:aiso/themes/typography.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
@@ -41,7 +42,12 @@ class HomeRowCol extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
 
-                H1Heading(deviceType: deviceType, text: 'Be Found. Gain Trust. Get Leads.'),
+                // H1Heading(deviceType: deviceType, text: 'Be Found. Gain Trust. Get Leads.'),
+                Text(
+                  'Be Found. Gain Trust. Get Leads.',
+                  style: AppTextStyles.h1(deviceType),
+                  textAlign: TextAlign.start,
+                ),
 
                 SizedBox(height: 32),
 
