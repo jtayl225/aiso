@@ -14,28 +14,47 @@ class LayoutTemplate extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
+    final double _maxWidth = 1100.0;
+
     return ResponsiveBuilder(
       builder: (context, sizingInformation) => Scaffold(
         drawer: sizingInformation.isDesktop ? null : MyNavigationDrawer(),
         backgroundColor: Colors.white,
-        body: CenteredView(
-          child: Column(
-            children: <Widget>[
-              MyNavigationBar(),
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Align(
-                    alignment: Alignment.topCenter,
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(maxWidth: 1400,),
+        body: Column(
+          children: <Widget>[
+
+            ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: _maxWidth,),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 16.0),
+                child: MyNavigationBar(),
+              )
+            ),
+
+            Expanded(
+              child: SingleChildScrollView(
+                child: Align(
+                  alignment: Alignment.topCenter,
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(maxWidth: _maxWidth,),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 16.0),
                       child: child,
-                      ),
-                  ),
+                    ),
+                    ),
                 ),
-                ),
-              FooterView(),
-            ],
-          ),
+              ),
+              ),
+
+            ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: _maxWidth,),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 16.0),
+                child: FooterView(),
+              )
+              ),
+
+          ],
         ),
       ),
     );
