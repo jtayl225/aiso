@@ -30,7 +30,7 @@ Future<void> main() async {
 
       if (refreshToken != null) {
         await Supabase.instance.client.auth.setSession(refreshToken);
-        appRouter.go(reportRoute);
+        // appRouter.go(reportsRoute);
       }
       
       final user = Supabase.instance.client.auth.currentUser;
