@@ -10,7 +10,7 @@ class NavBarLogo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ConstrainedBox(
-      constraints: BoxConstraints(maxHeight: 150.0, maxWidth: 150.0),
+      constraints: BoxConstraints(maxHeight: 250.0, maxWidth: 250.0),
       child: GestureDetector(
         onTap:() => appRouter.go(homeRoute),
         child: Image.asset(logoImage)),

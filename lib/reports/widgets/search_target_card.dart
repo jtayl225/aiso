@@ -20,21 +20,27 @@ class SearchTargetCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+
             Text(
               target.name,
               style: Theme.of(context).textTheme.titleMedium,
             ),
+
             const SizedBox(height: 8),
+            
             if (target.industry != null)
               Text(
                 'Industry: ${target.industry!.name}',
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
-            Text(
-              'Type: ${target.entityType.name}',
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
+
+            // Text(
+            //   'Type: ${target.entityType.name}',
+            //   style: Theme.of(context).textTheme.bodyMedium,
+            // ),
+
             const SizedBox(height: 8),
+
             Text(
               target.description,
               style: Theme.of(context).textTheme.bodySmall,
@@ -49,13 +55,15 @@ class SearchTargetCard extends StatelessWidget {
                     ?.copyWith(color: Colors.blue),
               ),
             ],
-            const SizedBox(height: 12),
-            Text(
-              'Created: $createdAtFormatted',
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Colors.grey[600],
-                  ),
-            ),
+            // const SizedBox(height: 12),
+
+            // Text(
+            //   'Created: $createdAtFormatted',
+            //   style: Theme.of(context).textTheme.bodySmall?.copyWith(
+            //         color: Colors.grey[600],
+            //       ),
+            // ),
+
           ],
         ),
       ),

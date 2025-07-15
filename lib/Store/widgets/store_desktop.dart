@@ -44,7 +44,7 @@ class StoreDesktop extends StatelessWidget {
                 child: Row(
                    mainAxisAlignment: MainAxisAlignment.center,
                   children: products.map((product) => Padding(
-                    padding: const EdgeInsets.all(6),
+                    padding: const EdgeInsets.all(4),
                     child: ProductCard(product),
                   )).toList(),
                 ),

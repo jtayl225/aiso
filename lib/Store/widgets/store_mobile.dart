@@ -42,7 +42,7 @@ class StoreMobile extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: products.map((product) => Padding(
-                      padding: const EdgeInsets.only(top: 6),
+                      padding: const EdgeInsets.only(top: 4),
                       child: ProductCard(product),
                     )).toList(),
                   ),
