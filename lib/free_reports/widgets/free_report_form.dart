@@ -67,6 +67,13 @@ class _FreeReportFormState extends State<FreeReportForm> {
                       autofillHints: [AutofillHints.email],
                       isEmail: true
                     ),
+
+                    _buildTextField("Password", (val) => _updateField(val, (v) => vm.password = v), 
+                      // keyboardType: TextInputType.pass, 
+                      // autofillHints: [AutofillHints.email],
+                      obscureText: true,
+                      isEmail: false
+                    ),
                 
                     const SizedBox(height: 16),
                 

@@ -6,7 +6,9 @@ import 'package:aiso/models/industry_model.dart';
 import 'package:aiso/models/location_models.dart';
 import 'package:aiso/models/prompt_model.dart';
 import 'package:aiso/models/search_target_model.dart';
+import 'package:aiso/models/user_model.dart';
 import 'package:aiso/reports/models/report_model.dart';
+import 'package:aiso/services/auth_service_supabase.dart';
 import 'package:aiso/services/location_service_supabase.dart';
 import 'package:aiso/services/report_service_supabase.dart';
 import 'package:aiso/utils/logger.dart';
@@ -21,11 +23,14 @@ class FreeReportViewModel extends ChangeNotifier {
 
   final ReportServiceSupabase _reportService = ReportServiceSupabase();
   final LocationServiceSupabase _locationService = LocationServiceSupabase();
+  final AuthServiceSupabase _authService = AuthServiceSupabase();
 
   bool isLoading = false;
   String? errorMessage;
 
   String email = '';
+  String password = '';
+
   String entityBusinessName = '';
   String entityPersonName = '';
   String prompt = '';
@@ -68,6 +73,8 @@ class FreeReportViewModel extends ChangeNotifier {
   bool get isFormValid => 
     email.isNotEmpty &&
     email.contains('@') &&
+    password.isNotEmpty &&
+    password.length >= 6 &&
     selectedIndustry != null && 
     entityBusinessName.isNotEmpty &&
     _selectedCountry != null &&
@@ -181,6 +188,9 @@ class FreeReportViewModel extends ChangeNotifier {
     notifyListeners();
     try {
       printDebug('[processFreeReport]');
+
+      // signup with email and password
+      final UserModel? user = await _authService.signUp(email, password);
 
       final SearchTarget searchTarget = _buildSearchTarget();
       final Report report = _buildFreeReport();

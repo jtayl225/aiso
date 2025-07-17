@@ -1,5 +1,6 @@
 import 'package:aiso/NavBar/widgets/nav_bar_item.dart';
 import 'package:aiso/NavBar/widgets/nav_bar_logo.dart';
+import 'package:aiso/constants/app_colors.dart';
 import 'package:aiso/constants/string_constants.dart';
 import 'package:aiso/models/auth_state_enum.dart';
 import 'package:aiso/routing/route_names.dart';
@@ -45,10 +46,29 @@ class NavigationBarDesktop extends StatelessWidget {
       if (isLoggedIn)
         NavBarItem('Reports', onTap: () => appRouter.go(reportsRoute)),
 
-      if (isLoggedIn)
-        NavBarItem('Account', onTap: () => appRouter.go(profileRoute))
-      else
+      // if (isLoggedIn)
+      //   NavBarItem('Account', onTap: () => appRouter.go(profileRoute))
+      // else
+      //   NavBarItem('Sign in', onTap: () => appRouter.go(signInRoute)),
+      //   NavBarItem('Sign up', onTap: () => appRouter.go(signUpRoute), fontColor: Colors.white, color: AppColors.color6, hoverColor: AppColors.color3,),
+
+      ...(
+  isLoggedIn
+    ? [
+        NavBarItem('Account', onTap: () => appRouter.go(profileRoute)),
+      ]
+    : [
         NavBarItem('Sign in', onTap: () => appRouter.go(signInRoute)),
+        NavBarItem(
+          'Sign up',
+          onTap: () => appRouter.go(signUpRoute),
+          fontColor: Colors.white,
+          color: AppColors.color6,
+          hoverColor: AppColors.color3,
+        ),
+      ]
+),
+
 
     ];
 

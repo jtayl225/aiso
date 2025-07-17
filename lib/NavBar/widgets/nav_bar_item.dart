@@ -150,11 +150,17 @@ import 'package:flutter/material.dart';
 class NavBarItem extends StatefulWidget {
   final String title;
   final VoidCallback onTap;
+  final Color fontColor;
+  final Color color;
+  final Color hoverColor;
 
   const NavBarItem(
     this.title, {
     super.key,
     required this.onTap,
+    this.fontColor = Colors.black87,
+    this.color = Colors.white,
+    this.hoverColor = Colors.grey, // shade100
   });
 
   @override
@@ -176,14 +182,14 @@ class _NavBarItemState extends State<NavBarItem> {
           curve: Curves.easeOut,
           padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
           decoration: BoxDecoration(
-            color: _isHovered ? Colors.grey.shade100 : Colors.white,
+            color: _isHovered ? widget.hoverColor : widget.color,
             borderRadius: BorderRadius.circular(6),
           ),
           child: Text(
             widget.title,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 18,
-              color: Colors.black87,
+              color: widget.fontColor,
               fontWeight: FontWeight.bold,
             ),
           ),

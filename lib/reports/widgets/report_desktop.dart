@@ -48,9 +48,9 @@ class ReportDesktop extends StatelessWidget {
           // ),
 
           Text(
-                vm.report!.title,
-                style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              ),
+            vm.report?.title ?? 'Untitled Report',
+            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          ),
 
           SizedBox(height: 30.0,),
 
@@ -97,6 +97,45 @@ class ReportDesktop extends StatelessWidget {
           SizedBox(height: 20.0,),
 
           const Text(
+            "Ranking reports:",
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+      
+          // Prompts List
+          if (vm.prompts != null && vm.prompts!.isNotEmpty)
+            ...vm.prompts!.map((prompt) => Padding(
+              padding: const EdgeInsets.symmetric(vertical: 2),
+              child: SizedBox(
+                width: double.infinity, 
+                child: PromptCard(
+                  prompt: prompt,
+                  onTap: () {
+
+                    debugPrint('DEBUG: about to navigate to prompt results');
+
+                    // if (vm.selectedReportRun?.id == null) {
+                    //   debugPrint('❌ Cannot navigate: selectedReportRun.id is null');
+                    //   return;
+                    // }
+                    final runId = vm.selectedReportRun?.id;
+
+                    if (runId == null) {
+                      debugPrint('❌ Cannot navigate: selectedReportRun.id is null');
+                      return;
+                    }
+
+                    final uri = Uri(path: promptRoute, queryParameters: {'report_id': vm.reportId, 'report_run_id': runId, 'prompt_id': prompt.id});
+                    appRouter.go(uri.toString());
+                  }
+                  )),
+            )),
+            
+          if (vm.prompts == null || vm.prompts!.isEmpty)
+            const Text('No ranking reports available for this report run.'),
+
+          SizedBox(height: 20.0,),
+
+          const Text(
             "Recommendations:",
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
@@ -139,33 +178,7 @@ class ReportDesktop extends StatelessWidget {
 
           SizedBox(height: 20.0,),
       
-          const Text(
-            "Prompts:",
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
-      
-          // Prompts List
-          if (vm.prompts != null && vm.prompts!.isNotEmpty)
-            ...vm.prompts!.map((prompt) => Padding(
-              padding: const EdgeInsets.symmetric(vertical: 2),
-              child: SizedBox(
-                width: double.infinity, 
-                child: PromptCard(
-                  prompt: prompt,
-                  onTap: () {
-                    debugPrint('DEBUG: about to navigate to prompt results');
-                    if (vm.selectedReportRun?.id == null) {
-                      debugPrint('❌ Cannot navigate: selectedReportRun.id is null');
-                      return;
-                    }
-                    final uri = Uri(path: promptRoute, queryParameters: {'report_id': vm.reportId, 'report_run_id': vm.selectedReportRun?.id, 'prompt_id': prompt.id});
-                    appRouter.go(uri.toString());
-                  }
-                  )),
-            )),
-            
-          if (vm.prompts == null || vm.prompts!.isEmpty)
-            const Text('No prompts available for this report run.'),
+          
 
         ],
       ),
