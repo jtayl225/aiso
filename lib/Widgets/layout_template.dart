@@ -63,7 +63,10 @@ class LayoutTemplate extends StatelessWidget {
 
 @override
 Widget build(BuildContext context) {
+
   const double maxWidth = 1100.0;
+  const double navBarHeight = 150.0; // Estimate or measure
+  const double footerHeight = 120.0; // Estimate or measure
 
   return ResponsiveBuilder(
     builder: (context, sizingInformation) => Scaffold(
@@ -71,6 +74,10 @@ Widget build(BuildContext context) {
       backgroundColor: Colors.white,
       body: LayoutBuilder(
         builder: (context, constraints) {
+
+          final availableHeight = constraints.maxHeight;
+          final bodyHeight = availableHeight - navBarHeight - footerHeight;
+
           return SingleChildScrollView(
             child: ConstrainedBox(
               constraints: BoxConstraints(minHeight: constraints.maxHeight),
@@ -80,6 +87,7 @@ Widget build(BuildContext context) {
                   // mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
+
                     // Header
                     ConstrainedBox(
                       constraints: BoxConstraints(maxWidth: maxWidth),
@@ -91,7 +99,7 @@ Widget build(BuildContext context) {
                 
                     // Body
                     ConstrainedBox(
-                      constraints: BoxConstraints(maxWidth: maxWidth),
+                      constraints: BoxConstraints(maxWidth: maxWidth, minHeight: bodyHeight),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 16.0),
                         child: child,
@@ -100,6 +108,12 @@ Widget build(BuildContext context) {
                 
                     // Spacer pushes footer to bottom if content is short
                     // const Spacer(),
+                
+                    // Flexible Spacer that takes remaining space only if available
+                    // const Expanded(child: SizedBox()),
+                
+                    // Push footer to bottom if content is short
+                    // SizedBox(height: 20), // optional visual spacing
                 
                     // Footer
                     ConstrainedBox(
