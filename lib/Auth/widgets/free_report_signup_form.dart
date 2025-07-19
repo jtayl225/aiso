@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:aiso/routing/app_router.dart';
 
-class SignUpForm extends StatefulWidget {
-  const SignUpForm({super.key});
+class FreeReportSignUpForm extends StatefulWidget {
+  const FreeReportSignUpForm({super.key});
   @override
-  State<SignUpForm> createState() => _SignUpFormState();
+  State<FreeReportSignUpForm> createState() => _FreeReportSignUpFormState();
 }
 
-class _SignUpFormState extends State<SignUpForm> {
+class _FreeReportSignUpFormState extends State<FreeReportSignUpForm> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController    = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -35,20 +35,18 @@ class _SignUpFormState extends State<SignUpForm> {
 
     try {
       final authVm   = context.read<AuthViewModel>();
-      // final reportVm = context.read<ReportsViewModel>();
-
       final email    = _emailController.text.trim();
       final password = _passwordController.text;
 
-      final success = await authVm.signUp(email, password);
-      appRouter.go(verifyEmailRoute);
+      final success = await authVm.signInOrSignUp(email, password);
+      appRouter.go(freeReportFormRoute);
       
       if (!mounted) return;
 
       if (success) {
-        _showErrorSnackBar('Signup successful! Check your email to verify.');
+        _showErrorSnackBar('Success!');
       } else {
-        _showErrorSnackBar(authVm.errorMessage ?? 'Signup failed.');
+        _showErrorSnackBar(authVm.errorMessage ?? 'Something went wrong. Please try again');
       }
     } catch (e) {
       if (mounted) _showErrorSnackBar('Something went wrong. Please try again.');

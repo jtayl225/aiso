@@ -28,8 +28,8 @@ class FreeReportViewModel extends ChangeNotifier {
   bool isLoading = false;
   String? errorMessage;
 
-  String email = '';
-  String password = '';
+  // String email = '';
+  // String password = '';
 
   String entityBusinessName = '';
   String entityPersonName = '';
@@ -71,10 +71,10 @@ class FreeReportViewModel extends ChangeNotifier {
   }
 
   bool get isFormValid => 
-    email.isNotEmpty &&
-    email.contains('@') &&
-    password.isNotEmpty &&
-    password.length >= 6 &&
+    // email.isNotEmpty &&
+    // email.contains('@') &&
+    // password.isNotEmpty &&
+    // password.length >= 6 &&
     selectedIndustry != null && 
     entityBusinessName.isNotEmpty &&
     _selectedCountry != null &&
@@ -190,7 +190,10 @@ class FreeReportViewModel extends ChangeNotifier {
       printDebug('[processFreeReport]');
 
       // signup with email and password
-      final UserModel? user = await _authService.signUp(email, password);
+      // final UserModel? user = await _authService.signUp(email, password);
+
+      final String? email = _authService.currentUserEmail;
+      if (email == null) return false;
 
       final SearchTarget searchTarget = _buildSearchTarget();
       final Report report = _buildFreeReport();

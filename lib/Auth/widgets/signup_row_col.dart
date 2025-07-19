@@ -26,11 +26,13 @@ class SignUpRowCol extends StatelessWidget {
     return ConstrainedBox(
       constraints: constraints,
       child: RowCol(
-        layoutType: layoutType,
+        layoutType: RowColType.column, // layoutType,
         flexes: [1,1],
         spacing: 16.0,
         rowMainAxisAlignment: MainAxisAlignment.center,
         rowCrossAxisAlignment: CrossAxisAlignment.center,
+        colMainAxisAlignment: MainAxisAlignment.center,
+        colCrossAxisAlignment: CrossAxisAlignment.center,
         children: [
           SignUpDetails(deviceType: deviceType),
           SignUpForm()

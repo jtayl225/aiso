@@ -120,7 +120,7 @@ class _SignInFormState extends State<SignInForm> {
                   // ),
                   child: _isLoading
                       ? const CircularProgressIndicator(color: Colors.white)
-                      : Text('Sign In'),
+                      : Text('Go'),
                 ),
               ),
             // ),

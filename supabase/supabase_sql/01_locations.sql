@@ -36,6 +36,8 @@ CREATE TABLE localities (
   latitude DOUBLE PRECISION,
   longitude DOUBLE PRECISION,
 
+  iana_timezone TEXT CHECK (iana_timezone ~ '^[A-Za-z]+(?:/[A-Za-z_\-]+)+$'), -- add this column
+
   -- automatically generated hash of normalised prompt
   locality_hash TEXT, -- Populate via trigger
 
@@ -90,6 +92,7 @@ RETURNS TABLE (
   name TEXT,
   latitude DOUBLE PRECISION,
   longitude DOUBLE PRECISION,
+  iana_timezone TEXT,
   locality_hash TEXT,
   location GEOGRAPHY,
   distance_meters DOUBLE PRECISION
@@ -97,7 +100,14 @@ RETURNS TABLE (
 BEGIN
   RETURN QUERY
   SELECT
-    l.*,
+    l.id,
+    l.region_iso_code,
+    l.name,
+    l.latitude,
+    l.longitude,
+    l.iana_timezone,
+    l.locality_hash,
+    l.location,
     ST_Distance(
       l.location,
       ST_SetSRID(ST_MakePoint(lon, lat), 4326)

@@ -1,17 +1,23 @@
-import 'package:aiso/Auth/widgets/signin_details.dart';
-import 'package:aiso/Auth/widgets/signin_form.dart';
+import 'package:aiso/Auth/widgets/free_report_signup_details.dart';
+import 'package:aiso/Auth/widgets/free_report_signup_form.dart';
+import 'package:aiso/Store/view_models/store_view_model.dart';
+import 'package:aiso/Store/widgets/product_card_small.dart';
 import 'package:aiso/Widgets/row_col.dart';
+import 'package:aiso/view_models/auth_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
-class SignInRowCol extends StatelessWidget {
+class SubscribeSignUpRowCol extends StatelessWidget {
 
   final DeviceScreenType deviceType;
 
-  const SignInRowCol({super.key, required this.deviceType});
+  const SubscribeSignUpRowCol({super.key, required this.deviceType});
 
   @override
   Widget build(BuildContext context) {
+
+    final storeVm = context.read<StoreViewModel>();
 
     final bool isDesktop =
         deviceType == DeviceScreenType.desktop ? true : false;
@@ -26,7 +32,7 @@ class SignInRowCol extends StatelessWidget {
     return ConstrainedBox(
       constraints: constraints,
       child: RowCol(
-        layoutType: RowColType.column, // layoutType,
+        layoutType: layoutType,
         flexes: [1,1],
         spacing: 16.0,
         rowMainAxisAlignment: MainAxisAlignment.center,
@@ -34,8 +40,8 @@ class SignInRowCol extends StatelessWidget {
         colMainAxisAlignment: MainAxisAlignment.center,
         colCrossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SignInDetails(deviceType: deviceType), 
-          SignInForm(),
+          ProductCardSmall(storeVm.selectedProduct),
+          FreeReportSignUpForm()
         ],
       ),
     );

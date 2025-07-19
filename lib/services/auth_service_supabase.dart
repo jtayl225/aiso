@@ -7,6 +7,8 @@ class AuthServiceSupabase {
 
   final SupabaseClient _supabase = Supabase.instance.client;
 
+  User? get currentUser => _supabase.auth.currentUser;
+  String? get currentUserEmail => _supabase.auth.currentUser?.email;
   bool get isAuthenticated => _supabase.auth.currentSession != null;
 
   bool get isAnonymous {

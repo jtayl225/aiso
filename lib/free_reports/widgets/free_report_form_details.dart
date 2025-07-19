@@ -31,7 +31,7 @@ class FreeReportFormDetails extends StatelessWidget {
             textAlign: isCentered ? TextAlign.center : TextAlign.start,
           ),
 
-          SizedBox(height: 30,),
+          // SizedBox(height: 16,),
 
         ],
       ),

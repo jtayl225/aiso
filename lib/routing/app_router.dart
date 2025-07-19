@@ -1,5 +1,7 @@
+import 'package:aiso/Auth/views/free_report_signup_view.dart';
 import 'package:aiso/Auth/views/signin_view.dart';
 import 'package:aiso/Auth/views/signup_view.dart';
+import 'package:aiso/Auth/views/subscribe_signup_view.dart';
 import 'package:aiso/Auth/views/verify_email_view.dart';
 import 'package:aiso/Home/views/about_view.dart';
 import 'package:aiso/NavBar/views/faq_view.dart';
@@ -31,7 +33,10 @@ final GoRouter appRouter = GoRouter(
     GoRoute(path: initRoute, pageBuilder: (context, state) => NoTransitionPage(child: const MyHome())),
     GoRoute(path: homeRoute, pageBuilder: (context, state) => NoTransitionPage(child: const MyHome())),
     GoRoute(path: aboutRoute, pageBuilder: (context, state) => NoTransitionPage(child: const AboutView())),
+
     GoRoute(path: storeRoute, pageBuilder: (context, state) => NoTransitionPage(child: const MyStore())),
+    GoRoute(path: storeAuthRoute, pageBuilder: (context, state) => NoTransitionPage(child: const SubscribeSignUpView())),
+
     GoRoute(path: signInRoute, pageBuilder: (context, state) => NoTransitionPage(child: const SignInView())),
     GoRoute(path: signUpRoute, pageBuilder: (context, state) => NoTransitionPage(child: const SignUpView())),
     GoRoute(path: termsRoute, pageBuilder: (context, state) => NoTransitionPage(child: const TermsAndConditionsView())),
@@ -79,6 +84,7 @@ final GoRouter appRouter = GoRouter(
       redirect: authGuard,
     ),
 
+    GoRoute(path: freeReportSignUpRoute, pageBuilder: (context, state) => NoTransitionPage(child: const FreeReportSignUpView())),
     GoRoute(path: freeReportFormRoute, pageBuilder: (context, state) => NoTransitionPage(child: const FreeReport())),
     GoRoute(path: freeReportConfirmationRoute, pageBuilder: (context, state) => NoTransitionPage(child: const FreeReportConfirmationView())),
     // GoRoute(path: freeReportTimelineRoute, pageBuilder: (context, state) => NoTransitionPage(child: const FreeReportTimelineScreen())),

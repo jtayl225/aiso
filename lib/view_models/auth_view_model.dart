@@ -107,6 +107,68 @@ class AuthViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  // sign in or sign up
+  Future<bool> signInOrSignUp(String email, String password) async {
+    _authState = MyAuthState.loading;
+    _errorMessage = null;
+    notifyListeners();
+
+    try {
+      // Try sign in first
+      _currentUser = await _authService.signInWithEmailAndPassword(email, password);
+
+      _authState = MyAuthState.authenticated;
+
+      final subs = await _authService.fetchUserSubscriptions();
+      _isSubscribed = subs.isNotEmpty;
+      subscribeToSubscriptionStatus();
+
+      return true;
+
+    } on AuthApiException catch (e) {
+      if (e.code == 'invalid_credentials') {
+        // Attempt to sign up if credentials were invalid
+        try {
+          final newUser = await _authService.signUp(email, password);
+
+          if (newUser != null) {
+            _currentUser = newUser;
+            _authState = MyAuthState.authenticated;
+
+            final subs = await _authService.fetchUserSubscriptions();
+            _isSubscribed = subs.isNotEmpty;
+            subscribeToSubscriptionStatus();
+
+            return true;
+          } else {
+            _authState = MyAuthState.unauthenticated;
+            _errorMessage = 'Sign up failed. Please try again.';
+            return false;
+          }
+        } on AuthException catch (signupError) {
+          _authState = MyAuthState.error;
+          _errorMessage = 'Sign-up failed: ${signupError.message}';
+          return false;
+        } catch (e) {
+          _authState = MyAuthState.error;
+          _errorMessage = 'Unexpected sign-up error: ${e.toString()}';
+          return false;
+        }
+      } else {
+        _authState = MyAuthState.error;
+        _errorMessage = 'Sign-in failed: ${e.message}';
+        return false;
+      }
+
+    } catch (e) {
+      _authState = MyAuthState.error;
+      _errorMessage = 'Unexpected error: ${e.toString()}';
+      return false;
+    } finally {
+      notifyListeners();
+    }
+  }
+
 
   // Sign up
   Future<bool> signUp(String email, String password) async {

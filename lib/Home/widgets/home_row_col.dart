@@ -64,7 +64,7 @@ class HomeRowCol extends StatelessWidget {
                   CallToAction(
                     title: 'Generate free report!',
                     onPressed: () {
-                      appRouter.go(freeReportFormRoute);
+                      appRouter.go(freeReportSignUpRoute);
                     },
                   ),
                   SizedBox(height: 10,),

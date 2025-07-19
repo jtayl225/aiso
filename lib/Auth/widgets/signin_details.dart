@@ -34,48 +34,49 @@ class SignInDetails extends StatelessWidget {
           // textAlign: isDesktop ? TextAlign.center : TextAlign.start,
         ),
         
-        SizedBox(height: 30),
+        SizedBox(height: 32),
         
-        Text(
-          'If you already have a GEOMAX account, you can sign in here.',
-          style: AppTextStyles.h3(deviceType),
-          textAlign: TextAlign.center,
-          // textAlign: isDesktop ? TextAlign.center : TextAlign.start,
-        ),
+        // Text(
+        //   'If you already have a GEOMAX account, you can sign in here.',
+        //   style: AppTextStyles.h3(deviceType),
+        //   textAlign: TextAlign.center,
+        //   // textAlign: isDesktop ? TextAlign.center : TextAlign.start,
+        // ),
         
-        SizedBox(height: 30),
+        // SizedBox(height: 30),
         
-        TextButton(
-          // onPressed: appRouter.go(signUpRoute),
-          style: TextButton.styleFrom(
-            padding:
-                EdgeInsets.zero, // Removes default 16px horizontal padding
-            alignment: Alignment.centerLeft, // Aligns content to the left
-            tapTargetSize:
-                MaterialTapTargetSize
-                    .shrinkWrap, // Optional: makes hitbox smaller
-          ),
-          onPressed: () => appRouter.go(signUpRoute),
-          child: RichText(
-            textAlign: TextAlign.center,
-            // textAlign: isDesktop ? TextAlign.center : TextAlign.start,
-            text: TextSpan(
-              style: DefaultTextStyle.of(
-                context,
-              ).style.copyWith(fontSize: fontSizeDesktopMedium),
-              children: [
-                TextSpan(
-                  text: 'If you want to create a new account, ',
-                  style: AppTextStyles.h3(deviceType),
-                  ),
-                TextSpan(
-                  text: 'click here.',
-                  style: AppTextStyles.h3(deviceType).copyWith(fontWeight: FontWeight.bold),
-                ),
-              ],
-            ),
-          ),
-        ),
+        // TextButton(
+        //   // onPressed: appRouter.go(signUpRoute),
+        //   style: TextButton.styleFrom(
+        //     padding:
+        //         EdgeInsets.zero, // Removes default 16px horizontal padding
+        //     alignment: Alignment.centerLeft, // Aligns content to the left
+        //     tapTargetSize:
+        //         MaterialTapTargetSize
+        //             .shrinkWrap, // Optional: makes hitbox smaller
+        //   ),
+        //   onPressed: () => appRouter.go(signUpRoute),
+        //   child: RichText(
+        //     textAlign: TextAlign.center,
+        //     // textAlign: isDesktop ? TextAlign.center : TextAlign.start,
+        //     text: TextSpan(
+        //       style: DefaultTextStyle.of(
+        //         context,
+        //       ).style.copyWith(fontSize: fontSizeDesktopMedium),
+        //       children: [
+        //         TextSpan(
+        //           text: 'If you want to create a new account, ',
+        //           style: AppTextStyles.h3(deviceType),
+        //           ),
+        //         TextSpan(
+        //           text: 'click here.',
+        //           style: AppTextStyles.h3(deviceType).copyWith(fontWeight: FontWeight.bold),
+        //         ),
+        //       ],
+        //     ),
+        //   ),
+        // ),
+
       ],
     );
   }

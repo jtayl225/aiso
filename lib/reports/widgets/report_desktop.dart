@@ -52,6 +52,16 @@ class ReportDesktop extends StatelessWidget {
             style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
 
+          SizedBox(height: 10.0,),
+
+          //  const Text(
+          //   "Business details:",
+          //   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          // ),
+      
+          if (vm.searchTarget != null)
+            SizedBox(width: double.infinity, child: SearchTargetCard(target: vm.searchTarget!)),
+
           SizedBox(height: 30.0,),
 
           const Text(
@@ -64,7 +74,7 @@ class ReportDesktop extends StatelessWidget {
           DropdownButtonFormField<ReportRun>(
             value: vm.selectedReportRun,
             decoration: const InputDecoration(
-              labelText: 'Date',
+              labelText: 'Report Date',
               border: OutlineInputBorder(),
             ),
             items:
@@ -84,17 +94,7 @@ class ReportDesktop extends StatelessWidget {
             },
           ),
 
-          SizedBox(height: 20.0,),
-      
-          const Text(
-            "Business details:",
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
-      
-          if (vm.searchTarget != null)
-            SizedBox(width: double.infinity, child: SearchTargetCard(target: vm.searchTarget!)),
-
-          SizedBox(height: 20.0,),
+          SizedBox(height: 30.0,),
 
           const Text(
             "Ranking reports:",

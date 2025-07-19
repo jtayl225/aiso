@@ -25,6 +25,8 @@ class FreeReportRowCol extends StatelessWidget {
       spacing: 16.0,
       rowMainAxisAlignment: MainAxisAlignment.center,
       rowCrossAxisAlignment: CrossAxisAlignment.center,
+      colMainAxisAlignment: MainAxisAlignment.center,
+      colCrossAxisAlignment: CrossAxisAlignment.center,
       children: [
         FreeReportFormDetails(deviceType: deviceType, isCentered: isDesktop),
         FreeReportForm(deviceType: deviceType),

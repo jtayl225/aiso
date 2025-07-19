@@ -4,6 +4,7 @@ import 'package:aiso/Store/widgets/store_details.dart';
 import 'package:aiso/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 
 class StoreDesktop extends StatelessWidget {
   const StoreDesktop({super.key});
@@ -20,7 +21,7 @@ class StoreDesktop extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
     mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            StoreDetails(),
+            StoreDetails(deviceType: DeviceScreenType.desktop),
             const SizedBox(height: 16),
             Container(
               decoration: BoxDecoration(

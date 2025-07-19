@@ -43,7 +43,7 @@ class _FreeReportFormState extends State<FreeReportForm> {
     final vm = Provider.of<FreeReportViewModel>(context);
 
     return Padding(
-        padding: const EdgeInsets.only(top: 40.0, bottom: 40.0),
+        padding: const EdgeInsets.only(top: 32.0, bottom: 32.0),
         child: AutofillGroup(
           child: Form(
             key: _formKey,
@@ -62,20 +62,20 @@ class _FreeReportFormState extends State<FreeReportForm> {
                     // const SizedBox(height: 20),
                     // _buildTextField("First Name", (val) => _updateField(val, (v) => firstName = v)),
                     // _buildTextField("Last Name", (val) => _updateField(val, (v) => lastName = v)),
-                    _buildTextField("Email", (val) => _updateField(val, (v) => vm.email = v), 
-                      keyboardType: TextInputType.emailAddress, 
-                      autofillHints: [AutofillHints.email],
-                      isEmail: true
-                    ),
+                    // _buildTextField("Email", (val) => _updateField(val, (v) => vm.email = v), 
+                    //   keyboardType: TextInputType.emailAddress, 
+                    //   autofillHints: [AutofillHints.email],
+                    //   isEmail: true
+                    // ),
 
-                    _buildTextField("Password", (val) => _updateField(val, (v) => vm.password = v), 
-                      // keyboardType: TextInputType.pass, 
-                      // autofillHints: [AutofillHints.email],
-                      obscureText: true,
-                      isEmail: false
-                    ),
+                    // _buildTextField("Password", (val) => _updateField(val, (v) => vm.password = v), 
+                    //   // keyboardType: TextInputType.pass, 
+                    //   // autofillHints: [AutofillHints.email],
+                    //   obscureText: true,
+                    //   isEmail: false
+                    // ),
                 
-                    const SizedBox(height: 16),
+                    // const SizedBox(height: 16),
                 
                     _buildDropdownField<Industry>(
                       label: 'Industry',

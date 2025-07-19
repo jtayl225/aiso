@@ -60,7 +60,7 @@ class NavigationBarDesktop extends StatelessWidget {
     : [
         NavBarItem('Sign in', onTap: () => appRouter.go(signInRoute)),
         NavBarItem(
-          'Sign up',
+          'Join',
           onTap: () => appRouter.go(signUpRoute),
           fontColor: Colors.white,
           color: AppColors.color6,

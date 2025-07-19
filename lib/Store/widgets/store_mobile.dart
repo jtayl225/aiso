@@ -4,6 +4,7 @@ import 'package:aiso/Store/widgets/store_details.dart';
 import 'package:aiso/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 
 class StoreMobile extends StatelessWidget {
   const StoreMobile({super.key});
@@ -18,7 +19,7 @@ class StoreMobile extends StatelessWidget {
         child: Center(
           child: Column(
             children: [
-              StoreDetails(),
+              StoreDetails(deviceType: DeviceScreenType.mobile),
               const SizedBox(height: 16),
               Container(
                 decoration: BoxDecoration(

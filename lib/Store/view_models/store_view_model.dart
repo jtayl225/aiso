@@ -1,31 +1,113 @@
 import 'package:aiso/Store/models/product_model.dart';
 import 'package:aiso/Store/widgets/buy_report_dialog.dart';
 import 'package:aiso/Store/widgets/signin_dialog.dart';
-import 'package:aiso/Store/widgets/store_desktop.dart';
+// import 'package:aiso/Store/widgets/store_desktop.dart';
 import 'package:aiso/Store/widgets/verify_email_dialog.dart';
 import 'package:aiso/models/purchase_enum.dart';
+import 'package:aiso/routing/app_router.dart';
+import 'package:aiso/routing/route_names.dart';
+import 'package:aiso/services/auth_service_supabase.dart';
 import 'package:aiso/services/store_service_supabase.dart';
 import 'package:aiso/services/url_launcher_service.dart';
-import 'package:flutter/foundation.dart';
+import 'package:aiso/utils/logger.dart';
+// import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+// import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:web/web.dart' as web;
+// import 'package:url_launcher/url_launcher.dart';
+// import 'package:web/web.dart' as web;
 
 /// A ChangeNotifier ViewModel to handle state & logic for the FreeReport flow.
 /// It listens to supabase realtime on report_runs for status updates,
 /// and drives both timeline and result screens.
 class StoreViewModel extends ChangeNotifier {
 
+  final AuthServiceSupabase _authService = AuthServiceSupabase();
   final StoreServiceSupabase _storeService = StoreServiceSupabase();
   // final UrlLauncherService _urlLauncherService = UrlLauncherService();
 
   bool isLoading = false;
   String? errorMessage;
   late List<Product> products = [];
+  late final Product _monthlySubcription;
+  late final Product _yearlySubcription;
+
+  Product? _selectedProduct;
+  Product get selectedProduct => _selectedProduct ?? _monthlySubcription;
+  set selectedProduct(Product? value) {
+    _selectedProduct = value;    
+    notifyListeners(); // ✅ Trigger UI rebuild
+  }
 
   StoreViewModel() {
+
+    _monthlySubcription = Product(
+        id: '2',
+        title: 'Monthly Plan',
+        description: 'All features for growing teams.',
+        cadence: '/ month',
+        price: 14.95,
+        // reducedFromPrice: 19.95,
+        pctDiscount: 0.3,
+        productInclusions: [
+          ProductInclusion(isIncluded: true, description: '\$1.50 / report'),
+          ProductInclusion(isIncluded: true, description: 'ChatGPT (OpenAI)'),
+          ProductInclusion(isIncluded: true, description: 'Gemini (Google)'),
+          ProductInclusion(isIncluded: true, description: 'Up to 10 reports / month'),
+          ProductInclusion(isIncluded: true, description: 'Up to 10 prompts / report'),
+          ProductInclusion(isIncluded: true, description: 'Automated monthly report updates'),
+        ],
+        callToAction: 'Subscribe',
+        // onPressed: (context) => handleProductAction(context, ProductType.SUBSCRIBE_MONTHLY),
+       onPressed: (context) {
+
+        final user =_authService.currentUser;
+
+        if (user != null) {
+          // ✅ Only launch if signed in
+          UrlLauncherService.launchFromAsyncSource(() {
+            return handleProductAction(context, ProductType.SUBSCRIBE_MONTHLY);
+          });
+        } else {
+          // ❌ Not signed in — redirect
+          handleProductAction(context, ProductType.SUBSCRIBE_MONTHLY);
+        }
+      },
+      );
+
+    _yearlySubcription = Product(
+        id: '3',
+        title: 'Yearly Plan',
+        description: 'Custom solutions for businesses.',
+        cadence: '/ year',
+        price: 144.95,
+        // reducedFromPrice: 199.95,
+        pctDiscount: 0.3,
+        productInclusions: [
+          ProductInclusion(isIncluded: true, description: '\$1.20 / report'),
+          ProductInclusion(isIncluded: true, description: 'ChatGPT (OpenAI)'),
+          ProductInclusion(isIncluded: true, description: 'Gemini (Google)'),
+          ProductInclusion(isIncluded: true, description: 'Up to 10 reports / month'),
+          ProductInclusion(isIncluded: true, description: 'Up to 10 prompts / report'),
+          ProductInclusion(isIncluded: true, description: 'Automated monthly report updates'),
+        ],
+        callToAction: 'Subscribe',
+        // onPressed: (context) => handleProductAction(context, ProductType.SUBSCRIBE_YEARLY),
+        onPressed: (context) {
+        
+          final user =_authService.currentUser;
+
+          if (user != null) {
+            // ✅ Only launch if signed in
+            UrlLauncherService.launchFromAsyncSource(() {
+              return handleProductAction(context, ProductType.SUBSCRIBE_YEARLY);
+            });
+          } else {
+            // ❌ Not signed in — redirect
+            handleProductAction(context, ProductType.SUBSCRIBE_YEARLY);
+          }
+        },
+      );
 
     products = [
       Product(
@@ -52,51 +134,9 @@ class StoreViewModel extends ChangeNotifier {
         // }),
 
       ),
-      Product(
-        id: '2',
-        title: 'Monthly Plan',
-        description: 'All features for growing teams.',
-        cadence: '/ month',
-        price: 14.95,
-        // reducedFromPrice: 19.95,
-        pctDiscount: 0.3,
-        productInclusions: [
-          ProductInclusion(isIncluded: true, description: '\$1.50 / report'),
-          ProductInclusion(isIncluded: true, description: 'ChatGPT (OpenAI)'),
-          ProductInclusion(isIncluded: true, description: 'Gemini (Google)'),
-          ProductInclusion(isIncluded: true, description: 'Up to 10 reports / month'),
-          ProductInclusion(isIncluded: true, description: 'Up to 10 prompts / report'),
-          ProductInclusion(isIncluded: true, description: 'Automated monthly report updates'),
-        ],
-        callToAction: 'Subscribe',
-        // onPressed: (context) => handleProductAction(context, ProductType.SUBSCRIBE_MONTHLY),
-        onPressed: (context) => UrlLauncherService.launchFromAsyncSource(() {
-          return handleProductAction(context, ProductType.SUBSCRIBE_MONTHLY);
-        }),
-      ),
-      Product(
-        id: '3',
-        title: 'Yearly Plan',
-        description: 'Custom solutions for businesses.',
-        cadence: '/ year',
-        price: 144.95,
-        // reducedFromPrice: 199.95,
-        pctDiscount: 0.3,
-        productInclusions: [
-          ProductInclusion(isIncluded: true, description: '\$1.20 / report'),
-          ProductInclusion(isIncluded: true, description: 'ChatGPT (OpenAI)'),
-          ProductInclusion(isIncluded: true, description: 'Gemini (Google)'),
-          ProductInclusion(isIncluded: true, description: 'Up to 10 reports / month'),
-          ProductInclusion(isIncluded: true, description: 'Up to 10 prompts / report'),
-          ProductInclusion(isIncluded: true, description: 'Automated monthly report updates'),
-        ],
-        callToAction: 'Subscribe',
-        // onPressed: (context) => handleProductAction(context, ProductType.SUBSCRIBE_YEARLY),
-        onPressed: (context) => UrlLauncherService.launchFromAsyncSource(() {
-          return handleProductAction(context, ProductType.SUBSCRIBE_YEARLY);
-        }),
 
-      ),
+      _monthlySubcription,
+      _yearlySubcription      
     ];
 
   }
@@ -146,7 +186,14 @@ class StoreViewModel extends ChangeNotifier {
     final user = Supabase.instance.client.auth.currentUser;
 
     if (user == null) {
-      showSignInDialog(context);
+      switch (productType) {
+        case ProductType.PURCHASE:
+          showBuyReportDialog(context); // UI action, not a checkout URL
+          return null;
+        case ProductType.SUBSCRIBE_MONTHLY: selectedProduct = _monthlySubcription;
+        case ProductType.SUBSCRIBE_YEARLY: selectedProduct = _yearlySubcription;
+    }
+      appRouter.go(storeAuthRoute);
       return null;
     }
 
@@ -159,14 +206,11 @@ class StoreViewModel extends ChangeNotifier {
       case ProductType.PURCHASE:
         showBuyReportDialog(context); // UI action, not a checkout URL
         return null;
-
       case ProductType.SUBSCRIBE_MONTHLY:
+        return _storeService.generateCheckoutUrl(productType, reportId: '');
       case ProductType.SUBSCRIBE_YEARLY:
         return _storeService.generateCheckoutUrl(productType, reportId: '');
 
-      default:
-        debugPrint("DEBUG: Unhandled product type in handleProductAction: $productType");
-        return null;
     }
   }
 

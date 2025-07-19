@@ -11,52 +11,114 @@ class LayoutTemplate extends StatelessWidget {
 
   const LayoutTemplate({required this.child, super.key});
 
-  @override
-  Widget build(BuildContext context) {
+//   @override
+//   Widget build(BuildContext context) {
 
-    final double _maxWidth = 1100.0;
+//     final double _maxWidth = 1100.0;
 
-    return ResponsiveBuilder(
-      builder: (context, sizingInformation) => Scaffold(
-        drawer: sizingInformation.isDesktop ? null : MyNavigationDrawer(),
-        backgroundColor: Colors.white,
-        body: Column(
-          children: <Widget>[
+//     return ResponsiveBuilder(
+//       builder: (context, sizingInformation) => Scaffold(
+//         drawer: sizingInformation.isDesktop ? null : MyNavigationDrawer(),
+//         backgroundColor: Colors.white,
+//         body: Column(
+//           children: <Widget>[
 
-            ConstrainedBox(
-              constraints: BoxConstraints(maxWidth: _maxWidth,),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 16.0),
-                child: MyNavigationBar(),
-              )
-            ),
+//             ConstrainedBox(
+//               constraints: BoxConstraints(maxWidth: _maxWidth,),
+//               child: Padding(
+//                 padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 16.0),
+//                 child: MyNavigationBar(),
+//               )
+//             ),
 
-            Expanded(
-              child: SingleChildScrollView(
-                child: Align(
-                  alignment: Alignment.topCenter,
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(maxWidth: _maxWidth,),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 16.0),
-                      child: child,
+//             Expanded(
+//               child: SingleChildScrollView(
+//                 child: Align(
+//                   alignment: Alignment.topCenter,
+//                   child: ConstrainedBox(
+//                     constraints: BoxConstraints(maxWidth: _maxWidth,),
+//                     child: Padding(
+//                       padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 16.0),
+//                       child: child,
+//                     ),
+//                     ),
+//                 ),
+//               ),
+//               ),
+
+//             ConstrainedBox(
+//               constraints: BoxConstraints(maxWidth: _maxWidth,),
+//               child: Padding(
+//                 padding: const EdgeInsets.symmetric(horizontal: 30.0),
+//                 child: FooterView(),
+//               )
+//               ),
+
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
+
+@override
+Widget build(BuildContext context) {
+  const double maxWidth = 1100.0;
+
+  return ResponsiveBuilder(
+    builder: (context, sizingInformation) => Scaffold(
+      drawer: sizingInformation.isDesktop ? null : MyNavigationDrawer(),
+      backgroundColor: Colors.white,
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          return SingleChildScrollView(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(minHeight: constraints.maxHeight),
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: Column(
+                  // mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    // Header
+                    ConstrainedBox(
+                      constraints: BoxConstraints(maxWidth: maxWidth),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 16.0),
+                        child: MyNavigationBar(),
+                      ),
                     ),
+                
+                    // Body
+                    ConstrainedBox(
+                      constraints: BoxConstraints(maxWidth: maxWidth),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 16.0),
+                        child: child,
+                      ),
                     ),
+                
+                    // Spacer pushes footer to bottom if content is short
+                    // const Spacer(),
+                
+                    // Footer
+                    ConstrainedBox(
+                      constraints: BoxConstraints(maxWidth: maxWidth),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                        child: FooterView(),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              ),
-
-            ConstrainedBox(
-              constraints: BoxConstraints(maxWidth: _maxWidth,),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 16.0),
-                child: FooterView(),
-              )
-              ),
-
-          ],
-        ),
+            ),
+          );
+        },
       ),
-    );
-  }
+    ),
+  );
+}
+
+
 }

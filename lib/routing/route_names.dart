@@ -1,7 +1,10 @@
 const String initRoute = '/';
 const String homeRoute = "/home";
 const String aboutRoute = "/about";
+
 const String storeRoute = "/store";
+const String storeAuthRoute = "/store/auth";
+
 const String newsRoute = '/news';
 const String faqRoute = '/faq';
 const String signUpRoute = '/sign-up';
@@ -19,6 +22,7 @@ const String promptRoute = "/reports/report/prompt";
 
 const String profileRoute = "/profile";
 
+const String freeReportSignUpRoute = "/free/signup";
 const String freeReportFormRoute = "/free/form";
 const String freeReportConfirmationRoute = "/free/confirmation";
 const String freeReportTimelineRoute = "/free/timeline";

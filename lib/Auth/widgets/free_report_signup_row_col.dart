@@ -1,14 +1,14 @@
-import 'package:aiso/Auth/widgets/signin_details.dart';
-import 'package:aiso/Auth/widgets/signin_form.dart';
+import 'package:aiso/Auth/widgets/free_report_signup_details.dart';
+import 'package:aiso/Auth/widgets/free_report_signup_form.dart';
 import 'package:aiso/Widgets/row_col.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
-class SignInRowCol extends StatelessWidget {
+class FreeReportSignUpRowCol extends StatelessWidget {
 
   final DeviceScreenType deviceType;
 
-  const SignInRowCol({super.key, required this.deviceType});
+  const FreeReportSignUpRowCol({super.key, required this.deviceType});
 
   @override
   Widget build(BuildContext context) {
@@ -26,16 +26,14 @@ class SignInRowCol extends StatelessWidget {
     return ConstrainedBox(
       constraints: constraints,
       child: RowCol(
-        layoutType: RowColType.column, // layoutType,
+        layoutType: layoutType,
         flexes: [1,1],
         spacing: 16.0,
         rowMainAxisAlignment: MainAxisAlignment.center,
         rowCrossAxisAlignment: CrossAxisAlignment.center,
-        colMainAxisAlignment: MainAxisAlignment.center,
-        colCrossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SignInDetails(deviceType: deviceType), 
-          SignInForm(),
+          FreeReportSignUpDetails(deviceType: deviceType),
+          FreeReportSignUpForm()
         ],
       ),
     );
