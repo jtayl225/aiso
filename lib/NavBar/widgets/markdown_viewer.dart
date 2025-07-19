@@ -102,11 +102,11 @@ class MarkdownContent extends StatelessWidget {
           bottom: ResponsiveSpacing.headingMarginBottom(deviceType),
         ),
         h2Padding: EdgeInsets.only(
-          top: ResponsiveSpacing.headingMarginBottom(deviceType),
+          top: 0, // ResponsiveSpacing.headingMarginBottom(deviceType),
           bottom: ResponsiveSpacing.paragraphSpacing(deviceType),
         ),
         h3Padding: EdgeInsets.only(
-          top: ResponsiveSpacing.headingMarginBottom(deviceType) / 2,
+          top: 0, //ResponsiveSpacing.headingMarginBottom(deviceType) / 2,
           bottom: ResponsiveSpacing.paragraphSpacing(deviceType),
         ),
         listBulletPadding: const EdgeInsets.only(left: 12),

@@ -1,4 +1,5 @@
 import 'package:aiso/models/location_models.dart';
+import 'package:aiso/utils/logger.dart';
 // import 'package:crypto/crypto.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter/foundation.dart';
@@ -7,12 +8,14 @@ class LocationServiceSupabase {
   final _supabase = Supabase.instance.client;
 
   Future<List<Country>> fetchCountries() async {
-    debugPrint('DEBUG: Service is fetching countries');
+
+    printDebug('Service is fetching countries');
+
     final response = await _supabase
         .from('countries')
         .select('*, regions(code, name, iso_code)');
 
-    debugPrint('DEBUG: countries response: $response');
+    // printDebug('countries response: $response');
 
     final List<Country> countries =
         (response as List).map((item) {
@@ -35,7 +38,7 @@ class LocationServiceSupabase {
   // }
 
   Future<Locality> fetchLocality(String localityId) async {
-    debugPrint(
+    printDebug(
       'DEBUG: Service is fetching locality for localityId: $localityId',
     );
     final response =
@@ -45,13 +48,13 @@ class LocationServiceSupabase {
             .eq('locality_id', localityId)
             .select()
             .single();
-    // debugPrint('DEBUG: report results response: $response');
+    // printDebug('DEBUG: report results response: $response');
     final Locality locality = Locality.fromJson(response);
     return locality;
   }
 
   Future<Locality?> fetchLocalityFromHash(String localityHash) async {
-    debugPrint('DEBUG: Service is fetching locality for hash: $localityHash');
+    printDebug('DEBUG: Service is fetching locality for hash: $localityHash');
     final response =
         await _supabase
             .from('localities')
@@ -65,7 +68,7 @@ class LocationServiceSupabase {
   }
 
   Future<Locality> createLocality(Locality locality) async {
-    debugPrint(
+    printDebug(
       'DEBUG: Service is creating a locality: ${locality.regionIsoCode}, ${locality.name}.',
     );
     final response =
@@ -75,12 +78,12 @@ class LocationServiceSupabase {
             .select()
             .single();
     final Locality insertedLocality = Locality.fromJson(response);
-    debugPrint('DEBUG: inserted Locality ID: ${insertedLocality.id}');
+    printDebug('DEBUG: inserted Locality ID: ${insertedLocality.id}');
     return insertedLocality;
   }
 
   Future<List<Locality>> fetchNearbyLocalities(Locality locality) async {
-    debugPrint(
+    printDebug(
       'DEBUG: Service is fetchNearbyLocalities: ${locality.regionIsoCode}, ${locality.name}.',
     );
     final response = await _supabase.rpc(

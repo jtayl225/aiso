@@ -11,9 +11,12 @@ class NavBarLogo extends StatelessWidget {
   Widget build(BuildContext context) {
     return ConstrainedBox(
       constraints: BoxConstraints(maxHeight: 250.0, maxWidth: 250.0),
-      child: GestureDetector(
-        onTap:() => appRouter.go(homeRoute),
-        child: Image.asset(logoImage)),
+      child: MouseRegion(
+        cursor: SystemMouseCursors.click,
+        child: GestureDetector(
+          onTap:() => appRouter.go(homeRoute),
+          child: Image.asset(logoImage)),
+      ),
     );
   }
 }

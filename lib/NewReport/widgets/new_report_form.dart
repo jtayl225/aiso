@@ -11,12 +11,15 @@ import 'package:aiso/models/location_models.dart';
 import 'package:aiso/models/search_target_model.dart';
 import 'package:aiso/routing/app_router.dart';
 import 'package:aiso/routing/route_names.dart';
+import 'package:aiso/themes/h1_heading.dart';
 import 'package:aiso/view_models/auth_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 
 class NewReportForm extends StatefulWidget {
   final RowColType rowColType;
+  
   const NewReportForm({
     super.key,
     required this.rowColType,
@@ -71,15 +74,18 @@ class _NewReportFormState extends State<NewReportForm> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'Create new report!',
-              style: TextStyle(
-                fontWeight: FontWeight.w800,
-                fontSize: 30,
-                height: 0.9,
-              ),
-              textAlign: TextAlign.start,
-            ),
+
+            H1Heading(deviceType: rowColType == RowColType.row ? DeviceScreenType.desktop : DeviceScreenType.mobile, text: 'Create new report!'),
+
+            // Text(
+            //   'Create new report!',
+            //   style: TextStyle(
+            //     fontWeight: FontWeight.w800,
+            //     fontSize: 30,
+            //     height: 0.9,
+            //   ),
+            //   textAlign: TextAlign.start,
+            // ),
 
             // if (vm.isLoading)
             //   SizedBox(height: 60), 
@@ -213,15 +219,32 @@ class _NewReportFormState extends State<NewReportForm> {
 
             SizedBox(height: 60),
 
-            ElevatedButton(
-              onPressed:
-                  vm.isFormValid
-                      ? () async {
-                        await vm.createAndRunPaidReport();
-                        appRouter.go(reportsRoute);
-                      }
-                      : null, // disables the button
-              child: Text('Generate report!'),
+            RowCol(
+              layoutType: rowColType,
+              spacing: spacing,
+              rowMainAxisAlignment: MainAxisAlignment.center,
+              rowCrossAxisAlignment: CrossAxisAlignment.center,
+              colMainAxisAlignment: MainAxisAlignment.center,
+              colCrossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+
+                if (rowColType == RowColType.row)
+                  SizedBox(width:10),
+
+                Center(
+                  child: ElevatedButton(
+                  onPressed:
+                      vm.isFormValid
+                          ? () async {
+                            await vm.createAndRunPaidReport();
+                            appRouter.go(reportsRoute);
+                          }
+                          : null, // disables the button
+                  child: Text('Generate report!'),
+                                ),
+                ),
+
+              ]
             ),
           ],
         ),
@@ -443,7 +466,7 @@ List<Widget> _buildLocationsChildren(NewReportViewModel vm) {
               '${vm.selectedPromptType} '
               '${vm.selectedSearchTarget!.entityType == EntityType.business ? 'real estate agencies' : 'real estate agents'} in ...',
               style: const TextStyle(
-                fontSize: 14,
+                fontSize: 18,
                 fontWeight: FontWeight.bold,
                 color: Colors.black,
               ),

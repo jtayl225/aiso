@@ -28,6 +28,39 @@ class MyNavigationDrawer extends StatelessWidget {
 
     final navDrawItems = <NavDrawItem>[
 
+            ...(
+        isLoggedIn ? [
+          NavDrawItem(
+          'Account',
+          Icons.person,
+          onTap: () {
+            Scaffold.of(context).closeDrawer();
+            appRouter.go(profileRoute);
+          },
+        )
+        ] : [
+
+          NavDrawItem(
+          'Join',
+          Icons.login,
+          onTap: () {
+            Scaffold.of(context).closeDrawer();
+            appRouter.go(signUpRoute);
+          },
+        ),
+
+          NavDrawItem(
+          'Sign in',
+          Icons.login,
+          onTap: () {
+            Scaffold.of(context).closeDrawer();
+            appRouter.go(signInRoute);
+          },
+        ),
+
+        ]
+      ),
+
       NavDrawItem(
         'About',
         Icons.info,
@@ -76,24 +109,26 @@ class MyNavigationDrawer extends StatelessWidget {
           },
         ),
 
-      if (isLoggedIn)
-        NavDrawItem(
-          'Account',
-          Icons.person,
-          onTap: () {
-            Scaffold.of(context).closeDrawer();
-            appRouter.go(profileRoute);
-          },
-        )
-      else
-        NavDrawItem(
-          'Sign in',
-          Icons.login,
-          onTap: () {
-            Scaffold.of(context).closeDrawer();
-            appRouter.go(signInRoute);
-          },
-        ),
+
+
+      // if (isLoggedIn)
+      //   NavDrawItem(
+      //     'Account',
+      //     Icons.person,
+      //     onTap: () {
+      //       Scaffold.of(context).closeDrawer();
+      //       appRouter.go(profileRoute);
+      //     },
+      //   )
+      // else
+      //   NavDrawItem(
+      //     'Sign in',
+      //     Icons.login,
+      //     onTap: () {
+      //       Scaffold.of(context).closeDrawer();
+      //       appRouter.go(signInRoute);
+      //     },
+      //   ),
 
       NavDrawItem(
         'Terms & Conditions',

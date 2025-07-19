@@ -35,7 +35,7 @@ Also, being featured in AI responses builds unprecedented trust. When ChatGPT or
 ''';
 
 
-const String aboutMarkdown = '''## Helping businesses be found, gain trust, and get leads from AI tools.
+const String aboutMarkdown = '''### Helping businesses be found, gain trust, and get leads from AI tools.
 GEOMAX is the world's first platform built to help small to medium businesses understand how they appear in AI tools like ChatGPT and Google Gemini compared to their competitors.
 
 We measure how visible, trustworthy, and recommendable your business is when customers ask AI for advice — and give you a simple roadmap to improve.
@@ -43,15 +43,15 @@ We measure how visible, trustworthy, and recommendable your business is when cus
 As search evolves from links to answers, GEO is becoming essential. GEOMAX puts that power in the hands of local businesses, giving you the tools to show up, stand out, and grow.
 ''';
 
-const String aboutJustin = '''## Justin Hodgson - Co-Founder, GEOMAX & Real Estate Ai
+const String aboutJustin = '''### Justin Hodgson - Co-Founder, GEOMAX & Real Estate Ai
 Justin is a multi-award-winning marketer. Justin leads GEOMAX's product development and marketing. He's passionate about helping everyday business owners succeed in the era of AI.
 ''';
 
-const String aboutBlair = '''## Blair Robinson - Co-Founder, GEOMAX & Real Estate Ai
+const String aboutBlair = '''### Blair Robinson - Co-Founder, GEOMAX & Real Estate Ai
 Blair is a digital strategist and performance marketing expert with a strong background in tech and paid social. He leads GEOMAX's technology, growth, and go-to-market strategy — using automation, data, and smart execution to scale the business.
 ''';
 
-const String aboutJesse = '''## Jesse Taylor - Co-Founder GEOMAX
+const String aboutJesse = '''### Jesse Taylor - Co-Founder GEOMAX
 Jesse is a full-stack developer and AI enthusiast with a passion for building smart, scalable web applications. As the technical lead on GEOMAX, Jesse is responsible for bringing the platform to life — from user experience to backend systems and everything in between.
 ''';
 

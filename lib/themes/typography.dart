@@ -4,13 +4,13 @@ import 'package:responsive_builder/responsive_builder.dart';
 /// Font sizes for mobile and desktop
 class FontSizes {
   // Desktop
-  static const double desktopH1 = 40;
-  static const double desktopH2 = 30;
+  static const double desktopH1 = 36;
+  static const double desktopH2 = 28;
   static const double desktopH3 = 20;
   static const double desktopBody = 14;
 
   // Mobile
-  static const double mobileH1 = 28;
+  static const double mobileH1 = 26;
   static const double mobileH2 = 20;
   static const double mobileH3 = 16;
   static const double mobileBody = 12;

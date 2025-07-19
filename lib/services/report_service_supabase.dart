@@ -30,7 +30,7 @@ class ReportServiceSupabase {
 
   // REPORTS //
   Future<Report> createReport(Report newReport) async {
-    debugPrint('DEBUG: Service is creating a new report.');
+    printDebug('DEBUG: Service is creating a new report.');
     try {
       final response = await _supabase
         .from('reports')
@@ -38,16 +38,16 @@ class ReportServiceSupabase {
         .select()
         .single();
       final Report insertedReport = Report.fromJson(response);
-      debugPrint('DEBUG: inserted report ID: ${insertedReport.id}');
+      printDebug('DEBUG: inserted report ID: ${insertedReport.id}');
       return insertedReport;
     } catch (e) {
-      debugPrint('ERROR: Failed to create report: $e');
+      printDebug('ERROR: Failed to create report: $e');
       rethrow; // or throw a custom exception
     }
   }
 
   Future<List<Report>> fetchReports(String userId) async {
-    debugPrint('DEBUG: Service is fetching all reports for userId: $userId');
+    printDebug('DEBUG: Service is fetching all reports for userId: $userId');
     final response = await _supabase
       .from('reports')
       .select('*, prompts(*), search_targets(*)')
@@ -67,7 +67,7 @@ class ReportServiceSupabase {
   }
 
   Future<Report> fetchReport(String reportId) async {
-    debugPrint('DEBUG: Service is fetching report with ID: $reportId');
+    printDebug('DEBUG: Service is fetching report with ID: $reportId');
     final response = await _supabase
       .from('reports')
       .select('*, prompts(*), search_targets(*), report_run_recommendations_vw(*)')
@@ -82,7 +82,7 @@ class ReportServiceSupabase {
   }
 
   Future<Report> updateReport(Report report) async {
-    debugPrint('DEBUG: Service is updating a report.');
+    printDebug('DEBUG: Service is updating a report.');
     try {
       final response = await _supabase
       .from('reports')
@@ -92,16 +92,16 @@ class ReportServiceSupabase {
       .select()
       .single();
     final Report insertedReport = Report.fromJson(response);
-    debugPrint('DEBUG: updated report ID: ${insertedReport.id}');
+    printDebug('DEBUG: updated report ID: ${insertedReport.id}');
     return insertedReport;
     } catch (e) {
-      debugPrint('ERROR: Failed to update report: $e');
+      printError('ERROR: Failed to update report: $e');
       rethrow; // or throw a custom exception
     }
   }
 
   Future<List<ReportRun>> fetchReportRuns(String reportId) async {
-    debugPrint('DEBUG: Service is fetching all report runs for userId: $reportId');
+    printDebug('DEBUG: Service is fetching all report runs for userId: $reportId');
     final response = await _supabase
       .from('report_runs')
       .select('*')
@@ -122,7 +122,7 @@ class ReportServiceSupabase {
   // REPORT RESULTS //
   Future<ReportRunResults> fetchReportRunResults(String reportRunId) async {
 
-    debugPrint('DEBUG: Service is fetching all report run results for reportRunId: $reportRunId');
+    printDebug('DEBUG: Service is fetching all report run results for reportRunId: $reportRunId');
 
     final response = await _supabase
       .from('report_results')
@@ -135,7 +135,7 @@ class ReportServiceSupabase {
       throw Exception('No report result found for reportRunId: $reportRunId');
     }
 
-    debugPrint('DEBUG: report results response: $response');
+    printDebug('DEBUG: report results response: $response');
 
     final ReportRunResults reportRunResult = ReportRunResults.fromJson(response);
 
@@ -148,7 +148,7 @@ class ReportServiceSupabase {
 
   Future<List<Entity>> fetchLlmRunResults(String llmEochId) async {
 
-    debugPrint('DEBUG: Service is fetchLlmRunResults');
+    printDebug('DEBUG: Service is fetchLlmRunResults');
 
     final response = await _supabase
       .from('llm_results')
@@ -169,13 +169,13 @@ class ReportServiceSupabase {
 
 
   Future<List<ReportResult>> fetchReportResults(String reportId) async {
-    debugPrint('DEBUG: Service is fetching all report results For reportId: $reportId');
+    printDebug('DEBUG: Service is fetching all report results For reportId: $reportId');
     final response = await _supabase
       .from('report_results_summary_vw')
       .select()
       .eq('report_id', reportId);
 
-    // debugPrint('DEBUG: report results response: $response');
+    // printDebug('DEBUG: report results response: $response');
 
     final List<ReportResult> reports = (response as List).map((item) {
       return ReportResult.fromJson(item);
@@ -185,7 +185,7 @@ class ReportServiceSupabase {
   }
 
   Future<SearchTarget> fetchSearchTarget(String searchTargetId) async {
-    debugPrint('DEBUG: Service is fetching the search target for searchTargetId: $searchTargetId');
+    printDebug('DEBUG: Service is fetching the search target for searchTargetId: $searchTargetId');
     final response = await _supabase
       .from('search_targets')
       .select()
@@ -198,13 +198,13 @@ class ReportServiceSupabase {
   }
 
   Future<List<SearchTarget>> fetchSearchTargets(String userId) async {
-    debugPrint('DEBUG: Service is fetching the search target for userId: $userId');
+    printDebug('DEBUG: Service is fetching the search target for userId: $userId');
     final response = await _supabase
       .from('search_targets')
       .select()
       .eq('user_id', userId);
 
-    debugPrint('DEBUG: search targets response: $response');
+    // printDebug('DEBUG: search targets response: $response');
 
     final List<SearchTarget> searchTargets = (response as List).map((item) {
       return SearchTarget.fromJson(item);
@@ -253,14 +253,14 @@ class ReportServiceSupabase {
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        debugPrint('DEBUG: Render response: $data');
+        printDebug('DEBUG: Render response: $data');
         return data['report_run_id'] as String;
       } else {
-        debugPrint('DEBUG: Render error (${response.statusCode}): ${response.body}');
+        printDebug('DEBUG: Render error (${response.statusCode}): ${response.body}');
         return null;
       }
     } catch (e) {
-      debugPrint('DEBUG: Network error: $e');
+      printDebug('DEBUG: Network error: $e');
       return null;
     }
   }
@@ -332,7 +332,7 @@ class ReportServiceSupabase {
 
       final accessToken = _supabase.auth.currentSession?.accessToken;
       if (accessToken == null) {
-        debugPrint('DEBUG: No access token found. User might not be logged in.');
+        printDebug('DEBUG: No access token found. User might not be logged in.');
         return null;
       }
 
@@ -347,14 +347,14 @@ class ReportServiceSupabase {
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        debugPrint('DEBUG: Render response: $data');
+        printDebug('DEBUG: Render response: $data');
         return data['checkout_url'] as String;
       } else {
-        debugPrint('DEBUG: Render error (${response.statusCode}): ${response.body}');
+        printDebug('DEBUG: Render error (${response.statusCode}): ${response.body}');
         return null;
       }
     } catch (e) {
-      debugPrint('DEBUG: Network error: $e');
+      printDebug('DEBUG: Network error: $e');
       return null;
     }
   }
@@ -367,7 +367,7 @@ class ReportServiceSupabase {
 
       final accessToken = _supabase.auth.currentSession?.accessToken;
       if (accessToken == null) {
-        debugPrint('DEBUG: No access token found. User might not be logged in.');
+        printDebug('DEBUG: No access token found. User might not be logged in.');
         return null;
       }
 
@@ -381,14 +381,14 @@ class ReportServiceSupabase {
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        debugPrint('DEBUG: Render response: $data');
+        printDebug('DEBUG: Render response: $data');
         return data['url'] as String;
       } else {
-        debugPrint('DEBUG: Render error (${response.statusCode}): ${response.body}');
+        printDebug('DEBUG: Render error (${response.statusCode}): ${response.body}');
         return null;
       }
     } catch (e) {
-      debugPrint('DEBUG: Network error: $e');
+      printDebug('DEBUG: Network error: $e');
       return null;
     }
   }
@@ -397,7 +397,7 @@ class ReportServiceSupabase {
 
   // SEARCH TARGET //
   Future<SearchTarget> createSearchTarget(SearchTarget newSearchTarget) async {
-    debugPrint('DEBUG: Service is creating a new search target.');
+    printDebug('DEBUG: Service is creating a new search target.');
     final response = await _supabase
       .from('search_targets')
       // .insert(newSearchTarget.toJson())
@@ -408,12 +408,12 @@ class ReportServiceSupabase {
       .select()
       .single();
     final SearchTarget insertedSearchTarget = SearchTarget.fromJson(response);
-    debugPrint('DEBUG: inserted search target ID: ${insertedSearchTarget.id}');
+    printDebug('DEBUG: inserted search target ID: ${insertedSearchTarget.id}');
     return insertedSearchTarget;
   }
 
   Future<void> softDeleteSearchTarget(SearchTarget searchTarget) async {
-    debugPrint('DEBUG: Service is soft deleting a SearchTarget.');
+    printDebug('DEBUG: Service is soft deleting a SearchTarget.');
     final response = await _supabase
       .from('search_targets')
       .update({
@@ -427,7 +427,7 @@ class ReportServiceSupabase {
   }
 
   Future<void> updateSearchTarget(SearchTarget searchTarget) async {
-    debugPrint('DEBUG: Service is updating a SearchTarget.');
+    printDebug('DEBUG: Service is updating a SearchTarget.');
     final response = await _supabase
       .from('search_targets')
       .update(searchTarget.toJson())
@@ -446,19 +446,19 @@ class ReportServiceSupabase {
 
   // PROMPTS //
   Future<Prompt> createPrompt(Prompt newPrompt) async {
-    debugPrint('DEBUG: Service is creating a new prompt: ${newPrompt.toJson()}');
+    printDebug('DEBUG: Service is creating a new prompt: ${newPrompt.toJson()}');
     final response = await _supabase
       .from('prompts')
       .insert(newPrompt.toJson())
       .select()
       .single();
     final Prompt insertedPrompt = Prompt.fromJson(response);
-    debugPrint('DEBUG: inserted prompt ID: ${insertedPrompt.id}');
+    printDebug('DEBUG: inserted prompt ID: ${insertedPrompt.id}');
     return insertedPrompt;
   }
 
   Future<List<Prompt>> createPrompts(List<Prompt> newPrompts) async {
-    debugPrint('DEBUG: Service is creating ${newPrompts.length} new prompts.');
+    printDebug('DEBUG: Service is creating ${newPrompts.length} new prompts.');
 
     final response = await _supabase
       .from('prompts')
@@ -470,13 +470,13 @@ class ReportServiceSupabase {
       return Prompt.fromJson(item);
     }).toList();
 
-    debugPrint('DEBUG: inserted prompt IDs: ${insertedPrompts.map((p) => p.id).join(', ')}');
+    printDebug('DEBUG: inserted prompt IDs: ${insertedPrompts.map((p) => p.id).join(', ')}');
 
     return insertedPrompts;
   }
 
   Future<Prompt> fetchPrompt(String promptId) async {
-    debugPrint('DEBUG: Service is fetching prompt for promptId: $promptId');
+    printDebug('DEBUG: Service is fetching prompt for promptId: $promptId');
     final response = await _supabase
       .from('prompts')
       .select('*, localities(*)')
@@ -488,7 +488,7 @@ class ReportServiceSupabase {
   }
 
   Future<List<Prompt>> fetchReportPrompts(String reportId) async {
-    debugPrint('DEBUG: Service is fetching prompts for reportId: $reportId');
+    printDebug('DEBUG: Service is fetching prompts for reportId: $reportId');
 
     final response = await _supabase
         .from('report_prompts')
@@ -498,7 +498,7 @@ class ReportServiceSupabase {
 
     // Validate response type
     if (response is! List) {
-      debugPrint('❌ Unexpected response type from Supabase: $response');
+      printDebug('❌ Unexpected response type from Supabase: $response');
       return [];
     }
 
@@ -514,7 +514,7 @@ class ReportServiceSupabase {
 
 
   Future<List<PromptTemplate>> fetchPromptTemplates() async {
-    debugPrint('DEBUG: Service is fetching all prompt templates');
+    printDebug('DEBUG: Service is fetching all prompt templates');
     final response = await _supabase
       .from('prompt_templates')
       .select()
@@ -529,7 +529,7 @@ class ReportServiceSupabase {
   }
 
   Future<void> softDeletePrompt(Prompt prompt) async {
-    debugPrint('DEBUG: Service is soft deleting a prompt.');
+    printDebug('DEBUG: Service is soft deleting a prompt.');
     await _supabase
       .from('prompts')
       .update({
@@ -540,7 +540,7 @@ class ReportServiceSupabase {
   }
 
   Future<List<PromptResult>> fetchPromptResults(String reportId, String reportRunId, String promptId, int epoch) async {
-    debugPrint('DEBUG: Service is fetching all prompt results for reportId: $reportId, runId: $reportRunId');
+    printDebug('DEBUG: Service is fetching all prompt results for reportId: $reportId, runId: $reportRunId');
     final response = await _supabase
       .from('prompt_results_vw')
       .select()
@@ -551,7 +551,7 @@ class ReportServiceSupabase {
       .isFilter('deleted_at', null);
 
     // Inspect the response to see its structure
-    debugPrint('Response: $response');
+    printDebug('Response: $response');
 
     final List<PromptResult> promptResults = (response as List).map((item) {
       return PromptResult.fromJson(item);
@@ -572,7 +572,7 @@ class ReportServiceSupabase {
         .select()
         .single();
 
-    debugPrint("Response from prompts upsert: $response");
+    printDebug("Response from prompts upsert: $response");
 
     // 3) Parse the Prompt object
     final Prompt prompt = Prompt.fromJson(response);
@@ -601,20 +601,20 @@ class ReportServiceSupabase {
   // LOCATIONS
 
   Future<Locality> fetchLocality(String localityId) async {
-    debugPrint('DEBUG: Service is fetching locality for localityId: $localityId');
+    printDebug('DEBUG: Service is fetching locality for localityId: $localityId');
     final response = await _supabase
       .from('locality_vw')
       .select()
       .eq('locality_id', localityId)
       .select()
       .single();
-    // debugPrint('DEBUG: report results response: $response');
+    // printDebug('DEBUG: report results response: $response');
     final Locality locality = Locality.fromJson(response);
     return locality;
   }
 
   Future<Locality?> fetchLocalityFromHash(String localityHash) async {
-    debugPrint('DEBUG: Service is fetching locality for hash: $localityHash');
+    printDebug('DEBUG: Service is fetching locality for hash: $localityHash');
     final response = await _supabase
       .from('localities')
       .select()
@@ -627,19 +627,19 @@ class ReportServiceSupabase {
   }
 
   Future<Locality> createLocality(Locality locality) async {
-    debugPrint('DEBUG: Service is creating a locality: ${locality.regionIsoCode}, ${locality.name}.');
+    printDebug('DEBUG: Service is creating a locality: ${locality.regionIsoCode}, ${locality.name}.');
     final response = await _supabase
       .from('localities')
       .insert(locality.toJson())
       .select()
       .single();
     final Locality insertedLocality = Locality.fromJson(response);
-    debugPrint('DEBUG: inserted Locality ID: ${insertedLocality.id}');
+    printDebug('DEBUG: inserted Locality ID: ${insertedLocality.id}');
     return insertedLocality;
   }
 
   Future<List<Industry>> fetchIndustries() async {
-    debugPrint('DEBUG: Service is fetching all industries');
+    printDebug('DEBUG: Service is fetching all industries');
 
     final response = await _supabase
       .from('industries')
@@ -647,7 +647,7 @@ class ReportServiceSupabase {
       .isFilter('deleted_at', null);
 
     // Inspect the response to see its structure
-    // debugPrint('Response: $response');
+    // printDebug('Response: $response');
 
     final List<Industry> industries = (response as List).map((item) {
       return Industry.fromJson(item);
@@ -675,16 +675,16 @@ class ReportServiceSupabase {
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        debugPrint('DEBUG: Render response: $data');
+        printDebug('DEBUG: Render response: $data');
         return data['url'] as String;
       } else {
-        debugPrint('DEBUG: Failed with status ${response.statusCode}, body: ${response.body}');
+        printDebug('DEBUG: Failed with status ${response.statusCode}, body: ${response.body}');
         return null;
     }
 
     } catch (e, stackTrace) {
-      debugPrint('DEBUG: handlePurchase error: $e');
-      debugPrint('DEBUG: Stack trace: $stackTrace');
+      printDebug('DEBUG: handlePurchase error: $e');
+      printDebug('DEBUG: Stack trace: $stackTrace');
       return null;
     }
   }

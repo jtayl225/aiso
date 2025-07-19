@@ -33,6 +33,8 @@ class AboutRowCol extends StatelessWidget {
               deviceType: deviceType
               ),
 
+        SizedBox(height: 24),
+
         H1Heading(deviceType: deviceType, text: 'Meet the Founders.'),
 
         RowCol(

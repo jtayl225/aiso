@@ -12,6 +12,7 @@ import 'package:aiso/reports/views/timeline.dart';
 import 'package:aiso/services/auth_service_supabase.dart';
 import 'package:aiso/services/location_service_supabase.dart';
 import 'package:aiso/services/report_service_supabase.dart';
+import 'package:aiso/utils/logger.dart';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -183,10 +184,10 @@ class NewReportViewModel extends ChangeNotifier {
   void _handleError(Object error, [StackTrace? stackTrace]) {
     errorMessage = error.toString();
 
-    debugPrint('FreeReportViewModel error: $errorMessage');
+    printDebug('FreeReportViewModel error: $errorMessage');
 
     if (stackTrace != null) {
-      debugPrint('Stack trace:\n$stackTrace');
+      printDebug('Stack trace:\n$stackTrace');
     }
 
     // You can add extra error handling logic here, like:
@@ -294,7 +295,7 @@ class NewReportViewModel extends ChangeNotifier {
     isLoading = true;
     notifyListeners();
     try {
-      debugPrint('DEBUG: createAndRunPaidReport.');
+      printDebug('createAndRunPaidReport.');
 
       // create search target
       final String? userId = await _authService.fetchCurrentUserId();
@@ -302,7 +303,7 @@ class NewReportViewModel extends ChangeNotifier {
       final String? title = reportTitle;
 
       if (userId == null || searchTargetId == null || title == null) {
-        debugPrint('❌ Missing required inputs: userId, searchTarget, or title');
+        printDebug('❌ Missing required inputs: userId, searchTarget, or title');
         return false;
       }
 
@@ -315,26 +316,26 @@ class NewReportViewModel extends ChangeNotifier {
       final String basePrompt = _buildBasePrompt();
 
       for (final locality in localities) {
-        debugPrint('DEBUG: start _buildPrompt.');
+        printDebug('DEBUG: start _buildPrompt.');
         final String promptText = _buildPrompt(basePrompt, locality);
-        debugPrint('DEBUG: end _buildPrompt.');
+        printDebug('DEBUG: end _buildPrompt.');
 
         // creates prompt - handles upserts of new prompts
-        debugPrint('DEBUG: start upsertPromptAndAttach.');
+        printDebug('DEBUG: start upsertPromptAndAttach.');
         final Prompt _ = await _reportService.upsertPromptAndAttach(
           reportId: report.id,
           promptText: promptText,
           localityId: locality.id
         );
-        debugPrint('DEBUG: end upsertPromptAndAttach.');
+        printDebug('DEBUG: end upsertPromptAndAttach.');
       }
 
       // init paid report run
-      debugPrint('DEBUG: start runReport.');
+      printDebug('DEBUG: start runReport.');
       final String? newReportRunId = await _reportService.runReport(report, true);
       if (newReportRunId == null || newReportRunId.isEmpty) return false;
-      debugPrint('DEBUG: end runReport.');
-      debugPrint('DEBUG: reportRunId: $newReportRunId.');
+      printDebug('DEBUG: end runReport.');
+      printDebug('DEBUG: reportRunId: $newReportRunId.');
 
       return true;
     } catch (e) {
@@ -367,7 +368,7 @@ class NewReportViewModel extends ChangeNotifier {
     isLoading = true;
     notifyListeners();
     try {
-      debugPrint('DEBUG: createAndRunFreeReport.');
+      printDebug('DEBUG: createAndRunFreeReport.');
 
       // 2) compute normalized hash
       final String localityHash = _hashString(regionIsoCode + localityName);
@@ -526,7 +527,7 @@ class NewReportViewModel extends ChangeNotifier {
 
     // Handle null user ID safely
     if (userId == null) {
-      debugPrint('⚠️ Error: userId is null. Cannot fetch search targets.');
+      printDebug('⚠️ Error: userId is null. Cannot fetch search targets.');
       return;
     }
 
@@ -538,8 +539,8 @@ class NewReportViewModel extends ChangeNotifier {
     // Fetch updated list of search targets
     searchTargets = await _reportService.fetchSearchTargets(userId);
   } catch (e, stackTrace) {
-    debugPrint('❌ Failed to create search target: $e');
-    debugPrint('StackTrace: $stackTrace');
+    printDebug('❌ Failed to create search target: $e');
+    printDebug('StackTrace: $stackTrace');
 
     // Optionally: set an error state or notify the UI
     // errorMessage = 'Failed to create search target. Please try again.';

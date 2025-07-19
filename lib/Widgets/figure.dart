@@ -21,22 +21,47 @@ class Figure extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(borderRadius),
-          child: ConstrainedBox(
-            constraints: BoxConstraints(
-              maxHeight: imageHeight,
-              maxWidth: imageWidth
+        // ClipRRect(
+        //   borderRadius: BorderRadius.circular(borderRadius),
+        //   child: ConstrainedBox(
+        //     constraints: BoxConstraints(
+        //       maxHeight: imageHeight,
+        //       maxWidth: imageWidth
+        //     ),
+        //     child: Image.asset(
+        //       imagePath,
+        //       // height: imageHeight,
+        //       // width: imageWidth,
+        //       fit: BoxFit.contain,
+        //     ),
+        //   ),
+        // ),
+        Container(
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: Colors.grey.shade300,
+              width: 2.0,
             ),
-            child: Image.asset(
-              imagePath,
-              // height: imageHeight,
-              // width: imageWidth,
-              fit: BoxFit.contain,
+            borderRadius: BorderRadius.circular(borderRadius),
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(borderRadius),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                maxHeight: imageHeight,
+                maxWidth: imageWidth,
+              ),
+              child: Image.asset(
+                imagePath,
+                fit: BoxFit.contain,
+              ),
             ),
           ),
         ),
+
+
         const SizedBox(height: 8),
+
         Text(
           caption,
           textAlign: TextAlign.center,
@@ -45,6 +70,10 @@ class Figure extends StatelessWidget {
                 fontStyle: FontStyle.italic,
               ),
         ),
+
+        
+
+
       ],
     );
   }

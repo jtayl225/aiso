@@ -34,7 +34,7 @@ class HomeRowCol extends StatelessWidget {
     
         RowCol(
           layoutType: layoutType,
-          flexes: [1,1],
+          flexes: [3,2],
           spacing: 16.0,
           children: [
     
@@ -106,8 +106,8 @@ class HomeRowCol extends StatelessWidget {
           rowCrossAxisAlignment: CrossAxisAlignment.start,
           children: [
 
-            if (layoutType == RowColType.row)
-              SizedBox(width: 100, height: 100),
+            // if (layoutType == RowColType.row)
+            //   SizedBox(width: 100, height: 100),
     
             MarkdownContent(
               markdownText: homeMarkdown2,
@@ -131,8 +131,8 @@ class HomeRowCol extends StatelessWidget {
               deviceType: deviceType
               ),
 
-            if (layoutType == RowColType.row)
-              SizedBox(width: 100, height: 100),
+            // if (layoutType == RowColType.row)
+            //   SizedBox(width: 100, height: 100),
     
           ],
         ),
