@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS subscriptions (
   -- user_id uuid NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
 
   -- Stripe references
-  stripe_customer_id text NOT NULL REFERENCES public.stripe_users(stripe_customer_id),
+  stripe_customer_id text NOT NULL REFERENCES public.stripe_users(stripe_customer_id) ON DELETE CASCADE,
   stripe_subscription_id text UNIQUE NOT NULL,
   stripe_price_id text,
   stripe_product_id text,

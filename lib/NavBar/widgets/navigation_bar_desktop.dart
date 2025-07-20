@@ -29,8 +29,11 @@ class NavigationBarDesktop extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final authState = context.watch<AuthViewModel>().authState;
-    final isLoggedIn = authState == MyAuthState.authenticated;
+
+    final authVm = context.watch<AuthViewModel>();
+    // final authState = authVm.authState;
+    // final isLoggedIn = authState == MyAuthState.authenticated;
+    final isLoggedIn = authVm.isAuthenticated;
     // final isSubscribed = context.watch<AuthViewModel>().isSubscribed;
 
     // final currentRoute = GoRouterState.of(context).uri.toString();

@@ -8,6 +8,7 @@ import 'package:aiso/NavBar/views/faq_view.dart';
 import 'package:aiso/NavBar/views/privacy_policy_view.dart';
 import 'package:aiso/NavBar/views/terms_and_conditions_view.dart';
 import 'package:aiso/free_reports/views/free_report_confirmation_view.dart';
+import 'package:aiso/free_reports/views/free_report_view.dart';
 import 'package:aiso/reports/views/prompt_view.dart';
 import 'package:aiso/view_models/auth_view_model.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +16,7 @@ import 'package:go_router/go_router.dart';
 import 'package:aiso/Auth/views/auth_home_view.dart';
 import 'package:aiso/Auth/views/auth_profile_view.dart';
 import 'package:aiso/Home/views/home_view.dart';
-import 'package:aiso/free_reports/views/free_report_view.dart';
+import 'package:aiso/free_reports/views/free_report_form_view.dart';
 // import 'package:aiso/free_reports/views/free_report_results_screen.dart';
 // import 'package:aiso/free_reports/views/free_report_timeline_screen.dart';
 import 'package:aiso/NewReport/views/new_report_view.dart';
@@ -62,6 +63,15 @@ final GoRouter appRouter = GoRouter(
     ),
 
     GoRoute(
+      path: freeReportRoute,
+      pageBuilder: (context, state) {
+        final reportId = state.uri.queryParameters['report_id']!;
+        return  NoTransitionPage(child: FreeReportView(reportId: reportId));
+      },
+      redirect: authGuard,
+    ),
+
+    GoRoute(
       path: promptRoute,
       pageBuilder: (context, state) {
         final reportId = state.uri.queryParameters['report_id']!;
@@ -85,7 +95,7 @@ final GoRouter appRouter = GoRouter(
     ),
 
     GoRoute(path: freeReportSignUpRoute, pageBuilder: (context, state) => NoTransitionPage(child: const FreeReportSignUpView())),
-    GoRoute(path: freeReportFormRoute, pageBuilder: (context, state) => NoTransitionPage(child: const FreeReport())),
+    GoRoute(path: freeReportFormRoute, pageBuilder: (context, state) => NoTransitionPage(child: const FreeReportFormView())),
     GoRoute(path: freeReportConfirmationRoute, pageBuilder: (context, state) => NoTransitionPage(child: const FreeReportConfirmationView())),
     // GoRoute(path: freeReportTimelineRoute, pageBuilder: (context, state) => NoTransitionPage(child: const FreeReportTimelineScreen())),
     // GoRoute(path: freeReportResultsRoute, pageBuilder: (context, state) => NoTransitionPage(child: const FreeReportResultScreen())),

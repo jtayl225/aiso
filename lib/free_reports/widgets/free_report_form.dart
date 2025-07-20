@@ -1,9 +1,12 @@
-import 'package:aiso/free_reports/view_models/free_report_view_model.dart';
+import 'package:aiso/free_reports/view_models/free_report_form_view_model.dart';
 import 'package:aiso/free_reports/widgets/powered_by_logos.dart';
 import 'package:aiso/models/industry_model.dart';
 import 'package:aiso/models/location_models.dart';
 import 'package:aiso/free_reports/widgets/locality_type_ahead.dart';
+import 'package:aiso/models/user_model.dart';
 import 'package:aiso/routing/route_names.dart';
+import 'package:aiso/utils/logger.dart';
+import 'package:aiso/view_models/auth_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:aiso/routing/app_router.dart';
@@ -25,7 +28,7 @@ class _FreeReportFormState extends State<FreeReportForm> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<FreeReportViewModel>(context, listen: false).init();
+      Provider.of<FreeReportFormViewModel>(context, listen: false).init();
     });
   }
 
@@ -40,7 +43,8 @@ class _FreeReportFormState extends State<FreeReportForm> {
   @override
   Widget build(BuildContext context) {
 
-    final vm = Provider.of<FreeReportViewModel>(context);
+    final authVm = Provider.of<AuthViewModel>(context);
+    final vm = Provider.of<FreeReportFormViewModel>(context);
 
     return Padding(
         padding: const EdgeInsets.only(top: 32.0, bottom: 32.0),
@@ -125,9 +129,20 @@ class _FreeReportFormState extends State<FreeReportForm> {
                           onPressed: vm.isFormValid
                             ? () async {
                                 if (_formKey.currentState!.validate()) {
-                                  
-                                  await vm.processFreeReport();
+
+                                  final user = authVm.currentUser ?? authVm.newUser;
+                                  if (user == null) {
+                                    printDebug('❌ No authenticated user or missing email');
+                                    return;
+                                  }
+
+                                  await vm.processFreeReport(user.email);
                                   appRouter.go(freeReportConfirmationRoute);
+
+
+                                  
+                                  // await vm.processFreeReport();
+                                  // appRouter.go(freeReportConfirmationRoute);
                         
                                 }
                               }

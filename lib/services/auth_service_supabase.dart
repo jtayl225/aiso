@@ -1,5 +1,6 @@
 import 'package:aiso/models/subscriptions_model.dart';
 import 'package:aiso/models/user_model.dart';
+import 'package:aiso/utils/logger.dart';
 import 'package:flutter/foundation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -37,20 +38,33 @@ class AuthServiceSupabase {
   }
 
   // Create a new user with email and password
-  Future<UserModel?> signUp(String email, String password, {String? username, String? displayName}) async {
+  Future<AuthResponse?> signUp(String email, String password, {String? username, String? displayName}) async {
     try {
       final AuthResponse response = await _supabase.auth.signUp(
         email: email, 
         password: password,
       );
-      final user = response.user;
-      if (user == null) return null;
-      return UserModel(
-          id: user.id,
-          email: user.email!,
-          username: username ?? '',
-          displayName: displayName ?? '',
-        );
+
+      return response;
+      
+      // final user = response.user;
+      // final session = response.session;
+
+      // printDebug('📧 Sign-up response:');
+      // printDebug(' - user.id: ${user?.id}');
+      // printDebug(' - user.email: ${user?.email}');
+      // printDebug(' - session: ${session != null ? '✅ created' : '❌ null (email verification required)'}');
+
+      // if (user == null) return null;
+      // return UserModel(
+      //     id: user.id,
+      //     email: user.email!,
+      //     username: username ?? '',
+      //     displayName: displayName ?? '',
+      //   );
+    } on AuthApiException catch (e) {
+      printDebug('Error signing up: $e');
+      rethrow; // ✅ Bubble up the error so `signInOrSignUp` can handle it
     } catch (e) {
       debugPrint('Error creating user: $e');
       return null;
@@ -65,6 +79,7 @@ class AuthServiceSupabase {
         email: email,
         password: password,
       );
+      printDebug('signInWithPassword response: $response');
       final user = response.user;
       if (user == null) return null;
       return UserModel(
@@ -73,6 +88,9 @@ class AuthServiceSupabase {
           username: user.userMetadata?['username'] ?? '',
           displayName: user.userMetadata?['displayName'] ?? '',
         );
+    } on AuthApiException catch (e) {
+    printDebug('Error signing in: $e');
+    rethrow; // ✅ Bubble up the error so `signInOrSignUp` can handle it
     } catch (e) {
       debugPrint('Error signing in: $e');
       return null;

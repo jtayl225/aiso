@@ -17,9 +17,9 @@ class MyPromptView extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (_) => PromptViewModel(reportId: reportId, reportRunId: reportRunId, promptId: promptId),
       child: ScreenTypeLayout.builder(
-        mobile: (BuildContext context) => PromptDesktop(),
-        tablet: (BuildContext context) => PromptDesktop(),
-        desktop: (BuildContext context) => PromptDesktop(),
+        mobile: (BuildContext context) => PromptDesktop(deviceType: DeviceScreenType.mobile),
+        tablet: (BuildContext context) => PromptDesktop(deviceType: DeviceScreenType.mobile),
+        desktop: (BuildContext context) => PromptDesktop(deviceType: DeviceScreenType.desktop),
       ),
     );
   }

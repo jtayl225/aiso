@@ -1,4 +1,4 @@
-import 'package:aiso/free_reports/view_models/free_report_view_model.dart';
+import 'package:aiso/free_reports/view_models/free_report_form_view_model.dart';
 import 'package:aiso/models/location_models.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -40,7 +40,7 @@ class _LocalityFieldState extends State<LocalityField> {
   @override
   Widget build(BuildContext context) {
     // final vm = Provider.of<FreeReportViewModel>(context, listen: false);
-    final vm = context.watch<FreeReportViewModel>();
+    final vm = context.watch<FreeReportFormViewModel>();
 
     return TypeAheadField<Locality>(
       suggestionsController: _suggestionsController,

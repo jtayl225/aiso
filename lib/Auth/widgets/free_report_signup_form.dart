@@ -33,23 +33,26 @@ class _FreeReportSignUpFormState extends State<FreeReportSignUpForm> {
     if (!_formKey.currentState!.validate()) return;
     setState(() => _isLoading = true);
 
+    final authVm = context.read<AuthViewModel>();
+
     try {
-      final authVm   = context.read<AuthViewModel>();
-      final email    = _emailController.text.trim();
+      
+      final email = _emailController.text.trim();
       final password = _passwordController.text;
 
-      final success = await authVm.signInOrSignUp(email, password);
-      appRouter.go(freeReportFormRoute);
+      // final success = await authVm.signInOrSignUp(email, password);
+      final success = await authVm.signUp(email, password);
       
       if (!mounted) return;
 
       if (success) {
         _showErrorSnackBar('Success!');
+        appRouter.go(freeReportFormRoute);
       } else {
         _showErrorSnackBar(authVm.errorMessage ?? 'Something went wrong. Please try again');
       }
     } catch (e) {
-      if (mounted) _showErrorSnackBar('Something went wrong. Please try again.');
+      if (mounted) _showErrorSnackBar(authVm.errorMessage ?? 'Something went wrong. Please try again.');
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }

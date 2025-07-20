@@ -3,6 +3,7 @@ import 'package:aiso/reports/view_models/reports_view_model.dart';
 import 'package:aiso/reports/widgets/report_card.dart';
 import 'package:aiso/routing/route_names.dart';
 import 'package:aiso/themes/typography.dart';
+import 'package:aiso/view_models/auth_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:aiso/routing/app_router.dart';
@@ -15,6 +16,9 @@ class ReportsRowCol extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final authVM = context.watch<AuthViewModel>();
+
     final RowColType layoutType =
         deviceType == DeviceScreenType.desktop
             ? RowColType.row
@@ -59,11 +63,16 @@ class ReportsRowCol extends StatelessWidget {
                     child: ConstrainedBox(
                       constraints: BoxConstraints(minWidth: 200, maxWidth: 400),
                       child: ElevatedButton(
-                        onPressed: () {
-                          appRouter.go(newReportRoute);
-                        },
-                        child: Text('New Report'),
-                      ),
+                      onPressed: reports.length >= 10
+                          ? null // ❌ disables the button
+                          : () {
+                              authVM.isSubscribed
+                                  ? appRouter.go(newReportRoute)
+                                  : appRouter.go(storeRoute);
+                            },
+                      child: const Text('New Report'),
+                    ),
+
                     ),
                   ),
                 ],
@@ -77,7 +86,7 @@ class ReportsRowCol extends StatelessWidget {
                   child: InkWell(
                     onTap: () {
                       final uri = Uri(
-                        path: reportRoute,
+                        path: report.isPaid ? reportRoute : freeReportRoute,
                         queryParameters: {'report_id': report.id},
                       );
                       appRouter.go(uri.toString());

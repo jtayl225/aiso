@@ -22,8 +22,12 @@ class MyNavigationDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final authState = context.watch<AuthViewModel>().authState;
-    final isLoggedIn = authState == MyAuthState.authenticated;
+
+    final authVm = context.watch<AuthViewModel>();
+    final isLoggedIn = authVm.isAuthenticated;
+
+    // final authState = context.watch<AuthViewModel>().authState;
+    // final isLoggedIn = authState == MyAuthState.authenticated;
     // final isSubscribed = context.watch<AuthViewModel>().isSubscribed;
 
     final navDrawItems = <NavDrawItem>[

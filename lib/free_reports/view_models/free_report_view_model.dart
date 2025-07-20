@@ -1,41 +1,46 @@
-// import 'dart:convert';
-import 'package:aiso/models/cadence_enum.dart';
-import 'package:aiso/models/db_timestamps_model.dart';
 import 'package:aiso/models/entity_model.dart';
-import 'package:aiso/models/industry_model.dart';
-import 'package:aiso/models/location_models.dart';
 import 'package:aiso/models/prompt_model.dart';
-import 'package:aiso/models/search_target_model.dart';
-import 'package:aiso/models/user_model.dart';
+import 'package:aiso/models/report_run_results_model.dart';
 import 'package:aiso/reports/models/report_model.dart';
-import 'package:aiso/services/auth_service_supabase.dart';
-import 'package:aiso/services/location_service_supabase.dart';
+import 'package:aiso/models/search_target_model.dart';
+import 'package:aiso/reports/models/report_run_model.dart';
 import 'package:aiso/services/report_service_supabase.dart';
 import 'package:aiso/utils/logger.dart';
-// import 'package:crypto/crypto.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
-/// A ChangeNotifier ViewModel to handle state & logic for the FreeReport flow.
-/// It listens to supabase realtime on report_runs for status updates,
-/// and drives both timeline and result screens.
 class FreeReportViewModel extends ChangeNotifier {
 
-  final ReportServiceSupabase _reportService = ReportServiceSupabase();
-  final LocationServiceSupabase _locationService = LocationServiceSupabase();
-  final AuthServiceSupabase _authService = AuthServiceSupabase();
+  final String reportId;
+
+  FreeReportViewModel({required this.reportId}) {
+    _init(); // Optional: load report immediately
+  }
 
   bool isLoading = false;
   String? errorMessage;
 
-  // String email = '';
-  // String password = '';
+  // final AuthServiceSupabase _authService = AuthServiceSupabase();
+  final ReportServiceSupabase _reportService = ReportServiceSupabase();
 
-  String entityBusinessName = '';
-  String entityPersonName = '';
-  String prompt = '';
-  String reportId = '';
-  String promptText = '';
+  Report? report;
+
+  List<ReportRun> reportRuns = [];
+  ReportRun? _selectedReportRun;
+  ReportRun? get selectedReportRun => _selectedReportRun;
+  set selectedReportRun(ReportRun? reportRun) {
+    _selectedReportRun = reportRun;
+    notifyListeners();
+  }
+
+  ReportRunResults? _reportRunResults;
+  ReportRunResults? get reportRunResults => _reportRunResults;
+
+  SearchTarget? searchTarget;
+  int searchTargetRank = -1;
+
+  final Set<int> _revealed = {};
+  Set<int> get revealed => _revealed;
 
   List<Entity> _entities = [];
   List<Entity> get entities => _entities;
@@ -43,52 +48,17 @@ class FreeReportViewModel extends ChangeNotifier {
     _entities = value;
     notifyListeners();
   }
-
-  List<Industry> industries = [];
-  Industry? selectedIndustry;
-
-  List<Country> countries = [];
-  Country? _selectedCountry;
-  Country? get selectedCountry => _selectedCountry;
-  set selectedCountry(Country? value) {
-    _selectedCountry = value;
-    selectedRegion = null; // Reset selected region if country changes
-    notifyListeners(); // ✅ Trigger UI rebuild
-  }
-
-  Region? _selectedRegion;
-  Region? get selectedRegion => _selectedRegion;
-  set selectedRegion(Region? value) {
-    _selectedRegion = value;
+  
+  List<Prompt> prompts = [];
+  Prompt? _selectedPrompt;
+  Prompt? get selectedPrompt => _selectedPrompt;
+  set selectedPrompt(Prompt? value) {
+    _selectedPrompt = value;
     notifyListeners();
   }
 
-  Locality? _selectedLocality;
-  Locality? get selectedLocality => _selectedLocality;
-  set selectedLocality(Locality? value) {
-    _selectedLocality = value;
-    notifyListeners();
-  }
-
-  bool get isFormValid => 
-    // email.isNotEmpty &&
-    // email.contains('@') &&
-    // password.isNotEmpty &&
-    // password.length >= 6 &&
-    selectedIndustry != null && 
-    entityBusinessName.isNotEmpty &&
-    _selectedCountry != null &&
-    _selectedRegion != null &&
-    _selectedLocality != null;
-
-  FreeReportViewModel() {
-    Future.microtask(() => init());
-  }
-
-
-  Future<void> init() async {
-
-    // Defer first notification to avoid "called during build"
+  Future<void> _init() async {
+    // Mark as loading
     Future.microtask(() {
       isLoading = true;
       errorMessage = null;
@@ -96,14 +66,51 @@ class FreeReportViewModel extends ChangeNotifier {
     });
 
     try {
-      countries = await _locationService.fetchCountries();
-      selectedCountry = countries.first;
-      industries = await _reportService.fetchIndustries();
-      selectedIndustry = industries.first;
-    } catch (e) {
+      // Fetch all report runs
+      reportRuns = await _reportService.fetchReportRuns(reportId);
+      selectedReportRun = reportRuns.isNotEmpty ? reportRuns.first : null;
+      if (selectedPrompt == null) {
+        printDebug('⚠️ No report runs found for reportId: $reportId');
+      }
+
+      // Always attempt to load prompts and dashboards
+      report = await _reportService.fetchReport(reportId);
+      if (report == null) {
+        errorMessage = '⚠️ Report not found for reportId: $reportId';
+        printDebug(errorMessage!);
+        return;
+      }
+
+      searchTarget = report!.searchTarget;
+
+      prompts = report?.prompts ?? [];
+      selectedPrompt = prompts.isNotEmpty ? prompts.first : null;
+      if (selectedPrompt == null) {
+        printDebug('⚠️ No prompts found for reportId: $reportId');
+      }
+
+
+      if (selectedReportRun == null ) return;
+      _reportRunResults = await _reportService.fetchReportRunResults(selectedReportRun!.id);
+
+      if (_reportRunResults == null ) return;
+
+      entities = await _reportService.fetchLlmRunResults(_reportRunResults!.llmEpochId);
+
+      if (_reportRunResults!.targetRank == null) {
+        printDebug('⚠️ targetRank is null for llmEpochId: ${_reportRunResults!.llmEpochId}');
+        searchTargetRank = -1;
+        return;
+      }
+
+      searchTargetRank =  _reportRunResults!.targetRank!;
+
+    } catch (e, stackTrace) {
+      // Log full error for debugging
       errorMessage = 'Failed to initialize: $e';
+      printDebug('❌ [FreeReportViewModel] init error: $e\n$stackTrace');
     } finally {
-      // Defer again to ensure build is complete
+      // Finish loading
       Future.microtask(() {
         isLoading = false;
         notifyListeners();
@@ -111,6 +118,10 @@ class FreeReportViewModel extends ChangeNotifier {
     }
   }
 
+  /// Whether the card at [index] should be fully shown.
+  bool canShow(int index) {
+    return entities[index].rank == searchTargetRank || _revealed.contains(index);
+  }
 
   void _handleError(Object error, [StackTrace? stackTrace]) {
     errorMessage = error.toString();
@@ -124,181 +135,6 @@ class FreeReportViewModel extends ChangeNotifier {
     // You can add extra error handling logic here, like:
     // - showing user-friendly messages
     // - sending logs to remote error tracking services
-  }
-
-  // String _hashString(String value) {
-  //     final normalized = value.trim().toLowerCase();
-  //     final bytes = utf8.encode(normalized);
-  //     final digest = sha256.convert(bytes);
-  //     return digest.toString();
-  //   }
-
-  /// createAndRunFreeReport
-  Report _buildFreeReport() {
-
-    final Report freeReport = Report(
-      id: '', // generated by supabase
-      userId: '', // generated by supabase
-      searchTargetId: '', // generated by supabase
-      title: 'Free report!',
-      isPaid: false,
-      cadence: Cadence.once,
-      dbTimestamps: DbTimestamps.now(),
-    );
-
-    return freeReport;
-
-  }
-
-  SearchTarget _buildSearchTarget() {
-
-    final String targetName = entityPersonName.isNotEmpty ? entityPersonName : entityBusinessName;
-    final String targetDescription = entityPersonName.isNotEmpty ? 'Real estate agent at $entityBusinessName' : 'A real estate agency.';
-    final EntityType targetEntityType = entityPersonName.isNotEmpty ? EntityType.person : EntityType.business;
-
-    final SearchTarget searchTarget = SearchTarget(
-      id: '', // generated by supabase
-      // reportId: reportId,
-      userId: '',
-      name: targetName, 
-      entityType: targetEntityType, 
-      industry: selectedIndustry!,
-      description: targetDescription, 
-      dbTimestamps: DbTimestamps.now()
-      );
-
-    return searchTarget;
-
-  }
-
-  String _buildPromptText(String basePrompt) {
-    if (selectedLocality == null || selectedRegion == null || selectedCountry == null) {
-      throw StateError('All location fields must be selected');
-    }
-
-    return '$basePrompt in ${selectedLocality!.name}, ${selectedRegion!.code} ${selectedCountry!.name}';
-  }
-
-  Prompt _buildPrompt(String promptText) {
-    return Prompt(id: '', localityId: selectedLocality?.id, prompt: promptText, dbTimestamps: DbTimestamps.now());
-  }
-
-  Future<bool> processFreeReport() async {
-    isLoading = true;
-    notifyListeners();
-    try {
-      printDebug('[processFreeReport]');
-
-      // signup with email and password
-      // final UserModel? user = await _authService.signUp(email, password);
-
-      final String? email = _authService.currentUserEmail;
-      if (email == null) return false;
-
-      final SearchTarget searchTarget = _buildSearchTarget();
-      final Report report = _buildFreeReport();
-      final String pt = entityPersonName.isNotEmpty ? 'Top 10 real estate agents' : 'Top 10 real estate agencies';
-      final Prompt prompt = _buildPrompt(_buildPromptText(pt));
-
-      final String? _ = await _reportService.processFreeReport(email, prompt, searchTarget, report);
-      
-      return true;
-    } catch (e) {
-      _handleError(e);
-      return false;
-    } finally {
-      isLoading = false;
-      notifyListeners();
-    }
-  }
-
-  Future<void> fetchCountries() async {
-    isLoading = true;
-    notifyListeners();
-    try {
-      countries = await _locationService.fetchCountries();
-    } catch (e) {
-      _handleError(e);
-    } finally {
-      isLoading = false;
-      notifyListeners();
-    }
-  }
-
-  // Future<Locality?> fetchLocality(String regionIsoCode, String localityName) async {
-  //   // 1) show loading
-  //   isLoading = true;
-  //   notifyListeners();
-  //   try {
-  //     debugPrint('DEBUG: createAndRunFreeReport.');
-
-  //     // 2) compute normalized hash
-  //     final String localityHash = _hashString(regionIsoCode + localityName);
-
-  //     // 3) attempt to fetch an existing one
-  //     final Locality? existingLocality = await _reportService.fetchLocalityFromHash(localityHash);
-  //     if (existingLocality != null) return existingLocality;
-
-  //     // // 4) not found → correct spelling via ChatGPT
-  //     // final String correctedName = await _reportService.correctLocalityName(
-  //     //   regionIsoCode: regionIsoCode,
-  //     //   rawName: localityName,
-  //     // );
-
-  //     // // 5) geocode the corrected name
-  //     // final LatLng coords = await _reportService.geocodeLocality(
-  //     //   regionIsoCode: regionIsoCode,
-  //     //   localityName: correctedName,
-  //     // );
-
-  //     // // 6) assemble a new Locality instance (id blank—server will fill it)
-  //     // final newLocality = Locality(
-  //     //   id: '', 
-  //     //   countryAlpha2: '', 
-  //     //   countryAlpha3: '', 
-  //     //   countryName: '',
-  //     //   regionCode: '',
-  //     //   regionIsoCode: regionIsoCode,
-  //     //   regionName: '',
-  //     //   name: correctedName,
-  //     //   latitude: coords.latitude,
-  //     //   longitude: coords.longitude,
-  //     // );
-
-  //     // // 7) persist via your service & return the result
-  //     // final Locality created = await _reportService.createLocality(newLocality);
-  //     // return created;
-
-  //   } catch (e) {
-  //     _handleError(e);
-  //     return null;
-  //   } finally {
-  //     isLoading = false;
-  //     notifyListeners();
-  //   }
-  // }
-
-  /// Returns up to 3 matching localities for the given input
-  Future<List<Locality>> fetchLocalitySuggestions(String pattern) async {
-    debugPrint('fetchLocalitySuggestions called with: "$pattern"');
-
-    final trimmed = pattern.trim();
-    if (trimmed.isEmpty) return [];
-    if (selectedRegion == null) return [];
-
-    final response = await Supabase.instance.client
-        .from('localities')
-        .select('id, region_iso_code, name, latitude, longitude')
-        .eq('region_iso_code', selectedRegion!.isoCode)
-        .ilike('name', '%$trimmed%')
-        .limit(3);
-
-    final List<Locality> localities = (response as List).map((item) {
-      return Locality.fromJson(item);
-    }).toList();
-
-    return localities;
-
   }
 
 }

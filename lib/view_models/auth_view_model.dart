@@ -24,6 +24,9 @@ class AuthViewModel extends ChangeNotifier {
   MyAuthState _authState = MyAuthState.initial;
   MyAuthState get authState => _authState;
 
+  UserModel? _newUser; 
+  UserModel? get newUser => _newUser;
+
   UserModel? _currentUser;
   UserModel? get currentUser => _currentUser;
 
@@ -78,7 +81,7 @@ class AuthViewModel extends ChangeNotifier {
     if (currentUser != null) {
       _currentUser = currentUser;
       _isAnonymous = _authService.isAnonymous;
-      debugPrint('DEBUG: is anon? $_isAnonymous'); 
+      // printDebug('DEBUG: is anon? $_isAnonymous'); 
       _authState = MyAuthState.authenticated;
       notifyListeners();
       return;
@@ -108,6 +111,71 @@ class AuthViewModel extends ChangeNotifier {
   }
 
   // sign in or sign up
+  // Future<bool> signInOrSignUp(String email, String password) async {
+  //   _authState = MyAuthState.loading;
+  //   _errorMessage = null;
+  //   notifyListeners();
+
+  //   try {
+  //     // Try sign in first
+  //     _currentUser = await _authService.signInWithEmailAndPassword(email, password);
+
+  //     _authState = MyAuthState.authenticated;
+
+  //     final subs = await _authService.fetchUserSubscriptions();
+  //     _isSubscribed = subs.isNotEmpty;
+  //     subscribeToSubscriptionStatus();
+
+  //     return true;
+
+  //   } on AuthApiException catch (e) {
+  //     printDebug('Auth error: ${e.message} (status: ${e.statusCode}, code: ${e.code})');
+  //     if (e.code?.trim().toLowerCase() == 'invalid_credentials') {
+  //       // Attempt to sign up if credentials were invalid
+  //       try {
+  //         printDebug('Trying to signup.');
+  //         final newUserx = await _authService.signUp(email, password);
+  //         printDebug('Signup response: ${newUserx?.email}');
+
+  //         if (newUser != null) {
+  //            _newUser = newUserx;
+  //           _currentUser = newUserx;
+  //           _authState = MyAuthState.authenticated;
+
+  //           final subs = await _authService.fetchUserSubscriptions();
+  //           _isSubscribed = subs.isNotEmpty;
+  //           subscribeToSubscriptionStatus();
+
+  //           return true;
+  //         } else {
+  //           _authState = MyAuthState.unauthenticated;
+  //           _errorMessage = 'Sign up failed. Please try again.';
+  //           return false;
+  //         }
+  //       } on AuthException catch (signupError) {
+  //         _authState = MyAuthState.error;
+  //         _errorMessage = 'Sign-up failed: ${signupError.message}';
+  //         return false;
+  //       } catch (e) {
+  //         _authState = MyAuthState.error;
+  //         _errorMessage = 'Unexpected sign-up error: ${e.toString()}';
+  //         return false;
+  //       }
+  //     } else {
+  //       _authState = MyAuthState.error;
+  //       _errorMessage = 'Sign-in failed: ${e.message}';
+  //       return false;
+  //     }
+
+  //   } catch (e) {
+  //     _authState = MyAuthState.error;
+  //     _errorMessage = 'Unexpected error: ${e.toString()}';
+  //     return false;
+  //   } finally {
+  //     notifyListeners();
+  //   }
+  // }
+
   Future<bool> signInOrSignUp(String email, String password) async {
     _authState = MyAuthState.loading;
     _errorMessage = null;
@@ -126,20 +194,39 @@ class AuthViewModel extends ChangeNotifier {
       return true;
 
     } on AuthApiException catch (e) {
-      if (e.code == 'invalid_credentials') {
-        // Attempt to sign up if credentials were invalid
+      printDebug('Auth error: ${e.message} (status: ${e.statusCode}, code: ${e.code})');
+
+      if (e.code?.trim().toLowerCase() == 'invalid_credentials') {
         try {
-          final newUser = await _authService.signUp(email, password);
+          printDebug('Trying to signup.');
+          final authResponse = await _authService.signUp(email, password);
+          final user = authResponse?.user;
+          final session = authResponse?.session;
 
-          if (newUser != null) {
-            _currentUser = newUser;
-            _authState = MyAuthState.authenticated;
+          if (user != null) {
+            final userModel = UserModel(
+              id: user.id,
+              email: user.email ?? '',
+              username: '',
+              displayName: '',
+            );
 
-            final subs = await _authService.fetchUserSubscriptions();
-            _isSubscribed = subs.isNotEmpty;
-            subscribeToSubscriptionStatus();
+            if (session != null) {
+              _currentUser = userModel;
+              _authState = MyAuthState.authenticated;
 
-            return true;
+              final subs = await _authService.fetchUserSubscriptions();
+              _isSubscribed = subs.isNotEmpty;
+              subscribeToSubscriptionStatus();
+
+              return true;
+            } else {
+              // Email verification required
+              _newUser = userModel;
+              _authState = MyAuthState.unauthenticated;
+              _errorMessage = 'Please check your inbox to verify your email.';
+              return true;
+            }
           } else {
             _authState = MyAuthState.unauthenticated;
             _errorMessage = 'Sign up failed. Please try again.';
@@ -154,11 +241,12 @@ class AuthViewModel extends ChangeNotifier {
           _errorMessage = 'Unexpected sign-up error: ${e.toString()}';
           return false;
         }
-      } else {
-        _authState = MyAuthState.error;
-        _errorMessage = 'Sign-in failed: ${e.message}';
-        return false;
       }
+
+      // Handle other sign-in failures (e.g., email_not_confirmed)
+      _authState = MyAuthState.error;
+      _errorMessage = 'Sign-in failed: ${e.message}';
+      return false;
 
     } catch (e) {
       _authState = MyAuthState.error;
@@ -171,28 +259,97 @@ class AuthViewModel extends ChangeNotifier {
 
 
   // Sign up
+  // Future<bool> signUp(String email, String password) async {
+  //   _authState = MyAuthState.loading;
+  //   _errorMessage = null;
+  //   notifyListeners();
+
+  //   try {
+  //     // final newUserx = await _authService.signUp(email, password);
+  //     final authResponse = await _authService.signUp(email, password);
+  //     final user = authResponse?.user;
+  //     final session = authResponse?.session;
+
+  //     if (user != null) {
+
+  //       final UserModel u = UserModel(
+  //         id: user.id,
+  //         email: user.email!,
+  //         username: '',
+  //         displayName: '',
+  //       );
+
+  //     }
+
+      
+
+  //     // if (newUserx != null) {
+
+  //     //   _newUser = newUserx;
+  //     //   _currentUser = newUserx;
+  //     //   _authState = MyAuthState.authenticated;
+
+  //     //   final List<Subscription> subs = await _authService.fetchUserSubscriptions();
+  //     //   _isSubscribed = subs.isNotEmpty;
+  //     //   subscribeToSubscriptionStatus();
+        
+  //     //   return true;
+  //     // } else {
+  //     //   _authState = MyAuthState.unauthenticated;
+  //     //   _errorMessage = 'Sign up failed. Please try again.';
+  //     //   return false;
+  //     // }
+
+  //   } catch (e) {
+  //     _authState = MyAuthState.error;
+  //     _errorMessage = e.toString();
+  //     return false;
+  //   } finally {
+  //     notifyListeners();
+  //   }
+  // }
+
   Future<bool> signUp(String email, String password) async {
     _authState = MyAuthState.loading;
     _errorMessage = null;
     notifyListeners();
 
     try {
-      final newUser = await _authService.signUp(email, password);
-      if (newUser != null) {
+      final authResponse = await _authService.signUp(email, password);
+      final user = authResponse?.user;
+      final session = authResponse?.session;
 
-        _currentUser = newUser;
-        _authState = MyAuthState.authenticated;
+      if (user != null) {
+        final UserModel userModel = UserModel(
+          id: user.id,
+          email: user.email ?? '',
+          username: '',
+          displayName: '',
+        );
 
-        final List<Subscription> subs = await _authService.fetchUserSubscriptions();
-        _isSubscribed = subs.isNotEmpty;
-        subscribeToSubscriptionStatus();
-        
-        return true;
+        if (session != null) {
+          // ✅ Email verification disabled: user is authenticated
+          _currentUser = userModel;
+          _authState = MyAuthState.authenticated;
+
+          final List<Subscription> subs = await _authService.fetchUserSubscriptions();
+          _isSubscribed = subs.isNotEmpty;
+          subscribeToSubscriptionStatus();
+
+          return true;
+        } else {
+          // ✅ Email verification enabled: no session returned
+          _newUser = userModel;
+          _authState = MyAuthState.unauthenticated;
+          _errorMessage = 'Please check your inbox to verify your email.';
+          return true;
+        }
       } else {
         _authState = MyAuthState.unauthenticated;
-        _errorMessage = 'Sign up failed. Please try again.';
+        _errorMessage = 'Sign up failed: no user returned.';
         return false;
       }
+
     } catch (e) {
       _authState = MyAuthState.error;
       _errorMessage = e.toString();
@@ -201,6 +358,7 @@ class AuthViewModel extends ChangeNotifier {
       notifyListeners();
     }
   }
+
 
 
 
@@ -219,7 +377,7 @@ class AuthViewModel extends ChangeNotifier {
         _isVerified = await _authService.isCurrentUserVerified();
 
         final List<Subscription> subs = await _authService.fetchUserSubscriptions();
-        debugPrint('subs: $subs');
+        printDebug('subs: $subs');
         _isSubscribed = subs.isNotEmpty;
         subscribeToSubscriptionStatus();
 
@@ -230,7 +388,7 @@ class AuthViewModel extends ChangeNotifier {
       }
     } catch (e) {
       _authState = MyAuthState.unauthenticated;
-      debugPrint('Sign-in error: $e');
+      printDebug('Sign-in error: $e');
       return null;
     } finally {
       notifyListeners();

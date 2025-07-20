@@ -18,6 +18,7 @@ const String getStartedRoute = '/get-started';
 const String reportsRoute = "/reports";
 const String newReportRoute = "/reports/new";
 const String reportRoute = "/reports/report";
+const String freeReportRoute = "/reports/free-report";
 const String promptRoute = "/reports/report/prompt";
 
 const String profileRoute = "/profile";

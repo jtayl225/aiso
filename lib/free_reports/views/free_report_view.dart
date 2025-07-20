@@ -4,17 +4,20 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
-class FreeReport extends StatelessWidget {
-  const FreeReport({super.key});
+class FreeReportView extends StatelessWidget {
+
+  final String reportId;
+
+  const FreeReportView({super.key, required this.reportId});
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => FreeReportViewModel(),
+      create: (_) => FreeReportViewModel(reportId: reportId),
       child: ScreenTypeLayout.builder(
-        mobile: (BuildContext context) => FreeReportRowCol(deviceType: DeviceScreenType.mobile), //FreeReportMobile(),
+        mobile: (BuildContext context) => FreeReportRowCol(deviceType: DeviceScreenType.mobile),
         tablet: (BuildContext context) => FreeReportRowCol(deviceType: DeviceScreenType.mobile),
-        desktop: (BuildContext context) => FreeReportRowCol(deviceType: DeviceScreenType.desktop), //FreeReportDesktop(),
+        desktop: (BuildContext context) => FreeReportRowCol(deviceType: DeviceScreenType.desktop),
       ),
     );
   }
