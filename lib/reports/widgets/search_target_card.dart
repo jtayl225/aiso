@@ -45,16 +45,17 @@ class SearchTargetCard extends StatelessWidget {
               target.description,
               style: Theme.of(context).textTheme.bodySmall,
             ),
-            if (target.url != null) ...[
-              const SizedBox(height: 8),
-              Text(
-                'Website: ${target.url}',
-                style: Theme.of(context)
-                    .textTheme
-                    .bodySmall
-                    ?.copyWith(color: Colors.blue),
-              ),
-            ],
+
+            // if (target.url != null || target.url!.isNotEmpty) ...[
+            //   const SizedBox(height: 8),
+            //   Text(
+            //     'Website: ${target.url}',
+            //     style: Theme.of(context)
+            //         .textTheme
+            //         .bodySmall
+            //         ?.copyWith(color: Colors.blue),
+            //   ),
+            // ],
             // const SizedBox(height: 12),
 
             // Text(

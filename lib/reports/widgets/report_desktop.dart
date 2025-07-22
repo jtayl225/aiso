@@ -6,9 +6,12 @@ import 'package:aiso/reports/widgets/recommendation_card.dart';
 import 'package:aiso/reports/widgets/search_target_card.dart';
 import 'package:aiso/routing/app_router.dart';
 import 'package:aiso/routing/route_names.dart';
+import 'package:aiso/themes/h1_heading.dart';
+import 'package:aiso/themes/typography.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 
 class ReportDesktop extends StatelessWidget {
   const ReportDesktop({super.key});
@@ -49,27 +52,27 @@ class ReportDesktop extends StatelessWidget {
 
           Text(
             vm.report?.title ?? 'Untitled Report',
-            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            // style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            style: AppTextStyles.h1(DeviceScreenType.desktop).copyWith(fontWeight: FontWeight.bold)
           ),
 
-          SizedBox(height: 10.0,),
+          // H1Heading(deviceType: DeviceScreenType.desktop, text: vm.report?.title ?? 'Untitled Report'),
+
+          SizedBox(height: 8.0,),
 
           //  const Text(
           //   "Business details:",
           //   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           // ),
       
-          if (vm.searchTarget != null)
-            SizedBox(width: double.infinity, child: SearchTargetCard(target: vm.searchTarget!)),
+          
 
-          SizedBox(height: 30.0,),
+          // const Text(
+          //   "Report date:",
+          //   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          // ),
 
-          const Text(
-            "Report date:",
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
-
-          SizedBox(height: 14.0,),
+          SizedBox(height: 8.0,),
 
           DropdownButtonFormField<ReportRun>(
             value: vm.selectedReportRun,
@@ -94,11 +97,17 @@ class ReportDesktop extends StatelessWidget {
             },
           ),
 
-          SizedBox(height: 30.0,),
+          SizedBox(height: 8.0,),
 
-          const Text(
+          if (vm.searchTarget != null)
+            SizedBox(width: double.infinity, child: SearchTargetCard(target: vm.searchTarget!)),
+
+          SizedBox(height: 40.0,),
+
+          Text(
             "Ranking reports:",
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            // style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            style: AppTextStyles.h2(DeviceScreenType.desktop).copyWith(fontWeight: FontWeight.bold),
           ),
       
           // Prompts List
@@ -135,9 +144,10 @@ class ReportDesktop extends StatelessWidget {
 
           SizedBox(height: 20.0,),
 
-          const Text(
+          Text(
             "Recommendations:",
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            // style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            style: AppTextStyles.h2(DeviceScreenType.desktop).copyWith(fontWeight: FontWeight.bold),
           ),
 
           // recommendation List
@@ -156,9 +166,10 @@ class ReportDesktop extends StatelessWidget {
 
           SizedBox(height: 20.0,),
 
-          const Text(
+          Text(
             "Dashboards:",
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            // style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            style: AppTextStyles.h2(DeviceScreenType.desktop).copyWith(fontWeight: FontWeight.bold),
           ),
       
           // dashboard List

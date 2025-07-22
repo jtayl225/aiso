@@ -47,7 +47,13 @@ class NavigationBarDesktop extends StatelessWidget {
       NavBarItem('FAQ''s', onTap: () => appRouter.go(faqRoute)),
 
       if (isLoggedIn)
-        NavBarItem('Reports', onTap: () => appRouter.go(reportsRoute)),
+        NavBarItem(
+          'Reports', 
+          onTap: () => appRouter.go(reportsRoute),
+          fontColor: Colors.white,
+          color: AppColors.color6,
+          hoverColor: AppColors.color3,
+        ),
 
       // if (isLoggedIn)
       //   NavBarItem('Account', onTap: () => appRouter.go(profileRoute))
@@ -58,7 +64,13 @@ class NavigationBarDesktop extends StatelessWidget {
       ...(
   isLoggedIn
     ? [
-        NavBarItem('Account', onTap: () => appRouter.go(profileRoute)),
+        // NavBarItem(
+        //   'Account', 
+        //   onTap: () => appRouter.go(profileRoute),
+        //   // fontColor: Colors.white,
+        //   // color: AppColors.color6,
+        //   // hoverColor: AppColors.color3,
+        // ),
       ]
     : [
         NavBarItem('Sign in', onTap: () => appRouter.go(signInRoute)),
@@ -91,6 +103,22 @@ class NavigationBarDesktop extends StatelessWidget {
                   child: item,
                 ),
               ),
+
+              if (isLoggedIn)
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  child: IconButton(
+                    icon: const Icon(Icons.person),
+                    onPressed: () => appRouter.go(profileRoute),
+                    hoverColor: AppColors.color3, // background on hover
+                    splashColor: AppColors.color1, // ripple effect
+                    highlightColor: Colors.transparent, // highlight during long-press/tap
+                    color: Colors.black, // default icon color
+                    // iconSize: 28,
+                    // tooltip: 'Profile',
+                  ),
+                ),
+
             ],
           ),
         ],

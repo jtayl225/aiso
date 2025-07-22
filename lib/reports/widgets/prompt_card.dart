@@ -38,6 +38,7 @@
 //   }
 // }
 
+import 'package:aiso/constants/app_colors.dart';
 import 'package:aiso/models/prompt_model.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -59,7 +60,15 @@ class PromptCard extends StatelessWidget {
 
     return Card(
       elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      // shadowColor: Colors.black.withOpacity(0.2), // custom shadow color
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: const BorderSide(
+          color: AppColors.color1, // custom border color
+          width: 1.5,
+        ),
+      ),
+      // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
         onTap: onTap,

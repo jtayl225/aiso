@@ -246,6 +246,9 @@ class _NewReportFormState extends State<NewReportForm> {
 
               ]
             ),
+
+            SizedBox(width:40)
+
           ],
         ),
       ),
