@@ -1,6 +1,5 @@
 import 'package:aiso/Store/view_models/store_view_model.dart';
 import 'package:aiso/routing/app_router.dart';
-import 'package:aiso/routing/route_names.dart';
 import 'package:aiso/themes/light_mode.dart';
 import 'package:aiso/utils/logger.dart';
 import 'package:aiso/view_models/auth_view_model.dart';

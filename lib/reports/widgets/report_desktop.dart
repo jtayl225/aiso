@@ -26,7 +26,7 @@ class ReportDesktop extends StatelessWidget {
 
     final bool canShow = (vm.report?.isPaid == true || authVm.isSubscribed == true) ? true : false;
 
-    if (vm.isLoading) {
+    if (vm.isLoading || vm.reportRuns.isEmpty) {
       return const Center(
         child: Padding(
           padding: EdgeInsets.all(32),

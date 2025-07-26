@@ -46,11 +46,25 @@ class RowCol extends StatelessWidget {
     }
   }
 
+  // List<Widget> _wrapChildrenForLayout(List<Widget> children) {
+  //   if (layoutType == RowColType.row) {
+  //     return List.generate(children.length, (i) {
+  //       final flex = flexes != null && flexes!.length > i ? flexes![i] : 1;
+  //       return Flexible(flex: flex, fit: FlexFit.tight, child: children[i]);
+  //     });
+  //   } else {
+  //     return children;
+  //   }
+  // }
+
   List<Widget> _wrapChildrenForLayout(List<Widget> children) {
     if (layoutType == RowColType.row) {
       return List.generate(children.length, (i) {
         final flex = flexes != null && flexes!.length > i ? flexes![i] : 1;
-        return Flexible(flex: flex, fit: FlexFit.tight, child: children[i]);
+        return Expanded(
+          flex: flex,
+          child: children[i],
+        );
       });
     } else {
       return children;

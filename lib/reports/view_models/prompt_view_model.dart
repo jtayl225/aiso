@@ -25,13 +25,30 @@ class PromptViewModel extends ChangeNotifier {
 
   Prompt? prompt;
   List<PromptResult> promptResults = [];
+  // List<PromptResult> get chatGptPromptResults {
+  // if (promptResults.isEmpty) return [];
+  //   return promptResults.where((p) => LLMParsing.fromString(p.llmGeneration) == LLM.chatgpt).toList();
+  // }
+
   List<PromptResult> get chatGptPromptResults {
-  if (promptResults.isEmpty) return [];
-    return promptResults.where((p) => LLMParsing.fromString(p.llmGeneration) == LLM.chatgpt).toList();
+    if (promptResults.isEmpty) return [];
+    return promptResults
+        .where((p) => LLMParsing.fromString(p.llmGeneration) == LLM.chatgpt)
+        .toList()
+      ..sort((a, b) => a.entityRank.compareTo(b.entityRank));
   }
+
+  // List<PromptResult> get geminiPromptResults {
+  // if (promptResults.isEmpty) return [];
+  //   return promptResults.where((p) => LLMParsing.fromString(p.llmGeneration) == LLM.gemini).toList();
+  // }
+
   List<PromptResult> get geminiPromptResults {
-  if (promptResults.isEmpty) return [];
-    return promptResults.where((p) => LLMParsing.fromString(p.llmGeneration) == LLM.gemini).toList();
+    if (promptResults.isEmpty) return [];
+    return promptResults
+        .where((p) => LLMParsing.fromString(p.llmGeneration) == LLM.gemini)
+        .toList()
+      ..sort((a, b) => a.entityRank.compareTo(b.entityRank));
   }
 
   Future<void> _init() async {
