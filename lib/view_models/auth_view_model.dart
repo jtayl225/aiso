@@ -76,15 +76,35 @@ class AuthViewModel extends ChangeNotifier {
 
   // subscribe to supabase
   void subscribeToSubscriptionStatus() async {
-    if (_subscriptionChannel != null) return; // Already subscribed
+    debugPrint('DEBUG: subscribeToSubscriptionStatus called.');
+    
+    if (_subscriptionChannel != null) {
+      debugPrint('DEBUG: Already subscribed, returning early.');
+      return; // Already subscribed
+    }
     
     final userId = Supabase.instance.client.auth.currentUser?.id;
-    if (userId == null) return;
+    if (userId == null) {
+      debugPrint('DEBUG: No user ID found.');
+      return;
+    }
+    debugPrint('DEBUG: User ID: $userId');
     
     final String env = _storeService.env;
+    debugPrint('DEBUG: Environment: $env');
+    
     final stripeCustomerId = await _storeService.fetchStripeCustomerId(userId, env);
-    if (stripeCustomerId == null) return;
-
+    if (stripeCustomerId == null) {
+      debugPrint('DEBUG: No stripe customer ID found.');
+      return;
+    }
+    debugPrint('DEBUG: Stripe Customer ID: $stripeCustomerId');
+    
+    // Check initial subscription status
+    await _checkInitialSubscriptionStatus(stripeCustomerId);
+    
+    debugPrint('DEBUG: About to subscribe to realtime changes.');
+    
     _subscriptionChannel = Supabase.instance.client
         .channel('subscription-updates')
         .onPostgresChanges(
@@ -92,15 +112,30 @@ class AuthViewModel extends ChangeNotifier {
           schema: 'public',
           table: 'subscriptions',
           filter: PostgresChangeFilter(
-            type: PostgresChangeFilterType.eq, 
-            column: 'stripe_customer_id', 
+            type: PostgresChangeFilterType.eq,
+            column: 'stripe_customer_id',
             value: stripeCustomerId
           ),
           callback: (payload) {
+            debugPrint('DEBUG: Subscriptions table change detected.');
+            debugPrint('DEBUG: Event type: ${payload.eventType}');
+            debugPrint('DEBUG: Old record: ${payload.oldRecord}');
+            debugPrint('DEBUG: New record: ${payload.newRecord}');
+            
             final newValue = payload.newRecord['stripe_status'];
+            debugPrint('DEBUG: New stripe_status value: $newValue');
+            
+            final wasSubscribed = _isSubscribed;
             _isSubscribed = newValue == 'active';
-            debugPrint('DEBUG: subscription status changed to: $_isSubscribed');
-            notifyListeners();
+            
+            debugPrint('DEBUG: Was subscribed: $wasSubscribed, Now subscribed: $_isSubscribed');
+            
+            if (wasSubscribed != _isSubscribed) {
+              debugPrint('DEBUG: Subscription status changed, notifying listeners.');
+              notifyListeners();
+            } else {
+              debugPrint('DEBUG: Subscription status unchanged, not notifying.');
+            }
           },
         )
         .onPostgresChanges(
@@ -108,25 +143,87 @@ class AuthViewModel extends ChangeNotifier {
           schema: 'public',
           table: 'stripe_users',
           filter: PostgresChangeFilter(
-            type: PostgresChangeFilterType.eq, 
-            column: 'user_id', 
+            type: PostgresChangeFilterType.eq,
+            column: 'user_id',
             value: userId
           ),
           callback: (payload) async {
+            debugPrint('DEBUG: Stripe users table change detected.');
+            debugPrint('DEBUG: Event type: ${payload.eventType}');
+            debugPrint('DEBUG: New record: ${payload.newRecord}');
+            
             // Re-fetch subscription status when stripe_users changes
             final newStripeCustomerId = await _storeService.fetchStripeCustomerId(userId, env);
+            debugPrint('DEBUG: Re-fetched stripe customer ID: $newStripeCustomerId');
+            
             if (newStripeCustomerId != null) {
               final response = await Supabase.instance.client
                   .from('subscriptions')
                   .select('stripe_status')
                   .eq('stripe_customer_id', newStripeCustomerId)
                   .maybeSingle();
+              
+              debugPrint('DEBUG: Subscription query response: $response');
+              
+              final wasSubscribed = _isSubscribed;
               _isSubscribed = response?['stripe_status'] == 'active';
-              notifyListeners();
+              
+              debugPrint('DEBUG: Was subscribed: $wasSubscribed, Now subscribed: $_isSubscribed');
+              
+              if (wasSubscribed != _isSubscribed) {
+                debugPrint('DEBUG: Subscription status changed via stripe_users, notifying listeners.');
+                notifyListeners();
+              }
             }
           },
         )
         .subscribe();
+    
+    debugPrint('DEBUG: Subscription setup complete.');
+  }
+
+  // Add this helper method to check initial status
+  Future<void> _checkInitialSubscriptionStatus(String stripeCustomerId) async {
+    debugPrint('DEBUG: Checking initial subscription status...');
+    
+    try {
+      final response = await Supabase.instance.client
+          .from('subscriptions')
+          .select('stripe_status')
+          .eq('stripe_customer_id', stripeCustomerId)
+          .maybeSingle();
+      
+      debugPrint('DEBUG: Initial subscription query response: $response');
+      
+      final initialStatus = response?['stripe_status'];
+      _isSubscribed = initialStatus == 'active';
+      
+      debugPrint('DEBUG: Initial subscription status: $_isSubscribed');
+      notifyListeners();
+    } catch (e) {
+      debugPrint('DEBUG: Error checking initial subscription status: $e');
+    }
+  }
+
+  // Add this method to manually refresh subscription status (useful for testing)
+  Future<void> refreshSubscriptionStatus() async {
+    debugPrint('DEBUG: Manual refresh requested.');
+    
+    final userId = Supabase.instance.client.auth.currentUser?.id;
+    if (userId == null) return;
+    
+    final String env = _storeService.env;
+    final stripeCustomerId = await _storeService.fetchStripeCustomerId(userId, env);
+    if (stripeCustomerId == null) return;
+    
+    await _checkInitialSubscriptionStatus(stripeCustomerId);
+  }
+
+  // Add this method to test if realtime is working
+  void testRealtimeConnection() {
+    debugPrint('DEBUG: Testing realtime connection...');
+    debugPrint('DEBUG: Channel exists: ${_subscriptionChannel != null}');
+    debugPrint('DEBUG: Is subscribed: $_isSubscribed');
   }
 
   // Check authentication status
