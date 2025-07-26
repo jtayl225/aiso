@@ -51,7 +51,7 @@ class StoreViewModel extends ChangeNotifier {
         // reducedFromPrice: 19.95,
         pctDiscount: 0.3,
         productInclusions: [
-          ProductInclusion(isIncluded: true, description: '\$1.50 / report'),
+          ProductInclusion(isIncluded: true, description: '\$1.80 / report'),
           ProductInclusion(isIncluded: true, description: 'ChatGPT (OpenAI)'),
           ProductInclusion(isIncluded: true, description: 'Gemini (Google)'),
           ProductInclusion(isIncluded: true, description: 'Up to 10 reports / month'),
@@ -86,7 +86,7 @@ class StoreViewModel extends ChangeNotifier {
         // reducedFromPrice: 199.95,
         pctDiscount: 0.3,
         productInclusions: [
-          ProductInclusion(isIncluded: true, description: '\$1.20 / report'),
+          ProductInclusion(isIncluded: true, description: '\$1.40 / report'),
           ProductInclusion(isIncluded: true, description: 'ChatGPT (OpenAI)'),
           ProductInclusion(isIncluded: true, description: 'Gemini (Google)'),
           ProductInclusion(isIncluded: true, description: 'Up to 10 reports / month'),
