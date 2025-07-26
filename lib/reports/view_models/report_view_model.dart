@@ -192,19 +192,8 @@ class ReportViewModel extends ChangeNotifier {
       recommendations![index] = current.copyWith(isDone: newIsDone);
       notifyListeners();
 
-      // // Update backend
-      // final response = await _supabase
-      //     .from('recommendations')
-      //     .update({
-      //       'is_done': newIsDone,
-      //       'updated_at': DateTime.now().toIso8601String(),
-      //     })
-      //     .match({
-      //       'id': recommendationId,
-      //       'report_run_id': reportRunId,
-      //     });
+     final _ = await _reportService.updateRecommendationStatus(current.id, current.reportRunId, newIsDone);
 
-      // debugPrint('✅ Supabase update response: $response');
     } catch (e, st) {
       debugPrint('❌ Error toggling isDone: $e\n$st');
     }

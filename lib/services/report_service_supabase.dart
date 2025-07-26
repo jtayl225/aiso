@@ -723,6 +723,25 @@ class ReportServiceSupabase {
     }
   }
 
+  // RECOMMENDATIONS
+  Future<bool> updateRecommendationStatus(String id, String reportRunId, bool isDone) async {
+    printDebug('DEBUG: updateRecommendationStatus.');
+    try {
+      final response = await _supabase
+          .from('report_run_recommendations')
+          .update({'is_done': isDone})
+          .eq('id', id)
+          .eq('report_run_id', reportRunId)
+          .select(); // Add select() to get the updated data back
+      
+      return response.isNotEmpty;
+      
+    } catch (e) {
+      printError('ERROR: Failed to update recommendation status: $e');
+      rethrow;
+    }
+  }
+
 
 
 
