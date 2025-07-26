@@ -1,2 +1,27 @@
-/index.html
-  Cache-Control: no-cache
+# /index.html
+#  Cache-Control: no-cache
+
+# All files - no cache
+/*
+  Cache-Control: no-cache, no-store, must-revalidate
+  Pragma: no-cache
+  Expires: 0
+
+# Or more specifically for Flutter web files:
+/main.dart.js
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/flutter_service_worker.js  
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/flutter.js
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/manifest.json
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/version.json
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/assets/*
+  Cache-Control: no-cache, no-store, must-revalidate
