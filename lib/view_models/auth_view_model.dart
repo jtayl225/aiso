@@ -99,6 +99,7 @@ class AuthViewModel extends ChangeNotifier {
           callback: (payload) {
             final newValue = payload.newRecord['stripe_status'];
             _isSubscribed = newValue == 'active';
+            debugPrint('DEBUG: subscription status changed to: $_isSubscribed');
             notifyListeners();
           },
         )
