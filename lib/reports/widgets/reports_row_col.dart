@@ -86,7 +86,8 @@ class ReportsRowCol extends StatelessWidget {
                   child: InkWell(
                     onTap: () {
                       final uri = Uri(
-                        path: report.isPaid ? reportRoute : freeReportRoute,
+                        // path: report.isPaid ? reportRoute : freeReportRoute,
+                        path: reportRoute,
                         queryParameters: {'report_id': report.id},
                       );
                       appRouter.go(uri.toString());

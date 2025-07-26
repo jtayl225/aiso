@@ -146,7 +146,7 @@ class FreeReportRowCol extends StatelessWidget {
                               vertical: 8,
                             ),
                           ),
-                          child: const Text('View'),
+                          child: const Text('Upgrade to view'),
                         ),
                       ),
                     ],

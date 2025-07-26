@@ -13,6 +13,7 @@ class ProductInclusion {
 
 class Product {
   final String id;
+  final String? highlightLabel;
   final String title;
   final String description;
   final String cadence; // e.g., /month, /year, /report, etc
@@ -25,6 +26,7 @@ class Product {
 
   Product({
     required this.id,
+    this.highlightLabel,
     required this.title,
     required this.description,
     required this.cadence,

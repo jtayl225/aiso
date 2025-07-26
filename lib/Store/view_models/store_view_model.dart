@@ -43,6 +43,7 @@ class StoreViewModel extends ChangeNotifier {
 
     _monthlySubcription = Product(
         id: '2',
+        highlightLabel: 'Most popular',
         title: 'Monthly Plan',
         description: 'All features for growing teams.',
         cadence: '/ month',
@@ -55,7 +56,7 @@ class StoreViewModel extends ChangeNotifier {
           ProductInclusion(isIncluded: true, description: 'Gemini (Google)'),
           ProductInclusion(isIncluded: true, description: 'Up to 10 reports / month'),
           ProductInclusion(isIncluded: true, description: 'Up to 10 prompts / report'),
-          ProductInclusion(isIncluded: true, description: 'Automated monthly report updates'),
+          ProductInclusion(isIncluded: true, description: 'Monthly report updates'),
         ],
         callToAction: 'Subscribe',
         // onPressed: (context) => handleProductAction(context, ProductType.SUBSCRIBE_MONTHLY),
@@ -77,6 +78,7 @@ class StoreViewModel extends ChangeNotifier {
 
     _yearlySubcription = Product(
         id: '3',
+        highlightLabel: 'Best value',
         title: 'Yearly Plan',
         description: 'Custom solutions for businesses.',
         cadence: '/ year',
@@ -89,7 +91,7 @@ class StoreViewModel extends ChangeNotifier {
           ProductInclusion(isIncluded: true, description: 'Gemini (Google)'),
           ProductInclusion(isIncluded: true, description: 'Up to 10 reports / month'),
           ProductInclusion(isIncluded: true, description: 'Up to 10 prompts / report'),
-          ProductInclusion(isIncluded: true, description: 'Automated monthly report updates'),
+          ProductInclusion(isIncluded: true, description: 'Monthly report updates'),
         ],
         callToAction: 'Subscribe',
         // onPressed: (context) => handleProductAction(context, ProductType.SUBSCRIBE_YEARLY),
@@ -125,7 +127,7 @@ class StoreViewModel extends ChangeNotifier {
           // ProductInclusion(isIncluded: true, description: 'Only 1 report'),
           ProductInclusion(isIncluded: false, description: 'Up to 10 reports / month'),
           ProductInclusion(isIncluded: false, description: 'Up to 10 prompts / report'),
-          ProductInclusion(isIncluded: false, description: 'Automated monthly report updates'),
+          ProductInclusion(isIncluded: false, description: 'Monthly report updates'),
         ],
         callToAction: 'Buy Now',
         onPressed: (context) => handleProductAction(context, ProductType.PURCHASE)

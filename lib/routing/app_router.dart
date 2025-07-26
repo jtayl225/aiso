@@ -3,6 +3,8 @@ import 'package:aiso/Auth/views/signin_view.dart';
 import 'package:aiso/Auth/views/signup_view.dart';
 import 'package:aiso/Auth/views/subscribe_signup_view.dart';
 import 'package:aiso/Auth/views/verify_email_view.dart';
+import 'package:aiso/Dashboards/views/dash_00_view.dart';
+// import 'package:aiso/Dashboards/widgets/bar_chart_string_double.dart';
 import 'package:aiso/Home/views/about_view.dart';
 import 'package:aiso/NavBar/views/faq_view.dart';
 import 'package:aiso/NavBar/views/privacy_policy_view.dart';
@@ -91,6 +93,15 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: profileRoute, 
       pageBuilder: (context, state) => NoTransitionPage(child: const AuthProfile()),
+      redirect: authGuard,
+    ),
+
+    GoRoute(
+      path: dash00Route,
+      pageBuilder: (context, state) {
+        final reportId = state.uri.queryParameters['report_id']!;
+        return NoTransitionPage(child: Dash00View(reportId: reportId)); 
+      },
       redirect: authGuard,
     ),
 

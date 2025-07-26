@@ -5,9 +5,11 @@ import 'package:responsive_builder/responsive_builder.dart';
 class FAQView extends StatelessWidget {
   const FAQView({super.key});
 
-  final String faqText = """
-# **Frequently Asked Questions**
+  // # **Frequently Asked Questions**
 
+  final String faqHeading = 'Frequently Asked Questions';
+
+  final String faqText = """
 ## What is Generative Engine Optimisation (GEO)?
 GEO is the practice of improving how your business is understood, ranked, and recommended by AI tools. It's like SEO, but for the AI era — focused on your online presence, content, reviews, and how well your brand is connected across the web.
 
@@ -64,9 +66,9 @@ GEOMAX is developed by the team at **Real Estate Ai**, founded by Justin Hodgson
   @override
   Widget build(BuildContext context) {
     return ScreenTypeLayout.builder(
-      mobile: (BuildContext context) => MarkdownContent(markdownText: faqText, deviceType: DeviceScreenType.mobile),
-      tablet: (BuildContext context) => MarkdownContent(markdownText: faqText, deviceType: DeviceScreenType.mobile),
-      desktop: (BuildContext context) => MarkdownContent(markdownText: faqText, deviceType: DeviceScreenType.desktop),
+      mobile: (BuildContext context) => H1MarkdownContent(headingText: faqHeading, bodyText: faqText, deviceType: DeviceScreenType.mobile),
+      tablet: (BuildContext context) => H1MarkdownContent(headingText: faqHeading, bodyText: faqText, deviceType: DeviceScreenType.mobile),
+      desktop: (BuildContext context) => H1MarkdownContent(headingText: faqHeading, bodyText: faqText, deviceType: DeviceScreenType.desktop),
     );
   }
 }

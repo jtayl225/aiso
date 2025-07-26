@@ -9,6 +9,13 @@ class StoreServiceSupabase {
 
   final _supabase = Supabase.instance.client;
 
+  // final String _env = kDebugMode ? 'test' : 'prod';
+  final String _env = 'test';
+  String get env => _env;
+  
+  // final String _endpoint = kDebugMode ? '$fastAPI/generate-checkout-url-test' : '$fastAPI/generate-checkout-url-prod';
+  final String _endpoint = '$fastAPI/generate-checkout-url-test';
+
   Future<String?> fetchStripeCustomerId(String userId, String env) async {
     debugPrint('DEBUG: Service is fetching Stripe customer ID for userId: $userId');
 
@@ -31,8 +38,7 @@ class StoreServiceSupabase {
 
   Future<String?>  generateCheckoutUrl(ProductType purchaseType, {String? reportId}) async {
 
-    final String endpoint = '$fastAPI/generate-checkout-url-test';
-    final url = Uri.parse(endpoint); // Replace with the correct path if needed
+    final url = Uri.parse(_endpoint); // Replace with the correct path if needed
 
     try {
 
@@ -67,8 +73,7 @@ class StoreServiceSupabase {
 
   Future<String?> generateBillingPortal() async {
 
-    final String endpoint = '$fastAPI/billing-portal-test';
-    final url = Uri.parse(endpoint); // Replace with the correct path if needed
+    final url = Uri.parse(_endpoint); // Replace with the correct path if needed
 
     try {
 

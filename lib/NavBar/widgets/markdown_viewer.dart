@@ -27,6 +27,7 @@
 //   }
 // }
 
+import 'package:aiso/themes/h1_heading.dart';
 import 'package:aiso/themes/typography.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
@@ -114,4 +115,35 @@ class MarkdownContent extends StatelessWidget {
     );
   }
 }
+
+
+class H1MarkdownContent extends StatelessWidget {
+
+  final String headingText;
+  final String bodyText;
+  final DeviceScreenType deviceType;
+
+  const H1MarkdownContent({
+    super.key,
+    required this.headingText,
+    required this.bodyText,
+    required this.deviceType
+  });
+
+  @override
+  Widget build(BuildContext context) {
+
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        H1Heading(deviceType: deviceType, text: headingText),
+        SizedBox(height: 64),
+        MarkdownContent(markdownText: bodyText, deviceType: deviceType)
+      ],
+    );
+  }
+}
+
+
 

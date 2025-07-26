@@ -42,7 +42,8 @@ class StoreDetails extends StatelessWidget {
           // ),
           SizedBox(height: 30),
           Text(
-            'Up grade to a monthly or yearly plan to receive monthly ranking reports with personalised recommendations to improve your visibility on AI tools.',
+            'Upgrade to view competitor rankings and to receive personalised recommendations to improve your visibility on AI tools.  Monthly or Yearly plans give you access to monthly reports with trend graphs and monthly recommendations.',
+            // 'Upgrade to a monthly or yearly plan to receive monthly ranking reports with personalised recommendations to improve your visibility on AI tools.',
             // style: TextStyle(fontSize: fontSizeDesktopMedium, height: 1.7),
             style: AppTextStyles.h3(deviceType),
             textAlign: TextAlign.center,

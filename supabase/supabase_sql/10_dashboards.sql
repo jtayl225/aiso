@@ -21,6 +21,7 @@ SELECT
   d.created_at AS report_run_date,
 
   e.prompt,
+  e.locality_id,
 
   f.name AS locality_name
 

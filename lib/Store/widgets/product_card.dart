@@ -33,6 +33,10 @@ class ProductCard extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               spacing: 10,
               children: [
+
+                SizedBox(height: 8.0,),
+
+                // title
                 Text(
                   product.title,
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
@@ -82,6 +86,8 @@ class ProductCard extends StatelessWidget {
                 //     color: Colors.black, // or any color you want
                 //   ),
                 // ),
+
+                SizedBox(height: 8.0,),
         
                 // dotted horizontal line
                 const Divider(color: AppColors.color1),
@@ -154,6 +160,29 @@ class ProductCard extends StatelessWidget {
             ),
           ),
         ),
+
+        // highlight label
+        if (product.highlightLabel != null && product.highlightLabel!.isNotEmpty)
+          Positioned(
+              top: 24 + 4,
+              left: 12 + 4,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  color: AppColors.color6,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Text(
+                  // 'Save ${_calculateDiscountPercent(product)}%',
+                  product.highlightLabel ?? '',
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 12,
+                  ),
+                ),
+              ),
+            ),
       
         // Floating Save badge
         if (product.price > product.discountedPrice)

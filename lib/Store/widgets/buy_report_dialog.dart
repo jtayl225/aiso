@@ -1,6 +1,16 @@
+import 'package:aiso/Store/view_models/store_view_model.dart';
+import 'package:aiso/models/purchase_enum.dart';
+import 'package:aiso/services/url_launcher_service.dart';
+import 'package:aiso/view_models/auth_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void showBuyReportDialog(BuildContext context) {
+
+  final storeVM = context.read<StoreViewModel>();
+  final authVM = context.read<AuthViewModel>();
+  final user = authVM.currentUser;
+
   showDialog(
     context: context,
     builder: (ctx) => AlertDialog(
@@ -21,9 +31,21 @@ void showBuyReportDialog(BuildContext context) {
         //   child: const Text('Buy 1 Report'),
         // ),
         ElevatedButton(
+          // onPressed: () {
+          //   // Navigate to subscription
+          //   Navigator.pop(ctx);
+          // },
           onPressed: () {
-            // Navigate to subscription
-            Navigator.pop(ctx);
+
+            if (user != null) {
+              // ✅ Only launch if signed in
+              UrlLauncherService.launchFromAsyncSource(() {
+                return storeVM.handleProductAction(context, ProductType.SUBSCRIBE_MONTHLY);
+              });
+            } else {
+              // ❌ Not signed in — redirect
+              storeVM.handleProductAction(context, ProductType.SUBSCRIBE_MONTHLY);
+            }
           },
           child: const Text('Subscribe & Save'),
         ),

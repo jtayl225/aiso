@@ -5,7 +5,7 @@ import 'package:responsive_builder/responsive_builder.dart';
 class FontSizes {
   // Desktop
   static const double desktopH1 = 36;
-  static const double desktopH2 = 28;
+  static const double desktopH2 = 26;
   static const double desktopH3 = 20;
   static const double desktopBody = 14;
 

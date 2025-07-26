@@ -11,6 +11,7 @@ import 'package:aiso/themes/h1_heading.dart';
 import 'package:aiso/themes/typography.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
+import 'package:aiso/Widgets/supabase_video_player.dart';
 
 class HomeRowCol extends StatelessWidget {
 
@@ -88,11 +89,21 @@ class HomeRowCol extends StatelessWidget {
           colCrossAxisAlignment: CrossAxisAlignment.center,
           children: [
 
+            // IframeView(
+            //   url: convertYouTubeToEmbedUrl(youTubeLink),
+            //   width: 500,
+            //   height: 500,
+            // ),
+
             IframeView(
               url: convertYouTubeToEmbedUrl(youTubeLink),
-              width: 500,
-              height: 500,
+              width: 750,
+              height: 750,
             ),
+
+            // SupabaseVideoPlayer(
+            //   videoUrl: youTubeLink,
+            // ),
 
             SizedBox(height: 16,)
 

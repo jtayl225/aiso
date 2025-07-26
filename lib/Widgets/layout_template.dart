@@ -87,7 +87,7 @@ Widget build(BuildContext context) {
                   // mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-
+          
                     // Header
                     ConstrainedBox(
                       constraints: BoxConstraints(maxWidth: maxWidth),

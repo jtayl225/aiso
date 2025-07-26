@@ -55,6 +55,9 @@ class ReportViewModel extends ChangeNotifier {
     Dashboard(icon: Icons.analytics, title: 'Timeseries', description: 'Prompt results over time.', number: 12),
   ];
 
+  Dashboard dash0 = Dashboard(icon: Icons.analytics, title: 'Summary', description: 'Descriptive statistics split by AI tool, prompt, and location.', number: 0);
+  Dashboard dash1 = Dashboard(icon: Icons.analytics, title: 'Timeseries', description: 'Descriptive statistics over time.', number: 1);
+
   Future<void> _init() async {
   // Mark as loading
   Future.microtask(() {

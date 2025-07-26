@@ -21,6 +21,8 @@ const String reportRoute = "/reports/report";
 const String freeReportRoute = "/reports/free-report";
 const String promptRoute = "/reports/report/prompt";
 
+const String dash00Route = "/reports/dashboard-00";
+
 const String profileRoute = "/profile";
 
 const String freeReportSignUpRoute = "/free/signup";

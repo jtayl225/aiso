@@ -5,7 +5,7 @@ import 'package:aiso/services/url_launcher_service.dart';
 import 'package:aiso/utils/logger.dart';
 import 'package:flutter/foundation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:url_launcher/url_launcher.dart';
+// import 'package:url_launcher/url_launcher.dart';
 import '../models/auth_state_enum.dart';
 import '../models/user_model.dart';
 
@@ -48,9 +48,13 @@ class AuthViewModel extends ChangeNotifier {
 
   // subscribe to supabase
   void subscribeToSubscriptionStatus() async {
+
+    if (_subscriptionChannel != null) return; // Already subscribed
+
     final userId = Supabase.instance.client.auth.currentUser?.id;
     if (userId == null) return;
-    final String env = 'test';
+    // final String env = 'test';
+    final String env = _storeService.env;
     final stripeCustomerId = await _storeService.fetchStripeCustomerId(userId, env);
     if (stripeCustomerId == null) return;
 
@@ -83,6 +87,7 @@ class AuthViewModel extends ChangeNotifier {
       _isAnonymous = _authService.isAnonymous;
       // printDebug('DEBUG: is anon? $_isAnonymous'); 
       _authState = MyAuthState.authenticated;
+      subscribeToSubscriptionStatus();
       notifyListeners();
       return;
     }
@@ -451,10 +456,15 @@ class AuthViewModel extends ChangeNotifier {
       _authState = MyAuthState.loading;
       notifyListeners();
 
+      // Unsubscribe from real-time updates
+      _subscriptionChannel?.unsubscribe();
+      _subscriptionChannel = null;
+
       await _authService.signOut(); // Perform sign-out
 
       _currentUser = null;
-      _authState = MyAuthState.unauthenticated;
+      _authState = MyAuthState.unauthenticated;      
+
       notifyListeners();
 
       return true; // ✅ Sign-out successful

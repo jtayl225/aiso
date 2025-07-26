@@ -4,10 +4,12 @@ import 'package:aiso/reports/view_models/report_view_model.dart';
 import 'package:aiso/reports/widgets/prompt_card.dart';
 import 'package:aiso/reports/widgets/recommendation_card.dart';
 import 'package:aiso/reports/widgets/search_target_card.dart';
+import 'package:aiso/reports/widgets/upgrade_prompt_card.dart';
 import 'package:aiso/routing/app_router.dart';
 import 'package:aiso/routing/route_names.dart';
 import 'package:aiso/themes/h1_heading.dart';
 import 'package:aiso/themes/typography.dart';
+import 'package:aiso/view_models/auth_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -18,7 +20,11 @@ class ReportDesktop extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final authVm = context.watch<AuthViewModel>();
     final vm = context.watch<ReportViewModel>();
+
+    final bool canShow = (vm.report?.isPaid == true || authVm.isSubscribed == true) ? true : false;
 
     if (vm.isLoading) {
       return const Center(
@@ -150,8 +156,10 @@ class ReportDesktop extends StatelessWidget {
             style: AppTextStyles.h2(DeviceScreenType.desktop).copyWith(fontWeight: FontWeight.bold),
           ),
 
+
+
           // recommendation List
-          if (vm.reportRunRecommendations != null && vm.reportRunRecommendations!.isNotEmpty)
+          if (canShow && vm.reportRunRecommendations != null && vm.reportRunRecommendations!.isNotEmpty)
             ...vm.reportRunRecommendations!.map((reco) => Padding(
               padding: const EdgeInsets.symmetric(vertical: 2),
               child: RecoCard(
@@ -164,6 +172,10 @@ class ReportDesktop extends StatelessWidget {
                 ),)
           ),
 
+          if (!canShow)
+            // Text('Upgrade to see recommendations.'),
+            UpgradePromptCard(onSubscribe: () => appRouter.go(storeRoute)),
+
           SizedBox(height: 20.0,),
 
           Text(
@@ -171,21 +183,51 @@ class ReportDesktop extends StatelessWidget {
             // style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             style: AppTextStyles.h2(DeviceScreenType.desktop).copyWith(fontWeight: FontWeight.bold),
           ),
+
+          if (!canShow)
+            // Text('Upgrade to see recommendations.'),
+            UpgradePromptCard(onSubscribe: () => appRouter.go(storeRoute)),
+
+          if (canShow)
+            DashboardCard(
+              dashboard: vm.dash0,
+              onTap: () {
+                  final uri = Uri(path: dash00Route, queryParameters: {'report_id': vm.reportId});
+                  appRouter.go(uri.toString());
+                }
+              ),
+
+          if (canShow && vm.reportRuns.length > 1)
+            DashboardCard(
+              dashboard: vm.dash1,
+              onTap: () {
+                  final uri = Uri(path: dash00Route, queryParameters: {'report_id': vm.reportId});
+                  appRouter.go(uri.toString());
+                }
+              ),
       
-          // dashboard List
-          if (vm.dashboards != null && vm.dashboards!.isNotEmpty)
-            ...vm.dashboards!.map((dash) => Padding(
-              padding: const EdgeInsets.symmetric(vertical: 2),
-              child: DashboardCard(
-                dashboard: dash, 
-                onTap: () async {
-                    await vm.generateDashboardUrl(dash.number);
-                  },
-                ),
-            )),
+          // // dashboard List
+          // if (vm.dashboards != null && vm.dashboards!.isNotEmpty)
+          //   ...vm.dashboards!.map((dash) => Padding(
+          //     padding: const EdgeInsets.symmetric(vertical: 2),
+          //     child: DashboardCard(
+          //       dashboard: dash, 
+          //       // onTap: () async {
+          //       //     await vm.generateDashboardUrl(dash.number);
+          //       //   },
+          //       // ),
+          //       // onTap: () => appRouter.go(dash00Route),
+          //       onTap: () {
+
+          //         final uri = Uri(path: dash00Route, queryParameters: {'report_id': vm.reportId});
+          //         appRouter.go(uri.toString());
+
+          //       }
+          //       ),
+          //   )),
             
-          if (vm.dashboards == null || vm.dashboards!.isEmpty)
-            const Text('No dashboards available for this report run.'),
+          // if (vm.dashboards == null || vm.dashboards!.isEmpty)
+          //   const Text('No dashboards available for this report run.'),
 
           SizedBox(height: 20.0,),
       

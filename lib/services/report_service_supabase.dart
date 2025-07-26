@@ -551,7 +551,7 @@ class ReportServiceSupabase {
       .isFilter('deleted_at', null);
 
     // Inspect the response to see its structure
-    printDebug('Response: $response');
+    // printDebug('Response: $response');
 
     final List<PromptResult> promptResults = (response as List).map((item) {
       return PromptResult.fromJson(item);
@@ -572,7 +572,7 @@ class ReportServiceSupabase {
         .select()
         .single();
 
-    printDebug("Response from prompts upsert: $response");
+    // printDebug("Response from prompts upsert: $response");
 
     // 3) Parse the Prompt object
     final Prompt prompt = Prompt.fromJson(response);
