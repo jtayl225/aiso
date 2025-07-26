@@ -30,7 +30,7 @@ class DashboardServiceSupabase {
 
     printDebug('Dashboard service: fetchPercentFoundSummary');
 
-    final query = _supabase
+    PostgrestFilterBuilder query = _supabase
       .from('dash_01_vw')
       .select('llm_generation, locality_name, target_found')
       // .eq('user_id', userId)
@@ -38,20 +38,20 @@ class DashboardServiceSupabase {
       ;
 
     if (reportRunId != null) {
-      query.eq('report_run_id', reportRunId);
+      query = query.eq('report_run_id', reportRunId);
     }
 
     if (promptId != null) {
-      query.eq('prompt_id', promptId);
+      query = query.eq('prompt_id', promptId);
     }
 
     if (locationId != null) {
-      query.eq('locality_id', locationId);
+      query = query.eq('locality_id', locationId);
     }
 
     final List data = await query;
 
-    printDebug('fetchPercentFoundSummary response: $data');
+    // printDebug('fetchPercentFoundSummary response: $data');
 
     // by LLM
     final Map<String, List<bool>> byLlm = {};
@@ -102,7 +102,7 @@ class DashboardServiceSupabase {
 
     printDebug('Dashboard service: fetchMeanRankSummary');
 
-    final query = _supabase
+    PostgrestFilterBuilder query = _supabase
       .from('dash_01_vw')
       .select('llm_generation, locality_name, target_rank')
       // .eq('user_id', userId)
@@ -111,20 +111,20 @@ class DashboardServiceSupabase {
       ;
 
     if (reportRunId != null) {
-      query.eq('report_run_id', reportRunId);
+      query = query.eq('report_run_id', reportRunId);
     }
 
     if (promptId != null) {
-      query.eq('prompt_id', promptId);
+      query = query.eq('prompt_id', promptId);
     }
 
     if (locationId != null) {
-      query.eq('locality_id', locationId);
+      query = query.eq('locality_id', locationId);
     }
 
     final List data = await query;
 
-    printDebug('fetchMeanRankSummary response: $data');
+    // printDebug('fetchMeanRankSummary response: $data');
 
     // by LLM
     final Map<String, List<num>> byLlm = {};

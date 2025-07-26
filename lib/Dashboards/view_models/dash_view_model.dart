@@ -37,7 +37,7 @@ class DashViewModel extends ChangeNotifier {
       promptId: _selectedPrompt?.id,
       locationId: _selectedLocation?.id,
     );
-    notifyListeners();
+    // notifyListeners();
   }
 
   List<Prompt> prompts = [];
@@ -51,7 +51,7 @@ class DashViewModel extends ChangeNotifier {
       promptId: _selectedPrompt?.id,
       locationId: _selectedLocation?.id,
     );
-    notifyListeners();
+    // notifyListeners();
   }
 
   List<Locality> locations = [];
@@ -65,7 +65,7 @@ class DashViewModel extends ChangeNotifier {
       promptId: _selectedPrompt?.id,
       locationId: _selectedLocation?.id,
     );
-    notifyListeners();
+    // notifyListeners();
   }
 
   // percent found
@@ -208,9 +208,18 @@ class DashViewModel extends ChangeNotifier {
     String? promptId,
     String? locationId,
   }) async {
+
+    isLoading = true;
+    notifyListeners();
+
     try {
       // Optional: set a loading state here
       printDebug('ViewModel: fetching summaries');
+
+      printDebug('reportId: $reportId');
+      printDebug('reportRunId: $reportRunId');
+      printDebug('promptId: $promptId');
+      printDebug('locationId: $locationId');
 
       final percentFuture = _dashService.fetchPercentFoundSummary(
         reportId: reportId,
@@ -231,11 +240,17 @@ class DashViewModel extends ChangeNotifier {
       percentFoundSummary = results[0];
       meanRankSummary = results[1];
 
-      notifyListeners(); // or equivalent in your state management
+      printDebug('ViewModel: summaries fetched successfully');
+      printDebug('Percent found: ${percentFoundSummary?.overall}');
+      printDebug('Mean rank: ${meanRankSummary?.overall}');
+
     } catch (e, st) {
       printError('Error fetching summaries: $e');
       printError(st as String);
       // Optionally handle error state here
+    } finally {
+      isLoading = false;
+      notifyListeners();
     }
   }
 
