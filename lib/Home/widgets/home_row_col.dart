@@ -95,15 +95,26 @@ class HomeRowCol extends StatelessWidget {
             //   height: 500,
             // ),
 
-            IframeView(
-              url: convertYouTubeToEmbedUrl(youTubeLink),
-              width: 750,
-              height: 750,
-            ),
+            // IframeView(
+            //   url: convertYouTubeToEmbedUrl(youTubeLink),
+            //   width: 750,
+            //   height: 750,
+            // ),
 
             // SupabaseVideoPlayer(
-            //   videoUrl: youTubeLink,
+            //   videoUrl: supabaseVideoUrl,
             // ),
+
+            Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 700),
+                child: AspectRatio(
+                  aspectRatio: 16 / 9,
+                  child: SupabaseVideoPlayer(videoUrl: supabaseVideoUrl),
+                ),
+              ),
+            ),
+
 
             SizedBox(height: 16,)
 

@@ -136,13 +136,7 @@ class _FreeReportFormState extends State<FreeReportForm> {
                                     return;
                                   }
 
-                                  await vm.processFreeReport(user.email);
-                                  // appRouter.go(freeReportConfirmationRoute);
-                                  appRouter.go(reportsRoute);
-
-
-                                  
-                                  // await vm.processFreeReport();
+                                  await vm.processFreeReport(user.email); // routing done via view model
                                   // appRouter.go(freeReportConfirmationRoute);
                         
                                 }

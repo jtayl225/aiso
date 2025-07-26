@@ -8,6 +8,8 @@ import 'package:aiso/models/prompt_model.dart';
 import 'package:aiso/models/search_target_model.dart';
 import 'package:aiso/models/user_model.dart';
 import 'package:aiso/reports/models/report_model.dart';
+import 'package:aiso/routing/app_router.dart';
+import 'package:aiso/routing/route_names.dart';
 import 'package:aiso/services/auth_service_supabase.dart';
 import 'package:aiso/services/location_service_supabase.dart';
 import 'package:aiso/services/report_service_supabase.dart';
@@ -201,6 +203,11 @@ class FreeReportFormViewModel extends ChangeNotifier {
       final Prompt prompt = _buildPrompt(_buildPromptText(pt));
 
       final String? _ = await _reportService.processFreeReport(email, prompt, searchTarget, report);
+
+      // Pause for 1 second before routing
+      await Future.delayed(const Duration(seconds: 1));
+
+      appRouter.go(reportsRoute);
       
       return true;
     } catch (e) {

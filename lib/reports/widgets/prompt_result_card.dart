@@ -62,7 +62,7 @@ class PromptResultCard extends StatelessWidget {
               children: [
                 _Badge(label: 'Rank: ${result.entityRank}'),
                 // _Badge(label: 'Type: ${result.entityType}'),
-                _Badge(label: 'LLM: ${result.llmGeneration}'),
+                // _Badge(label: 'LLM: ${result.llmGeneration}'),
                 // _Badge(label: 'Epoch: ${result.epoch}'),
                 // _Badge(label: 'Created: $createdAtFormatted'),
               ],

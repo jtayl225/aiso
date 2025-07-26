@@ -34,6 +34,9 @@ Statistics on the decline of Google search and the rise of AI tools include:
 No.  Many businesses wish they got their SEO right for Google years ago because their competitors who did are getting a lot more free leads than they are.  
 Today, you have a chance to fix that problem.  The businesses that understand how GEO works and begin to promote their business to become more visible to AI tools are the ones that will be recommended.  As more customers turn to AI to ask, “Who should I hire near me?”, businesses that understand how to show up in those answers now will win. 
 
+## Why do the results vary?
+LLM results vary each time due to their probabilistic nature, meaning your business may appear in the top 10 list sometimes but not others—even with the same query.
+
 ## Will GEOMAX really help me generate new leads?
 For GEOMAX to help you generate business leads you will need to run a good business that has people's trust, and you will need to implement the recommendations to ensure that trust is transferred to the online world.  Just buying the report won't help you win new leads on its own.
 

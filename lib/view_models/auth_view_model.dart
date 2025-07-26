@@ -47,28 +47,82 @@ class AuthViewModel extends ChangeNotifier {
   }
 
   // subscribe to supabase
+  // void subscribeToSubscriptionStatus() async {
+
+  //   if (_subscriptionChannel != null) return; // Already subscribed
+
+  //   final userId = Supabase.instance.client.auth.currentUser?.id;
+  //   if (userId == null) return;
+  //   // final String env = 'test';
+  //   final String env = _storeService.env;
+  //   final stripeCustomerId = await _storeService.fetchStripeCustomerId(userId, env);
+  //   if (stripeCustomerId == null) return;
+
+  //   _subscriptionChannel = Supabase.instance.client
+  //       .channel('public:subscriptions')
+  //       .onPostgresChanges(
+  //         event: PostgresChangeEvent.update,
+  //         schema: 'public',
+  //         table: 'subscriptions',
+  //         filter: PostgresChangeFilter(type: PostgresChangeFilterType.eq, column: 'stripe_customer_id', value: stripeCustomerId),
+  //         callback: (payload) {
+  //           final newValue = payload.newRecord['stripe_status'];
+  //           _isSubscribed = newValue == 'active';
+  //           notifyListeners();
+  //         },
+  //       )
+  //       .subscribe();
+  // }
+
+  // subscribe to supabase
   void subscribeToSubscriptionStatus() async {
-
     if (_subscriptionChannel != null) return; // Already subscribed
-
+    
     final userId = Supabase.instance.client.auth.currentUser?.id;
     if (userId == null) return;
-    // final String env = 'test';
+    
     final String env = _storeService.env;
     final stripeCustomerId = await _storeService.fetchStripeCustomerId(userId, env);
     if (stripeCustomerId == null) return;
 
     _subscriptionChannel = Supabase.instance.client
-        .channel('public:subscriptions')
+        .channel('subscription-updates')
         .onPostgresChanges(
-          event: PostgresChangeEvent.update,
+          event: PostgresChangeEvent.all,
           schema: 'public',
           table: 'subscriptions',
-          filter: PostgresChangeFilter(type: PostgresChangeFilterType.eq, column: 'stripe_customer_id', value: stripeCustomerId),
+          filter: PostgresChangeFilter(
+            type: PostgresChangeFilterType.eq, 
+            column: 'stripe_customer_id', 
+            value: stripeCustomerId
+          ),
           callback: (payload) {
             final newValue = payload.newRecord['stripe_status'];
             _isSubscribed = newValue == 'active';
             notifyListeners();
+          },
+        )
+        .onPostgresChanges(
+          event: PostgresChangeEvent.all,
+          schema: 'public',
+          table: 'stripe_users',
+          filter: PostgresChangeFilter(
+            type: PostgresChangeFilterType.eq, 
+            column: 'user_id', 
+            value: userId
+          ),
+          callback: (payload) async {
+            // Re-fetch subscription status when stripe_users changes
+            final newStripeCustomerId = await _storeService.fetchStripeCustomerId(userId, env);
+            if (newStripeCustomerId != null) {
+              final response = await Supabase.instance.client
+                  .from('subscriptions')
+                  .select('stripe_status')
+                  .eq('stripe_customer_id', newStripeCustomerId)
+                  .maybeSingle();
+              _isSubscribed = response?['stripe_status'] == 'active';
+              notifyListeners();
+            }
           },
         )
         .subscribe();

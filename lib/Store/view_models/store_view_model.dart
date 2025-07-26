@@ -47,7 +47,7 @@ class StoreViewModel extends ChangeNotifier {
         title: 'Monthly Plan',
         description: 'All features for growing teams.',
         cadence: '/ month',
-        price: 14.95,
+        price: 17.95,
         // reducedFromPrice: 19.95,
         pctDiscount: 0.3,
         productInclusions: [
@@ -82,7 +82,7 @@ class StoreViewModel extends ChangeNotifier {
         title: 'Yearly Plan',
         description: 'Custom solutions for businesses.',
         cadence: '/ year',
-        price: 144.95,
+        price: 169.95,
         // reducedFromPrice: 199.95,
         pctDiscount: 0.3,
         productInclusions: [
@@ -117,7 +117,7 @@ class StoreViewModel extends ChangeNotifier {
         title: 'Individual Report',
         description: 'Get started with a single one-off report.',
         cadence: '/ report',
-        price: 24.95,
+        price: 29.95,
         // reducedFromPrice: 34.95,
         pctDiscount: 0.0,
         productInclusions: [

@@ -5,6 +5,7 @@ const String logoGemini = 'assets/gemini_icon.png';
 
 const String newsTabLink = 'https://medium.com/generative-engine-optimization'; // 'https://medium.com/generative-engine-optimization/generative-engine-optimization-geo-2d78a01f8313';
 const String youTubeLink = 'https://youtu.be/EPkQ0VVyCbo';
+const String supabaseVideoUrl = 'https://evekbdfpapkdsmsxnhcc.supabase.co/storage/v1/object/public/public-videos//GEOMAX%20Introduction.mp4';
 
 const String homeMarkdown1 = '''Find out where your business ranks when people ask ChatGPT or Google Gemini who to trust — and unlock a new way to generate leads from AI search.
 It's the new SEO — smarter, faster, and built for the future.
