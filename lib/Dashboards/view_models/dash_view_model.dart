@@ -82,7 +82,10 @@ class DashViewModel extends ChangeNotifier {
   List<Map<String, dynamic>> get percentFoundLLMData {
     if (percentFoundSummary == null) return [];
 
-    return percentFoundSummary!.byLlm.entries.map((e) => {
+    final entries = percentFoundSummary!.byLlm.entries.toList()
+      ..sort((a, b) => a.key.compareTo(b.key)); // Sort by key (label)
+
+    return entries.map((e) => {
       'label': e.key,
       'value': e.value,
       'color': AppColors.color3,
@@ -92,7 +95,10 @@ class DashViewModel extends ChangeNotifier {
   List<Map<String, dynamic>> get percentFoundLocationData {
     if (percentFoundSummary == null) return [];
 
-    return percentFoundSummary!.byLocation.entries.map((e) => {
+    final entries = percentFoundSummary!.byLocation.entries.toList()
+      ..sort((a, b) => a.key.compareTo(b.key)); // Sort by key (label)
+
+    return entries.map((e) => {
       'label': e.key,
       'value': e.value,
       'color': AppColors.color3,
@@ -112,7 +118,10 @@ class DashViewModel extends ChangeNotifier {
   List<Map<String, dynamic>> get meanRankLLMData {
     if (meanRankSummary == null) return [];
 
-    return meanRankSummary!.byLlm.entries.map((e) => {
+    final entries = meanRankSummary!.byLlm.entries.toList()
+      ..sort((a, b) => a.key.compareTo(b.key)); // Sort by key (label)
+
+    return entries.map((e) => {
       'label': e.key,
       'value': e.value,
       'color': AppColors.color3,
@@ -122,7 +131,10 @@ class DashViewModel extends ChangeNotifier {
   List<Map<String, dynamic>> get meanRankLocationData {
     if (meanRankSummary == null) return [];
 
-    return meanRankSummary!.byLocation.entries.map((e) => {
+    final entries = meanRankSummary!.byLocation.entries.toList()
+      ..sort((a, b) => a.key.compareTo(b.key)); // Sort by key (label)
+
+    return entries.map((e) => {
       'label': e.key,
       'value': e.value,
       'color': AppColors.color3,
