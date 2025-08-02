@@ -237,7 +237,7 @@ class _NewReportFormState extends State<NewReportForm> {
                       vm.isFormValid
                           ? () async {
                             await vm.createAndRunPaidReport();
-                            appRouter.go(reportsRoute);
+                            appRouter.go(confirmationPaidRoute);
                           }
                           : null, // disables the button
                   child: Text('Generate report!'),

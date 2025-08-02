@@ -25,6 +25,8 @@ const String rankFreeRoute = "/free/reports/rank";
 const String recoPaidRoute = "/reports/recommendations";
 const String recoFreeRoute = "/free/reports/recommendations";
 
+const String confirmationPaidRoute = "/reports/confirmation";
+
 const String dash00Route = "/reports/dashboard-00";
 
 const String profileRoute = "/profile";
