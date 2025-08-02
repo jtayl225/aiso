@@ -1,5 +1,6 @@
 CREATE TABLE IF NOT EXISTS reports (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  locality_id UUID REFERENCES public.localities(id) ON DELETE SET NULL,
   user_id uuid NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
   search_target_id NOT NULL REFERENCES public.search_targets(id) ON DELETE CASCADE,
   title text NOT NULL,

@@ -93,13 +93,13 @@ class _NewReportFormState extends State<NewReportForm> {
 
             SizedBox(height: 60),
 
-            RowCol(
-              layoutType: rowColType,
-              spacing: spacing,
-              children: _buildReportTitleChildren(vm, reportTitleController),
-            ),
+            // RowCol(
+            //   layoutType: rowColType,
+            //   spacing: spacing,
+            //   children: _buildReportTitleChildren(vm, reportTitleController),
+            // ),
 
-            SizedBox(height: 60),
+            // SizedBox(height: 60),
 
             // Text(
             //   'Title.',

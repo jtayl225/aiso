@@ -66,6 +66,26 @@ class ReportServiceSupabase {
     return reports;
   }
 
+  Future<List<Report>> fetchReportsWithLocations(String userId) async {
+    printDebug('DEBUG: Service is fetching all reports for userId: $userId');
+    final response = await _supabase
+      .from('reports')
+      .select('*, prompts(*), search_targets(*), localities(*)')
+      .eq('user_id', userId)
+      .isFilter('deleted_at', null)
+      .isFilter('prompts.deleted_at', null)
+      .isFilter('search_targets.deleted_at', null);
+
+    // Inspect the response to see its structure
+    // debugPrint('DEBUG: reports response: $response');
+
+    final List<Report> reports = (response as List).map((item) {
+      return Report.fromJson(item);
+    }).toList();
+
+    return reports;
+  }
+
   Future<Report> fetchReport(String reportId) async {
     printDebug('DEBUG: Service is fetching report with ID: $reportId');
     final response = await _supabase

@@ -86,55 +86,56 @@ class Dash00RowCol extends StatelessWidget {
           spacing: 16.0,
           flexes: [1,1,1],
           children: [
-            DropdownButtonFormField<ReportRun>(
-              isExpanded: true,
-              value: vm.selectedReportRun,
-              decoration: const InputDecoration(
-                labelText: 'Report Date',
-                border: OutlineInputBorder(),
-              ),
-              items: [
-                DropdownMenuItem<ReportRun>(value: null, child: Text('All')),
-            
-                ...vm.reportRuns.map((run) {
-                  return DropdownMenuItem<ReportRun>(
-                    value: run,
-                    child: Text(
-                      DateFormat(
-                        'd MMMM y',
-                      ).format(run.dbTimestamps.createdAt),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  );
-                }),
-              ],
-              onChanged: (value) {
-                vm.selectedReportRun = value;
-              },
-            ),
 
-            DropdownButtonFormField<Prompt>(
-              isExpanded: true,
-              value: vm.selectedPrompt,
-              decoration: const InputDecoration(
-                labelText: 'Prompts',
-                border: OutlineInputBorder(),
-              ),
-              items: [
-                DropdownMenuItem<Prompt>(value: null, child: Text('All')),
+            // DropdownButtonFormField<ReportRun>(
+            //   isExpanded: true,
+            //   value: vm.selectedReportRun,
+            //   decoration: const InputDecoration(
+            //     labelText: 'Report Date',
+            //     border: OutlineInputBorder(),
+            //   ),
+            //   items: [
+            //     DropdownMenuItem<ReportRun>(value: null, child: Text('All')),
             
-                ...vm.prompts.map((p) {
-                  return DropdownMenuItem<Prompt>(
-                    value: p,
-                    child: Text(p.prompt, overflow: TextOverflow.ellipsis),
-                  );
-                }),
-              ],
+            //     ...vm.reportRuns.map((run) {
+            //       return DropdownMenuItem<ReportRun>(
+            //         value: run,
+            //         child: Text(
+            //           DateFormat(
+            //             'd MMMM y',
+            //           ).format(run.dbTimestamps.createdAt),
+            //           overflow: TextOverflow.ellipsis,
+            //         ),
+            //       );
+            //     }),
+            //   ],
+            //   onChanged: (value) {
+            //     vm.selectedReportRun = value;
+            //   },
+            // ),
+
+            // DropdownButtonFormField<Prompt>(
+            //   isExpanded: true,
+            //   value: vm.selectedPrompt,
+            //   decoration: const InputDecoration(
+            //     labelText: 'Prompts',
+            //     border: OutlineInputBorder(),
+            //   ),
+            //   items: [
+            //     DropdownMenuItem<Prompt>(value: null, child: Text('All')),
             
-              onChanged: (value) {
-                vm.selectedPrompt = value;
-              },
-            ),
+            //     ...vm.prompts.map((p) {
+            //       return DropdownMenuItem<Prompt>(
+            //         value: p,
+            //         child: Text(p.prompt, overflow: TextOverflow.ellipsis),
+            //       );
+            //     }),
+            //   ],
+            
+            //   onChanged: (value) {
+            //     vm.selectedPrompt = value;
+            //   },
+            // ),
 
             DropdownButtonFormField<Locality>(
               isExpanded: true,

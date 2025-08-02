@@ -20,6 +20,10 @@ const String newReportRoute = "/reports/new";
 const String reportRoute = "/reports/report";
 const String freeReportRoute = "/reports/free-report";
 const String promptRoute = "/reports/report/prompt";
+const String rankPaidRoute = "/reports/rank";
+const String rankFreeRoute = "/free/reports/rank";
+const String recoPaidRoute = "/reports/recommendations";
+const String recoFreeRoute = "/free/reports/recommendations";
 
 const String dash00Route = "/reports/dashboard-00";
 

@@ -16,7 +16,6 @@ class ReportsRowCol extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     final authVM = context.watch<AuthViewModel>();
 
     final RowColType layoutType =
@@ -30,78 +29,138 @@ class ReportsRowCol extends StatelessWidget {
     final reports = reportViewModel.reports;
 
     return SingleChildScrollView(
-      child: Align(
-        alignment: Alignment.topCenter,
-        child: ConstrainedBox(
-          constraints: BoxConstraints(maxWidth: 1200),
-          child: Column(
-            children: [
-              RowCol(
-                layoutType: layoutType,
-                spacing: spacing,
-                colCrossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Column(
-                    crossAxisAlignment: isDesktop ? CrossAxisAlignment.start : CrossAxisAlignment.center,
-                    mainAxisAlignment: isDesktop ? MainAxisAlignment.start :  MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Reports.',
-                        style: AppTextStyles.h1(deviceType),
-                        textAlign: isCentered ? TextAlign.center : TextAlign.start,
-                      ),
-                      SizedBox(height: 30),
-                      Text(
-                        'All of your reports can be found here. You can have up to 10 reports.',
-                        style: AppTextStyles.body(deviceType),
-                        textAlign: isCentered ? TextAlign.center : TextAlign.start,
-                      ),
-                    ],
-                  ),
-          
-                  Center(
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(minWidth: 200, maxWidth: 400),
-                      child: ElevatedButton(
-                      onPressed: reports.length >= 10
-                          ? null // ❌ disables the button
-                          : () {
-                              authVM.isSubscribed
-                                  ? appRouter.go(newReportRoute)
-                                  : appRouter.go(storeRoute);
-                            },
-                      child: const Text('New Report'),
-                    ),
-
-                    ),
-                  ),
-                ],
+      child: ConstrainedBox(
+        constraints: BoxConstraints(maxWidth: 1200),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            RowCol(
+              layoutType: layoutType,
+              spacing: spacing,
+              colMainAxisAlignment: MainAxisAlignment.center,
+              colCrossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  'Reports.',
+                  style: AppTextStyles.h1(deviceType),
+                  textAlign: isCentered ? TextAlign.center : TextAlign.start,
+                ),
+      
+                Text(
+                  'All of your reports can be found here. You can have up to 10 reports.',
+                  style: AppTextStyles.body(deviceType),
+                  textAlign: isCentered ? TextAlign.center : TextAlign.start,
+                ),
+      
+                // Column(
+                //   crossAxisAlignment: isDesktop ? CrossAxisAlignment.start : CrossAxisAlignment.center,
+                //   mainAxisAlignment: isDesktop ? MainAxisAlignment.start :  MainAxisAlignment.center,
+                //   children: [
+                //     Text(
+                //       'Reports.',
+                //       style: AppTextStyles.h1(deviceType),
+                //       textAlign: isCentered ? TextAlign.center : TextAlign.start,
+                //     ),
+                //     SizedBox(height: 30),
+                //     Text(
+                //       'All of your reports can be found here. You can have up to 10 reports.',
+                //       style: AppTextStyles.body(deviceType),
+                //       textAlign: isCentered ? TextAlign.center : TextAlign.start,
+                //     ),
+                //   ],
+                // ),
+      
+                // Center(
+                //   child: ConstrainedBox(
+                //     constraints: BoxConstraints(minWidth: 200, maxWidth: 400),
+                //     child: ElevatedButton(
+                //     onPressed: reports.length >= 10
+                //         ? null // ❌ disables the button
+                //         : () {
+                //             authVM.isSubscribed
+                //                 ? appRouter.go(newReportRoute)
+                //                 : appRouter.go(storeRoute);
+                //           },
+                //     child: const Text('New Report'),
+                //   ),
+      
+                //   ),
+                // ),
+              ],
+            ),
+      
+            SizedBox(height: 50),
+      
+            ...reports.map((report) {
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 4),
+                child: ReportCard(
+                  leadingIcon: Icons.abc,
+                  title: report.title,
+                  onPressedRank: () {
+                    final uri = Uri(
+                      // path: report.isPaid ? reportRoute : freeReportRoute,
+                      path: rankPaidRoute,
+                      queryParameters: {'report_id': report.id},
+                    );
+                    appRouter.go(uri.toString());
+                  },
+                  onPressedRecommendations: () {
+                    final uri = Uri(
+                      // path: report.isPaid ? reportRoute : freeReportRoute,
+                      path: recoPaidRoute,
+                      queryParameters: {'report_id': report.id},
+                    );
+                    appRouter.go(uri.toString());
+                  },
+                  lastRunAt: report.dbTimestamps.updatedAt,
+                  deviceType: deviceType
+                ),
+                // child: InkWell(
+                //   onTap: () {
+                //     final uri = Uri(
+                //       // path: report.isPaid ? reportRoute : freeReportRoute,
+                //       path: reportRoute,
+                //       queryParameters: {'report_id': report.id},
+                //     );
+                //     appRouter.go(uri.toString());
+                //   },
+                //   child: ReportCard(
+                //     leadingIcon: Icons.abc,
+                //     title: report.title,
+                //     onPressedRank: () {
+      
+                //       final uri = Uri(
+                //       // path: report.isPaid ? reportRoute : freeReportRoute,
+                //       path: reportRoute,
+                //       queryParameters: {'report_id': report.id},
+                //       );
+                //       appRouter.go(uri.toString());
+      
+                //     },
+                //     lastRunAt: report.dbTimestamps.updatedAt,
+                //   ),
+                // ),
+              );
+            }),
+      
+            SizedBox(height: 24,),
+      
+            ConstrainedBox(
+              constraints: BoxConstraints(minWidth: 200, maxWidth: 400),
+              child: ElevatedButton(
+                onPressed:
+                    reports.length >= 10
+                        ? null // ❌ disables the button
+                        : () {
+                          authVM.isSubscribed
+                              ? appRouter.go(newReportRoute)
+                              : appRouter.go(storeRoute);
+                        },
+                child: const Text('New Report'),
               ),
-          
-              SizedBox(height: 50,),
-          
-              ...reports.map((report) {
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 4),
-                  child: InkWell(
-                    onTap: () {
-                      final uri = Uri(
-                        // path: report.isPaid ? reportRoute : freeReportRoute,
-                        path: reportRoute,
-                        queryParameters: {'report_id': report.id},
-                      );
-                      appRouter.go(uri.toString());
-                    },
-                    child: ReportCard(
-                      leadingIcon: Icons.abc,
-                      title: report.title,
-                      lastRunAt: report.dbTimestamps.updatedAt,
-                    ),
-                  ),
-                );
-              }),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

@@ -6,14 +6,12 @@ import 'package:responsive_builder/responsive_builder.dart';
 
 class Dash00View extends StatelessWidget {
 
-  final String reportId;
-
-  const Dash00View({super.key, required this.reportId});
+  const Dash00View({super.key});
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => DashViewModel(reportId: reportId),
+      create: (_) => DashViewModel(),
       child: ScreenTypeLayout.builder(
         mobile: (BuildContext context) => Dash00RowCol(deviceType: DeviceScreenType.mobile),
         tablet: (BuildContext context) => Dash00RowCol(deviceType: DeviceScreenType.mobile),

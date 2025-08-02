@@ -20,10 +20,14 @@ SELECT
   d.report_id,
   d.created_at AS report_run_date,
 
-  e.prompt,
-  e.locality_id,
+  dd.locality_id as report_locality_id,
+  dd.user_id,
 
-  f.name AS locality_name
+  e.prompt,
+  e.locality_id as prompt_locality_id,
+
+  f.name AS prompt_locality_name,
+  ff.name AS report_locality_name
 
 FROM public.report_results AS a
 INNER JOIN public.llm_epochs AS b
@@ -32,10 +36,14 @@ INNER JOIN public.llm_runs AS c
   ON b.llm_run_id = c.id
 INNER JOIN public.report_runs AS d
   ON a.report_run_id = d.id
+INNER JOIN public.reports AS dd
+  ON d.report_id = dd.id
 INNER JOIN prompts AS e
- ON a.prompt_id = e.id
+  ON a.prompt_id = e.id
 LEFT JOIN localities AS f
- ON e.locality_id = f.id
+  ON e.locality_id = f.id
+LEFT JOIN localities AS ff
+  ON dd.locality_id = ff.id
 WHERE
   a.status = 'completed'
 ;

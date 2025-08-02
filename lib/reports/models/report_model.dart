@@ -1,5 +1,6 @@
 import 'package:aiso/models/cadence_enum.dart';
 import 'package:aiso/models/db_timestamps_model.dart';
+import 'package:aiso/models/location_models.dart';
 import 'package:aiso/models/prompt_model.dart';
 import 'package:aiso/models/recommendation.dart';
 import 'package:aiso/models/report_results.dart';
@@ -7,6 +8,8 @@ import 'package:aiso/models/search_target_model.dart';
 
 class Report {
   final String id;
+  final String? localityId;
+  final Locality? locality;
   final String userId;
   final String searchTargetId;
   final String title;
@@ -21,7 +24,9 @@ class Report {
   final DateTime? lastRunAt;
 
   Report({
-    required this.id, 
+    required this.id,
+    this.localityId,
+    this.locality,
     required this.userId,
     required this.searchTargetId, 
     required this.title, 
@@ -39,6 +44,10 @@ class Report {
   factory Report.fromJson(Map<String, dynamic> json) {
     return Report(
       id: json['id'] as String,
+      localityId: json['locality_id'] as String?,
+      locality: json['localities'] != null
+        ? Locality.fromJson(json['localities'] as Map<String, dynamic>)
+        : null,
       userId: json['user_id'] as String,
       searchTargetId: json['search_target_id'] as String,
       title: json['title'] as String,
@@ -69,6 +78,7 @@ class Report {
   Map<String, dynamic> toJson({bool includeId = false}) {
     return {
       if (includeId) 'id': id,
+      'locality_id': localityId,
       'user_id': userId,
       'search_target_id': searchTargetId,
       'title': title,
@@ -80,6 +90,8 @@ class Report {
 
   Report copyWith({
     String? id,
+    String? localityId,
+    Locality? locality,
     String? userId,
     String? searchTargetId,
     String? title,
@@ -95,6 +107,8 @@ class Report {
   }) {
     return Report(
       id: id ?? this.id,
+      localityId: localityId ?? this.localityId,
+      locality: locality ?? this.locality,
       userId: userId ?? this.userId,
       searchTargetId: searchTargetId ?? this.searchTargetId,
       title: title ?? this.title,

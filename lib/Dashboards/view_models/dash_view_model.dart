@@ -4,27 +4,39 @@ import 'package:aiso/models/llm_enum.dart';
 import 'package:aiso/models/location_models.dart';
 import 'package:aiso/models/prompt_model.dart';
 import 'package:aiso/reports/models/prompt_result_model.dart';
+import 'package:aiso/reports/models/report_model.dart';
 import 'package:aiso/reports/models/report_run_model.dart';
+import 'package:aiso/services/auth_service_supabase.dart';
 import 'package:aiso/services/report_service_supabase.dart';
 import 'package:aiso/utils/logger.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class DashViewModel extends ChangeNotifier {
-  final String reportId;
 
-
-  DashViewModel({
-    required this.reportId
-  }) {
-    _init(); // Optional: load report immediately
+  DashViewModel() {
+    _init();
   }
 
   bool isLoading = false;
   String? errorMessage;
 
+  final AuthServiceSupabase _authService = AuthServiceSupabase();
   final ReportServiceSupabase _reportService = ReportServiceSupabase();
   final DashboardServiceSupabase _dashService = DashboardServiceSupabase();
+
+  List<Report> reports = [];
+  Report? _selectedReport;
+  Report? get selectedReport => _selectedReport;
+  set selectedReport(Report? report) {
+    _selectedReport = report;
+    fetchSummaries(
+      reportId: _selectedReport?.id,
+      reportRunId: _selectedReportRun?.id,
+      promptId: _selectedPrompt?.id,
+      locationId: _selectedLocation?.id,
+    );
+  }
 
   List<ReportRun> reportRuns = [];
   ReportRun? _selectedReportRun;
@@ -32,12 +44,11 @@ class DashViewModel extends ChangeNotifier {
   set selectedReportRun(ReportRun? reportRun) {
     _selectedReportRun = reportRun;
     fetchSummaries(
-      reportId,
+      reportId: _selectedReport?.id,
       reportRunId: _selectedReportRun?.id,
       promptId: _selectedPrompt?.id,
       locationId: _selectedLocation?.id,
     );
-    // notifyListeners();
   }
 
   List<Prompt> prompts = [];
@@ -46,12 +57,11 @@ class DashViewModel extends ChangeNotifier {
   set selectedPrompt(Prompt? prompt) {
     _selectedPrompt = prompt;
     fetchSummaries(
-      reportId,
+      reportId: _selectedReport?.id,
       reportRunId: _selectedReportRun?.id,
       promptId: _selectedPrompt?.id,
       locationId: _selectedLocation?.id,
     );
-    // notifyListeners();
   }
 
   List<Locality> locations = [];
@@ -60,12 +70,11 @@ class DashViewModel extends ChangeNotifier {
   set selectedLocation(Locality? location) {
     _selectedLocation = location;
     fetchSummaries(
-      reportId,
+      reportId: _selectedReport?.id,
       reportRunId: _selectedReportRun?.id,
       promptId: _selectedPrompt?.id,
       locationId: _selectedLocation?.id,
     );
-    // notifyListeners();
   }
 
   // percent found
@@ -151,16 +160,27 @@ class DashViewModel extends ChangeNotifier {
 
     try {
 
-      reportRuns = await _reportService.fetchReportRuns(reportId);
-      prompts = await _reportService.fetchReportPrompts(reportId);
-      locations = prompts
-        .map((p) => p.locality)
+      String? userId = await _authService.fetchCurrentUserId();
+      if (userId == null) return;
+
+      List<Report> reports = await _reportService.fetchReportsWithLocations(userId);
+
+      locations = reports
+        .map((r) => r.locality)
         .whereType<Locality>() // filters out nulls
         .toSet()
         .toList();
 
-      percentFoundSummary = await _dashService.fetchPercentFoundSummary(reportId: reportId);
-      meanRankSummary = await _dashService.fetchMeanRankSummary(reportId: reportId);
+      // reportRuns = await _reportService.fetchReportRuns(reportId);
+      // prompts = await _reportService.fetchReportPrompts(reportId);
+      // locations = prompts
+      //   .map((p) => p.locality)
+      //   .whereType<Locality>() // filters out nulls
+      //   .toSet()
+      //   .toList();
+
+      percentFoundSummary = await _dashService.fetchPercentFoundSummary(userId: userId);
+      meanRankSummary = await _dashService.fetchMeanRankSummary(userId: userId);
 
       // // Safely assign first report run if any exist
       // if (reportRuns.isNotEmpty) {
@@ -191,7 +211,7 @@ class DashViewModel extends ChangeNotifier {
     } catch (e, stackTrace) {
       // Log full error for debugging
       errorMessage = 'Failed to initialize: $e';
-      debugPrint('❌ [PromptViewModel] init error: $e\n$stackTrace');
+      debugPrint('❌ [DashViewModel] init error: $e\n$stackTrace');
     } finally {
       // Finish loading
       Future.microtask(() {
@@ -204,7 +224,7 @@ class DashViewModel extends ChangeNotifier {
   void _handleError(Object error, [StackTrace? stackTrace]) {
     errorMessage = error.toString();
 
-    debugPrint('ReportViewModel error: $errorMessage');
+    debugPrint('DashViewModel error: $errorMessage');
 
     if (stackTrace != null) {
       debugPrint('Stack trace:\n$stackTrace');
@@ -215,7 +235,8 @@ class DashViewModel extends ChangeNotifier {
     // - sending logs to remote error tracking services
   }
 
-  Future<void> fetchSummaries(String reportId, {
+  Future<void> fetchSummaries({
+    String? reportId,
     String? reportRunId,
     String? promptId,
     String? locationId,
@@ -233,7 +254,11 @@ class DashViewModel extends ChangeNotifier {
       printDebug('promptId: $promptId');
       printDebug('locationId: $locationId');
 
+      String? userId = await _authService.fetchCurrentUserId();
+      if (userId == null) return;
+
       final percentFuture = _dashService.fetchPercentFoundSummary(
+        userId: userId,
         reportId: reportId,
         reportRunId: reportRunId,
         promptId: promptId,
@@ -241,6 +266,7 @@ class DashViewModel extends ChangeNotifier {
       );
 
       final rankFuture = _dashService.fetchMeanRankSummary(
+        userId: userId,
         reportId: reportId,
         reportRunId: reportRunId,
         promptId: promptId,

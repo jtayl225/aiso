@@ -1,5 +1,6 @@
 const String dummyLogoImage = "assets/dummy_logo.png";
-const String logoImage = "assets/GEOMAX_logo.png"; // "assets/large_aiso_logo.png";
+const String logoImage = "assets/GEOMAX_logo.png";
+const String smallLogoImage = "assets/GEOMAX_G_logo.png";
 const String logoChatGPT = "assets/OpenAI-black-monoblossom.png";
 const String logoGemini = 'assets/gemini_icon.png';
 

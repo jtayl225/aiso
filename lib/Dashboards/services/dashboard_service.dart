@@ -17,12 +17,13 @@ class DataSummary {
 
 
 class DashboardServiceSupabase {
+
   final _supabase = Supabase.instance.client;
 
 
-  Future<DataSummary> fetchPercentFoundSummary({
-    // required String userId, 
-    required String reportId, 
+  Future<DataSummary?> fetchPercentFoundSummary({
+    required String userId,
+    String? reportId, 
     String? reportRunId, 
     String? promptId, 
     String? locationId
@@ -30,12 +31,19 @@ class DashboardServiceSupabase {
 
     printDebug('Dashboard service: fetchPercentFoundSummary');
 
+    final user = _supabase.auth.currentUser;
+    if (user == null || user.id.isEmpty) return null;
+    final userId = user.id;
+
     PostgrestFilterBuilder query = _supabase
       .from('dash_01_vw')
-      .select('llm_generation, locality_name, target_found')
-      // .eq('user_id', userId)
-      .eq('report_id', reportId) // enough if RLS is properly scoped
+      .select('llm_generation, report_locality_name, target_found')
+      .eq('user_id', userId)
       ;
+
+    if (reportId != null) {
+      query = query.eq('report_id', reportId);
+    }
 
     if (reportRunId != null) {
       query = query.eq('report_run_id', reportRunId);
@@ -46,7 +54,7 @@ class DashboardServiceSupabase {
     }
 
     if (locationId != null) {
-      query = query.eq('locality_id', locationId);
+      query = query.eq('report_locality_id', locationId);
     }
 
     final List data = await query;
@@ -69,7 +77,8 @@ class DashboardServiceSupabase {
     // by Location
     final Map<String, List<bool>> byLoc = {};
     for (final row in data) {
-      final loc = row['locality_name'];
+      final loc = row['report_locality_name'];
+      if (loc == null) continue; // skip nulls
       final found = row['target_found'] == true;
       byLoc.putIfAbsent(loc, () => []).add(found);
     }
@@ -92,9 +101,9 @@ class DashboardServiceSupabase {
 
   }
 
-  Future<DataSummary> fetchMeanRankSummary({
-    // required String userId, 
-    required String reportId, 
+  Future<DataSummary?> fetchMeanRankSummary({
+    required String userId, 
+    String? reportId, 
     String? reportRunId, 
     String? promptId, 
     String? locationId
@@ -102,13 +111,20 @@ class DashboardServiceSupabase {
 
     printDebug('Dashboard service: fetchMeanRankSummary');
 
+    final user = _supabase.auth.currentUser;
+    if (user == null || user.id.isEmpty) return null;
+    final userId = user.id;
+
     PostgrestFilterBuilder query = _supabase
       .from('dash_01_vw')
-      .select('llm_generation, locality_name, target_rank')
-      // .eq('user_id', userId)
+      .select('llm_generation, report_locality_name, target_rank')
+      .eq('user_id', userId)
       .eq('target_found', true)
-      .eq('report_id', reportId) // enough if RLS is properly scoped
       ;
+
+    if (reportId != null) {
+      query = query.eq('report_id', reportId);
+    }
 
     if (reportRunId != null) {
       query = query.eq('report_run_id', reportRunId);
@@ -119,7 +135,7 @@ class DashboardServiceSupabase {
     }
 
     if (locationId != null) {
-      query = query.eq('locality_id', locationId);
+      query = query.eq('report_locality_id', locationId);
     }
 
     final List data = await query;
@@ -151,7 +167,8 @@ class DashboardServiceSupabase {
     final Map<String, List<num>> byLoc = {};
 
     for (final row in data) {
-      final loc = row['locality_name'];
+      final loc = row['report_locality_name'];
+      if (loc == null) continue; // skip nulls
       final rank = row['target_rank'];
 
       // Skip nulls or convert safely

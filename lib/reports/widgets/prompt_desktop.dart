@@ -1,6 +1,7 @@
 import 'package:aiso/Widgets/row_col.dart';
 import 'package:aiso/constants/string_constants.dart';
 import 'package:aiso/reports/view_models/prompt_view_model.dart';
+import 'package:aiso/reports/view_models/rank_view_model.dart';
 import 'package:aiso/reports/widgets/prompt_result_card.dart';
 import 'package:aiso/themes/typography.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +15,8 @@ class PromptDesktop extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final vm = context.watch<PromptViewModel>();
+    // final vm = context.watch<PromptViewModel>();
+    final vm = context.watch<RankViewModel>();
 
     if (vm.isLoading || vm.prompt == null) {
       return const Center(
