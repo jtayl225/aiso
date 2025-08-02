@@ -37,9 +37,9 @@ class ReportCard extends StatelessWidget {
           children: [
             // Icon(leadingIcon, size: 32),
             Image.asset(smallLogoImage, width: 20, height: 20),
-    
+
             const SizedBox(width: 16),
-    
+
             // Expanded(
             //   child: InkWell(
             //     onTap: onTap,
@@ -59,22 +59,23 @@ class ReportCard extends StatelessWidget {
             //     ),
             //   ),
             // ),
-
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    title, 
+                    title,
                     style: Theme.of(context).textTheme.titleMedium,
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
                     softWrap: false,
-                    ),
+                  ),
                   const SizedBox(height: 4),
                   Text(
                     'Last run: ${_formatDate(lastRunAt)}',
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.grey),
+                    style: Theme.of(
+                      context,
+                    ).textTheme.bodySmall?.copyWith(color: Colors.grey),
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
                     softWrap: false,
@@ -97,23 +98,33 @@ class ReportCard extends StatelessWidget {
             //     ),
             //   ],
             // ),
-
-            Spacer(),
+            // Spacer(),
 
             Wrap(
-  spacing: 8,
-  children: [
-    ElevatedButton(
-      onPressed: onPressedRank,
-      child: Text('Rank', style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.white)),
-    ),
-    ElevatedButton(
-      onPressed: onPressedRecommendations,
-      child: Text(deviceType == DeviceScreenType.desktop ? 'Recommendations' : 'Recos', style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.white)),
-    ),
-  ],
-)
-
+              spacing: 8,
+              children: [
+                ElevatedButton(
+                  onPressed: onPressedRank,
+                  child: Text(
+                    'Rank',
+                    style: Theme.of(
+                      context,
+                    ).textTheme.bodyMedium?.copyWith(color: Colors.white),
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: onPressedRecommendations,
+                  child: Text(
+                    deviceType == DeviceScreenType.desktop
+                        ? 'Recommendations'
+                        : 'Recos',
+                    style: Theme.of(
+                      context,
+                    ).textTheme.bodyMedium?.copyWith(color: Colors.white),
+                  ),
+                ),
+              ],
+            ),
 
             // Row(
             //   children: [
@@ -158,21 +169,20 @@ class ReportCard extends StatelessWidget {
             //   ),
             // ),
 
-    
             // ElevatedButton(
             //   onPressed: onPressedRank,
             //   // onPressed: () => printDebug('Rank pressed'),
             //   child: const Text('Rank'),
             // ),
-    
+
             // const SizedBox(width: 8),
-    
+
             // ElevatedButton(
             //   onPressed: onPressedRecommendations,
             //   // onPressed: () => printDebug('Reco pressed'),
             //   child: const Text('Recommendations'),
             // ),
-    
+
             // const Icon(Icons.arrow_forward_ios, size: 20),
           ],
         ),
@@ -187,5 +197,4 @@ class ReportCard extends StatelessWidget {
   String _formatDate(DateTime date) {
     return DateFormat('d MMMM y').format(date);
   }
-
 }

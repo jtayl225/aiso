@@ -112,30 +112,30 @@ class StoreViewModel extends ChangeNotifier {
       );
 
     products = [
-      Product(
-        id: '1',
-        title: 'Individual Report',
-        description: 'Get started with a single one-off report.',
-        cadence: '/ report',
-        price: 29.95,
-        // reducedFromPrice: 34.95,
-        pctDiscount: 0.0,
-        productInclusions: [
-          ProductInclusion(isIncluded: true, description: '\$24.95 / report'),
-          ProductInclusion(isIncluded: true, description: 'ChatGPT (OpenAI)'),
-          ProductInclusion(isIncluded: true, description: 'Gemini (Google)'),
-          // ProductInclusion(isIncluded: true, description: 'Only 1 report'),
-          ProductInclusion(isIncluded: false, description: 'Up to 10 reports / month'),
-          ProductInclusion(isIncluded: false, description: 'Up to 10 prompts / report'),
-          ProductInclusion(isIncluded: false, description: 'Monthly report updates'),
-        ],
-        callToAction: 'Buy Now',
-        onPressed: (context) => handleProductAction(context, ProductType.PURCHASE)
-        // onPressed: (context) => UrlLauncherService.launchFromAsyncSource(() {
-        //   return handleProductAction(context, ProductType.PURCHASE);
-        // }),
+      // Product(
+      //   id: '1',
+      //   title: 'Individual Report',
+      //   description: 'Get started with a single one-off report.',
+      //   cadence: '/ report',
+      //   price: 29.95,
+      //   // reducedFromPrice: 34.95,
+      //   pctDiscount: 0.0,
+      //   productInclusions: [
+      //     ProductInclusion(isIncluded: true, description: '\$24.95 / report'),
+      //     ProductInclusion(isIncluded: true, description: 'ChatGPT (OpenAI)'),
+      //     ProductInclusion(isIncluded: true, description: 'Gemini (Google)'),
+      //     // ProductInclusion(isIncluded: true, description: 'Only 1 report'),
+      //     ProductInclusion(isIncluded: false, description: 'Up to 10 reports / month'),
+      //     ProductInclusion(isIncluded: false, description: 'Up to 10 prompts / report'),
+      //     ProductInclusion(isIncluded: false, description: 'Monthly report updates'),
+      //   ],
+      //   callToAction: 'Buy Now',
+      //   onPressed: (context) => handleProductAction(context, ProductType.PURCHASE)
+      //   // onPressed: (context) => UrlLauncherService.launchFromAsyncSource(() {
+      //   //   return handleProductAction(context, ProductType.PURCHASE);
+      //   // }),
 
-      ),
+      // ),
 
       _monthlySubcription,
       _yearlySubcription      

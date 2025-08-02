@@ -148,7 +148,7 @@ class NewReportViewModel extends ChangeNotifier {
   }
 
   bool get isFormValid =>
-      reportTitle != '' &&
+      // reportTitle != '' &&
       selectedSearchTarget != null &&
       selectedPromptType != null &&
       localities.isNotEmpty;

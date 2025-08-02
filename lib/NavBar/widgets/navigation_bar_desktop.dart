@@ -48,11 +48,11 @@ class NavigationBarDesktop extends StatelessWidget {
 
       if (isLoggedIn)
         NavBarItem(
-          'Dashboard', 
+          'Dashboards', 
           onTap: () => appRouter.go(dash00Route),
-          fontColor: Colors.white,
-          color: AppColors.color6,
-          hoverColor: AppColors.color3,
+          // fontColor: Colors.white,
+          // color: AppColors.color6,
+          // hoverColor: AppColors.color3,
         ),
 
       if (isLoggedIn)

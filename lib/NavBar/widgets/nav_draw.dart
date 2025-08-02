@@ -34,6 +34,25 @@ class MyNavigationDrawer extends StatelessWidget {
 
             ...(
         isLoggedIn ? [
+
+          NavDrawItem(
+            'Reports',
+            Icons.document_scanner,
+            onTap: () {
+              Scaffold.of(context).closeDrawer();
+              appRouter.go(reportsRoute);
+            },
+          ),
+
+          NavDrawItem(
+            'Dashboards',
+            Icons.space_dashboard,
+            onTap: () {
+              Scaffold.of(context).closeDrawer();
+              appRouter.go(dash00Route);
+            },
+          ),
+
           NavDrawItem(
           'Account',
           Icons.person,
@@ -103,15 +122,7 @@ class MyNavigationDrawer extends StatelessWidget {
         },
       ),
 
-      if (isLoggedIn)
-        NavDrawItem(
-          'Reports',
-          Icons.document_scanner,
-          onTap: () {
-            Scaffold.of(context).closeDrawer();
-            appRouter.go(reportsRoute);
-          },
-        ),
+      
 
 
 

@@ -99,8 +99,8 @@ class ReportsRowCol extends StatelessWidget {
                   title: report.title,
                   onPressedRank: () {
                     final uri = Uri(
-                      // path: report.isPaid ? reportRoute : freeReportRoute,
-                      path: rankPaidRoute,
+                      path: (report.isPaid || authVM.isSubscribed) ? rankPaidRoute : rankFreeRoute,
+                      // path: rankPaidRoute,
                       queryParameters: {'report_id': report.id},
                     );
                     appRouter.go(uri.toString());

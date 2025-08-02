@@ -15,7 +15,7 @@ class ProductCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ConstrainedBox(
-      constraints: BoxConstraints(minWidth: 200, maxWidth: 300, minHeight: 200, maxHeight: 600),
+      constraints: BoxConstraints(minWidth: 200, maxWidth: 350, minHeight: 200, maxHeight: 600),
       child: Stack(
         children: [
         Card(

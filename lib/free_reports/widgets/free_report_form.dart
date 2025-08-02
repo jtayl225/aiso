@@ -147,8 +147,13 @@ class _FreeReportFormState extends State<FreeReportForm> {
                           ),
                           child: Text("Generate free report!"),
                         ),
+
                         SizedBox(height: 10,),
+
                         PoweredByLogos(deviceType: widget.deviceType),
+
+                        SizedBox(height: 80,),
+
                       ],
                     ),
                 

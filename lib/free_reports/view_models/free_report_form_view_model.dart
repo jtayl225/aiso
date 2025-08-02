@@ -209,7 +209,7 @@ class FreeReportFormViewModel extends ChangeNotifier {
       // Pause for 1 second before routing
       await Future.delayed(const Duration(seconds: 1));
 
-      appRouter.go(reportsRoute);
+      appRouter.go(freeReportConfirmationRoute);
       
       return true;
     } catch (e) {
