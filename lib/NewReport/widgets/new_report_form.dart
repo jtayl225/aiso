@@ -1,9 +1,9 @@
-import 'package:aiso/Home/widgets/centered_view.dart';
+// import 'package:aiso/Home/widgets/centered_view.dart';
 import 'package:aiso/NewReport/view_models/new_report_view_model.dart';
 import 'package:aiso/NewReport/widgets/locality_card.dart';
 import 'package:aiso/models/db_timestamps_model.dart';
 import 'package:aiso/models/entity_model.dart';
-import 'package:aiso/models/search_target_type_enum.dart';
+// import 'package:aiso/models/search_target_type_enum.dart';
 import 'package:aiso/Widgets/row_col.dart';
 import 'package:aiso/Widgets/generic_type_ahead.dart';
 import 'package:aiso/models/industry_model.dart';
@@ -12,7 +12,7 @@ import 'package:aiso/models/search_target_model.dart';
 import 'package:aiso/routing/app_router.dart';
 import 'package:aiso/routing/route_names.dart';
 import 'package:aiso/themes/h1_heading.dart';
-import 'package:aiso/view_models/auth_view_model.dart';
+// import 'package:aiso/view_models/auth_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_builder/responsive_builder.dart';
@@ -163,7 +163,7 @@ class _NewReportFormState extends State<NewReportForm> {
           RowCol(
             layoutType: rowColType,
             spacing: spacing,
-            children: _buildLocationsChildren(vm),
+            children: _buildLocationsChildren(vm, rowColType),
           ),
     
           if (vm.nearbyLocalities.isNotEmpty) const SizedBox(height: 60),
@@ -435,7 +435,7 @@ List<Widget> _buildPromptChildren(NewReportViewModel vm) {
   ];
 }
 
-List<Widget> _buildLocationsChildren(NewReportViewModel vm) {
+List<Widget> _buildLocationsChildren(NewReportViewModel vm, RowColType rowColType) {
   return [
     ConstrainedBox(
       constraints: BoxConstraints(maxWidth: 600.0),
@@ -513,12 +513,11 @@ List<Widget> _buildLocationsChildren(NewReportViewModel vm) {
             suggestionsCallback: vm.fetchLocalitySuggestions,
             displayString: (loc) => loc.name,
             onSelected: (loc) => vm.selectedLocality = loc,
-            validator:
-                () =>
-                    vm.selectedLocality == null
-                        ? 'Please pick a locality'
-                        : null,
+            validator: () => vm.selectedLocality == null ? 'Please pick a locality' : null,
+            showOnTop: rowColType == RowColType.row ? false : true, // Force suggestions to appear above
+            // suggestionsMaxHeight: 150.0, // Limit height for mobile
           ),
+          
         ),
     
       ],
