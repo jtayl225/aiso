@@ -29,7 +29,7 @@ class HomeRowCol extends StatelessWidget {
         deviceType == DeviceScreenType.desktop
             ? RowColType.row
             : RowColType.column;
-    final double spacing = deviceType == DeviceScreenType.desktop ? 64.0 : 32.0;
+    final double spacing = deviceType == DeviceScreenType.desktop ? 32.0 : 16.0;
 
     return Column(
       // mainAxisSize: MainAxisSize.min,

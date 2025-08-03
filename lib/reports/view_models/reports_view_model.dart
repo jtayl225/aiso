@@ -325,21 +325,21 @@ class ReportsViewModel extends ChangeNotifier {
     }
   }
 
-  Future<bool> runReport(Report report) async {
-    isLoading = true;
-    notifyListeners();
-    try {
-      debugPrint('DEBUG: view model about to call run-report edge function');
-      await _reportService.runReport(report, true);
-      return true;
-    } catch (e) {
-      _handleError(e);
-      return false;
-    } finally {
-      isLoading = false;
-      notifyListeners();
-    }
-  }
+  // Future<bool> runReport(Report report) async {
+  //   isLoading = true;
+  //   notifyListeners();
+  //   try {
+  //     debugPrint('DEBUG: view model about to call run-report edge function');
+  //     await _reportService.runReport(report, true);
+  //     return true;
+  //   } catch (e) {
+  //     _handleError(e);
+  //     return false;
+  //   } finally {
+  //     isLoading = false;
+  //     notifyListeners();
+  //   }
+  // }
 
   Future<String?> generateCheckoutUrl(ProductType productType) async {
     isLoading = true;

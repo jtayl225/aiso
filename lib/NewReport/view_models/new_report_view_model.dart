@@ -316,6 +316,8 @@ class NewReportViewModel extends ChangeNotifier {
       // // // fetch parent prompt given industry
       final String basePrompt = _buildBasePrompt();
 
+      List<String> reportIds = [];
+
       for (final locality in localities) {
 
         printDebug('DEBUG: start _buildPrompt.');
@@ -326,6 +328,8 @@ class NewReportViewModel extends ChangeNotifier {
           _buildPaidReport(userId, searchTargetId, promptText, locality.id),
         );
 
+        reportIds.add(report.id);
+
         // creates prompt - handles upserts of new prompts
         printDebug('DEBUG: start upsertPromptAndAttach.');
         final Prompt _ = await _reportService.upsertPromptAndAttach(
@@ -335,13 +339,15 @@ class NewReportViewModel extends ChangeNotifier {
         );
         printDebug('DEBUG: end upsertPromptAndAttach.');
 
-        printDebug('DEBUG: start runReport.');
-        final String? newReportRunId = await _reportService.runReport(report, true);
-        if (newReportRunId == null || newReportRunId.isEmpty) return false;
-        printDebug('DEBUG: end runReport.');
-        printDebug('DEBUG: reportRunId: $newReportRunId.');
+        // printDebug('DEBUG: start runReport.');
+        // final String? newReportRunId = await _reportService.runReport(report, true);
+        // if (newReportRunId == null || newReportRunId.isEmpty) return false;
+        // printDebug('DEBUG: end runReport.');
+        // printDebug('DEBUG: reportRunId: $newReportRunId.');
 
       }
+
+       final String? _ = await _reportService.runReport(userId, reportIds, true);
 
       // // init paid report run
       // printDebug('DEBUG: start runReport.');

@@ -152,7 +152,7 @@ class _FreeReportFormState extends State<FreeReportForm> {
 
                         PoweredByLogos(deviceType: widget.deviceType),
 
-                        SizedBox(height: 80,),
+                        SizedBox(height: 160,),
 
                       ],
                     ),

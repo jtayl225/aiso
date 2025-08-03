@@ -103,8 +103,8 @@ class MarkdownContent extends StatelessWidget {
           bottom: ResponsiveSpacing.headingMarginBottom(deviceType),
         ),
         h2Padding: EdgeInsets.only(
-          top: 0, // ResponsiveSpacing.headingMarginBottom(deviceType),
-          bottom: ResponsiveSpacing.paragraphSpacing(deviceType),
+          top: 24, // ResponsiveSpacing.headingMarginBottom(deviceType),
+          bottom: 0, // ResponsiveSpacing.paragraphSpacing(deviceType),
         ),
         h3Padding: EdgeInsets.only(
           top: 0, //ResponsiveSpacing.headingMarginBottom(deviceType) / 2,
@@ -138,7 +138,7 @@ class H1MarkdownContent extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         H1Heading(deviceType: deviceType, text: headingText),
-        SizedBox(height: 64),
+        SizedBox(height: 40),
         MarkdownContent(markdownText: bodyText, deviceType: deviceType)
       ],
     );

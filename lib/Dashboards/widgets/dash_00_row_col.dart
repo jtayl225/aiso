@@ -145,7 +145,6 @@ class Dash00RowCol extends StatelessWidget {
                 border: OutlineInputBorder(),
               ),
               items: [
-                DropdownMenuItem<Locality>(value: null, child: Text('All')),
             
                 ...vm.locations.map((l) {
                   return DropdownMenuItem<Locality>(
@@ -153,6 +152,9 @@ class Dash00RowCol extends StatelessWidget {
                     child: Text(l.name, overflow: TextOverflow.ellipsis),
                   );
                 }),
+
+                DropdownMenuItem<Locality>(value: null, child: Text('All')),
+
               ],
             
               onChanged: (value) {

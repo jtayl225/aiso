@@ -256,8 +256,8 @@ class ReportServiceSupabase {
   //   }
   // }
 
-  Future<String?> runReport(Report report, bool isPaid) async {
-    final url = Uri.parse('https://app-kyeo.onrender.com/run-task'); // Replace with the correct path if needed
+  Future<String?> runReport(String userId, List<String> reportIds, bool isPaid) async {
+    final url = Uri.parse('https://app-kyeo.onrender.com/paid-report'); // Replace with the correct path if needed
 
     try {
       final response = await http.post(
@@ -265,8 +265,13 @@ class ReportServiceSupabase {
         headers: {
           'Content-Type': 'application/json',
         },
+        // body: jsonEncode({
+        //   'report_id': report.id,
+        //   'is_paid': isPaid,
+        // }),
         body: jsonEncode({
-          'report_id': report.id,
+          'user_id': userId,
+          'report_ids': reportIds,
           'is_paid': isPaid,
         }),
       );
@@ -274,7 +279,7 @@ class ReportServiceSupabase {
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         printDebug('DEBUG: Render response: $data');
-        return data['report_run_id'] as String;
+        return data['success'] as String;
       } else {
         printDebug('DEBUG: Render error (${response.statusCode}): ${response.body}');
         return null;

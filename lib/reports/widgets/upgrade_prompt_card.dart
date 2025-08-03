@@ -67,7 +67,8 @@ class UpgradePromptCard extends StatelessWidget {
                       ),
                       const SizedBox(width: 8),
                       Text(
-                        'Up to 10 reports / month',
+                        // 'Up to 10 reports / month',
+                        'Up to 10 suburb reports / month', 
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
                             color: Colors.black, // or any color you want
                           ),

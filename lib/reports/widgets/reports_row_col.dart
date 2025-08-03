@@ -157,7 +157,7 @@ class ReportsRowCol extends StatelessWidget {
                               ? appRouter.go(newReportRoute)
                               : appRouter.go(storeRoute);
                         },
-                child: const Text('New Report'),
+                child: const Text('Generate new suburb reports'),
               ),
             ),
           ],

@@ -182,6 +182,8 @@ class DashViewModel extends ChangeNotifier {
       percentFoundSummary = await _dashService.fetchPercentFoundSummary(userId: userId);
       meanRankSummary = await _dashService.fetchMeanRankSummary(userId: userId);
 
+      selectedLocation = locations.first;
+
       // // Safely assign first report run if any exist
       // if (reportRuns.isNotEmpty) {
       //   selectedReportRun = reportRuns.first;

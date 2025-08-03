@@ -42,7 +42,8 @@ class StoreDetails extends StatelessWidget {
           // ),
           SizedBox(height: 30),
           Text(
-            'Upgrade to view competitor rankings and to receive personalised recommendations to improve your visibility on AI tools.  Monthly or Yearly plans give you access to monthly reports with trend graphs and monthly recommendations.',
+            'Upgrade to view monthly ranking reports, personalised recommendations and trend graphs to help you Be Found. Gain Trust. Get Leads.',
+            // 'Upgrade to view competitor rankings and to receive personalised recommendations to improve your visibility on AI tools.  Monthly or Yearly plans give you access to monthly reports with trend graphs and monthly recommendations.',
             // 'Upgrade to a monthly or yearly plan to receive monthly ranking reports with personalised recommendations to improve your visibility on AI tools.',
             // style: TextStyle(fontSize: fontSizeDesktopMedium, height: 1.7),
             style: AppTextStyles.h3(deviceType),

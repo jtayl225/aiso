@@ -63,14 +63,47 @@ class ReportCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+
                   Text(
                     title,
                     style: Theme.of(context).textTheme.titleMedium,
                     overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
+                    maxLines: 2,
                     softWrap: false,
                   ),
+
+                  if (deviceType != DeviceScreenType.desktop) const SizedBox(height: 4),
+
+                  if (deviceType != DeviceScreenType.desktop)
+                    Wrap(
+                      spacing: 8,
+                      children: [
+                        ElevatedButton(
+                          onPressed: onPressedRank,
+                          child: Text(
+                            'Rank',
+                            style: Theme.of(
+                              context,
+                            ).textTheme.bodyMedium?.copyWith(color: Colors.white),
+                          ),
+                        ),
+                        ElevatedButton(
+                          onPressed: onPressedRecommendations,
+                          child: Text(
+                            // deviceType == DeviceScreenType.desktop
+                            //     ? 'Recommendations'
+                            //     : 'Recos',
+                            'Recommendations',
+                            style: Theme.of(
+                              context,
+                            ).textTheme.bodyMedium?.copyWith(color: Colors.white),
+                          ),
+                        ),
+                      ],
+                    ),
+
                   const SizedBox(height: 4),
+
                   Text(
                     'Last run: ${_formatDate(lastRunAt)}',
                     style: Theme.of(
@@ -80,6 +113,9 @@ class ReportCard extends StatelessWidget {
                     maxLines: 1,
                     softWrap: false,
                   ),
+
+                  
+
                 ],
               ),
             ),
@@ -100,31 +136,32 @@ class ReportCard extends StatelessWidget {
             // ),
             // Spacer(),
 
-            Wrap(
-              spacing: 8,
-              children: [
-                ElevatedButton(
-                  onPressed: onPressedRank,
-                  child: Text(
-                    'Rank',
-                    style: Theme.of(
-                      context,
-                    ).textTheme.bodyMedium?.copyWith(color: Colors.white),
+            if (deviceType == DeviceScreenType.desktop)
+              Wrap(
+                spacing: 8,
+                children: [
+                  ElevatedButton(
+                    onPressed: onPressedRank,
+                    child: Text(
+                      'Rank',
+                      style: Theme.of(
+                        context,
+                      ).textTheme.bodyMedium?.copyWith(color: Colors.white),
+                    ),
                   ),
-                ),
-                ElevatedButton(
-                  onPressed: onPressedRecommendations,
-                  child: Text(
-                    deviceType == DeviceScreenType.desktop
-                        ? 'Recommendations'
-                        : 'Recos',
-                    style: Theme.of(
-                      context,
-                    ).textTheme.bodyMedium?.copyWith(color: Colors.white),
+                  ElevatedButton(
+                    onPressed: onPressedRecommendations,
+                    child: Text(
+                      deviceType == DeviceScreenType.desktop
+                          ? 'Recommendations'
+                          : 'Recos',
+                      style: Theme.of(
+                        context,
+                      ).textTheme.bodyMedium?.copyWith(color: Colors.white),
+                    ),
                   ),
-                ),
-              ],
-            ),
+                ],
+              ),
 
             // Row(
             //   children: [

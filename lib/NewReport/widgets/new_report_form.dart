@@ -69,188 +69,186 @@ class _NewReportFormState extends State<NewReportForm> {
       return const Center(child: CircularProgressIndicator());
     }
 
-    return SingleChildScrollView(
-      child: Center(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-
-            H1Heading(deviceType: rowColType == RowColType.row ? DeviceScreenType.desktop : DeviceScreenType.mobile, text: 'Create new report!'),
-
-            // Text(
-            //   'Create new report!',
-            //   style: TextStyle(
-            //     fontWeight: FontWeight.w800,
-            //     fontSize: 30,
-            //     height: 0.9,
-            //   ),
-            //   textAlign: TextAlign.start,
-            // ),
-
-            // if (vm.isLoading)
-            //   SizedBox(height: 60), 
-            //   const Center(child: CircularProgressIndicator()),
-
-            SizedBox(height: 60),
-
-            // RowCol(
-            //   layoutType: rowColType,
-            //   spacing: spacing,
-            //   children: _buildReportTitleChildren(vm, reportTitleController),
-            // ),
-
-            // SizedBox(height: 60),
-
-            // Text(
-            //   'Title.',
-            //   style: TextStyle(
-            //     fontWeight: FontWeight.w800,
-            //     fontSize: 25,
-            //     height: 0.9,
-            //   ),
-            //   textAlign: TextAlign.start,
-            // ),
-
-            // SizedBox(height: 14),
-
-            // TextField(
-            //   controller: reportTitleController,
-            //   decoration: const InputDecoration(
-            //     labelText: 'Report Title',
-            //     border: OutlineInputBorder(),
-            //   ),
-            //   onChanged: (value) {
-            //     vm.reportTitle = value;
-            //   },
-            // ),
-
-            // SizedBox(height: 14),
-
-            /// search target
-            RowCol(
-              layoutType: rowColType,
-              spacing: spacing,
-              children: _buildSearchTargetChildren(context, vm),
-            ),
-
-            SizedBox(height: 60),
-
-            // /// Prompt
-            // FlexibleLayout(
-            //   layoutType: LayoutType.row,
-            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //   crossAxisAlignment: CrossAxisAlignment.start,
-            //   spacing: 0.0,
-            //   children: _buildPromptChildren(vm),
-            // ),
-
-            // SizedBox(height: 30),
-
-            // if (vm.selectedPromptType?.isNotEmpty == true &&
-            //     vm.selectedSearchTarget != null)
-            //   Text(
-            //     '${vm.selectedPromptType} '
-            //     '${vm.selectedSearchTarget!.entityType == EntityType.business ? 'real estate agencies' : 'real estate agents'} in ...',
-            //     style: const TextStyle(
-            //       fontSize: 14,
-            //       fontWeight: FontWeight.bold,
-            //       color: Colors.black,
-            //     ),
-            //   ),
-
-            // SizedBox(height: 60),
-
-            /// Location
-            RowCol(
-              layoutType: rowColType,
-              spacing: spacing,
-              children: _buildLocationsChildren(vm),
-            ),
-
-            if (vm.nearbyLocalities.isNotEmpty) const SizedBox(height: 60),
-
-            if (vm.localities.isNotEmpty) const Text('Selected locations:'),
-
-            if (vm.localities.isNotEmpty) const SizedBox(height: 10),
-
-            Wrap(
-              spacing: 4,
-              runSpacing: 4,
-              children:
-                  vm.localities.map((locality) {
-                    return LocalityCard(
-                      locality: locality,
-                      icon: Icons.remove,
-                      tooltip: 'Remove locality',
-                      onPressed: () => vm.removeLocality(locality),
-                    );
-                  }).toList(),
-            ),
-
-            if (vm.nearbyLocalities.isNotEmpty) const SizedBox(height: 10),
-
-            if (vm.nearbyLocalities.isNotEmpty)
-              const Text('Suggested nearby locations:'),
-
-            if (vm.nearbyLocalities.isNotEmpty) const SizedBox(height: 10),
-
-            Wrap(
-              spacing: 4,
-              runSpacing: 4,
-              children:
-                  vm.nearbyLocalities.map((locality) {
-                    return LocalityCard(
-                      locality: locality,
-                      icon: Icons.add,
-                      tooltip: 'Add locality',
-                      onPressed: () {
-                        final success = vm.addLocality(locality);
-                        if (!success) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Maximum of 10 locations allowed'),
-                            ),
-                          );
+    return Center(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+    
+          H1Heading(deviceType: rowColType == RowColType.row ? DeviceScreenType.desktop : DeviceScreenType.mobile, text: 'Create new report!'),
+    
+          // Text(
+          //   'Create new report!',
+          //   style: TextStyle(
+          //     fontWeight: FontWeight.w800,
+          //     fontSize: 30,
+          //     height: 0.9,
+          //   ),
+          //   textAlign: TextAlign.start,
+          // ),
+    
+          // if (vm.isLoading)
+          //   SizedBox(height: 60), 
+          //   const Center(child: CircularProgressIndicator()),
+    
+          SizedBox(height: 60),
+    
+          // RowCol(
+          //   layoutType: rowColType,
+          //   spacing: spacing,
+          //   children: _buildReportTitleChildren(vm, reportTitleController),
+          // ),
+    
+          // SizedBox(height: 60),
+    
+          // Text(
+          //   'Title.',
+          //   style: TextStyle(
+          //     fontWeight: FontWeight.w800,
+          //     fontSize: 25,
+          //     height: 0.9,
+          //   ),
+          //   textAlign: TextAlign.start,
+          // ),
+    
+          // SizedBox(height: 14),
+    
+          // TextField(
+          //   controller: reportTitleController,
+          //   decoration: const InputDecoration(
+          //     labelText: 'Report Title',
+          //     border: OutlineInputBorder(),
+          //   ),
+          //   onChanged: (value) {
+          //     vm.reportTitle = value;
+          //   },
+          // ),
+    
+          // SizedBox(height: 14),
+    
+          /// search target
+          RowCol(
+            layoutType: rowColType,
+            spacing: spacing,
+            children: _buildSearchTargetChildren(context, vm),
+          ),
+    
+          SizedBox(height: 60),
+    
+          // /// Prompt
+          // FlexibleLayout(
+          //   layoutType: LayoutType.row,
+          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //   crossAxisAlignment: CrossAxisAlignment.start,
+          //   spacing: 0.0,
+          //   children: _buildPromptChildren(vm),
+          // ),
+    
+          // SizedBox(height: 30),
+    
+          // if (vm.selectedPromptType?.isNotEmpty == true &&
+          //     vm.selectedSearchTarget != null)
+          //   Text(
+          //     '${vm.selectedPromptType} '
+          //     '${vm.selectedSearchTarget!.entityType == EntityType.business ? 'real estate agencies' : 'real estate agents'} in ...',
+          //     style: const TextStyle(
+          //       fontSize: 14,
+          //       fontWeight: FontWeight.bold,
+          //       color: Colors.black,
+          //     ),
+          //   ),
+    
+          // SizedBox(height: 60),
+    
+          /// Location
+          RowCol(
+            layoutType: rowColType,
+            spacing: spacing,
+            children: _buildLocationsChildren(vm),
+          ),
+    
+          if (vm.nearbyLocalities.isNotEmpty) const SizedBox(height: 60),
+    
+          if (vm.localities.isNotEmpty) const Text('Selected locations:'),
+    
+          if (vm.localities.isNotEmpty) const SizedBox(height: 10),
+    
+          Wrap(
+            spacing: 4,
+            runSpacing: 4,
+            children:
+                vm.localities.map((locality) {
+                  return LocalityCard(
+                    locality: locality,
+                    icon: Icons.remove,
+                    tooltip: 'Remove locality',
+                    onPressed: () => vm.removeLocality(locality),
+                  );
+                }).toList(),
+          ),
+    
+          if (vm.nearbyLocalities.isNotEmpty) const SizedBox(height: 10),
+    
+          if (vm.nearbyLocalities.isNotEmpty)
+            const Text('Suggested nearby locations:'),
+    
+          if (vm.nearbyLocalities.isNotEmpty) const SizedBox(height: 10),
+    
+          Wrap(
+            spacing: 4,
+            runSpacing: 4,
+            children:
+                vm.nearbyLocalities.map((locality) {
+                  return LocalityCard(
+                    locality: locality,
+                    icon: Icons.add,
+                    tooltip: 'Add locality',
+                    onPressed: () {
+                      final success = vm.addLocality(locality);
+                      if (!success) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Maximum of 10 locations allowed'),
+                          ),
+                        );
+                      }
+                    },
+                  );
+                }).toList(),
+          ),
+    
+          SizedBox(height: 60),
+    
+          RowCol(
+            layoutType: rowColType,
+            spacing: spacing,
+            rowMainAxisAlignment: MainAxisAlignment.center,
+            rowCrossAxisAlignment: CrossAxisAlignment.center,
+            colMainAxisAlignment: MainAxisAlignment.center,
+            colCrossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+    
+              if (rowColType == RowColType.row)
+                SizedBox(width:10),
+    
+              Center(
+                child: ElevatedButton(
+                onPressed:
+                    vm.isFormValid
+                        ? () async {
+                          await vm.createAndRunPaidReport();
+                          appRouter.go(confirmationPaidRoute);
                         }
-                      },
-                    );
-                  }).toList(),
-            ),
-
-            SizedBox(height: 60),
-
-            RowCol(
-              layoutType: rowColType,
-              spacing: spacing,
-              rowMainAxisAlignment: MainAxisAlignment.center,
-              rowCrossAxisAlignment: CrossAxisAlignment.center,
-              colMainAxisAlignment: MainAxisAlignment.center,
-              colCrossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-
-                if (rowColType == RowColType.row)
-                  SizedBox(width:10),
-
-                Center(
-                  child: ElevatedButton(
-                  onPressed:
-                      vm.isFormValid
-                          ? () async {
-                            await vm.createAndRunPaidReport();
-                            appRouter.go(confirmationPaidRoute);
-                          }
-                          : null, // disables the button
-                  child: Text('Generate report!'),
-                                ),
-                ),
-
-              ]
-            ),
-
-            SizedBox(width:40)
-
-          ],
-        ),
+                        : null, // disables the button
+                child: Text('Generate report!'),
+                              ),
+              ),
+    
+            ]
+          ),
+    
+          const SizedBox(height: 180),
+    
+        ],
       ),
     );
   }
@@ -479,53 +477,51 @@ List<Widget> _buildLocationsChildren(NewReportViewModel vm) {
       ),
     ),
 
-    Align(
-      alignment: Alignment.center,
-      child: Column(
-        children: [
-          ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: 400.0),
-            child: _buildDropdownField<Country>(
-              label: 'Country',
-              value: vm.selectedCountry,
-              items:
-                  vm.countries
-                      .map((c) => DropdownMenuItem(value: c, child: Text(c.name)))
-                      .toList(),
-              onChanged: (c) => vm.selectedCountry = c,
-            ),
+    Column(
+      children: [
+        ConstrainedBox(
+          constraints: BoxConstraints(maxWidth: 400.0),
+          child: _buildDropdownField<Country>(
+            label: 'Country',
+            value: vm.selectedCountry,
+            items:
+                vm.countries
+                    .map((c) => DropdownMenuItem(value: c, child: Text(c.name)))
+                    .toList(),
+            onChanged: (c) => vm.selectedCountry = c,
           ),
-      
-          ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: 400.0),
-            child: _buildDropdownField<Region>(
-              label: 'State',
-              value: vm.selectedRegion,
-              items:
-                  (vm.selectedCountry?.regions ?? [])
-                      .map((r) => DropdownMenuItem(value: r, child: Text(r.name)))
-                      .toList(),
-              onChanged: (r) => vm.selectedRegion = r,
-            ),
+        ),
+    
+        ConstrainedBox(
+          constraints: BoxConstraints(maxWidth: 400.0),
+          child: _buildDropdownField<Region>(
+            label: 'State',
+            value: vm.selectedRegion,
+            items:
+                (vm.selectedCountry?.regions ?? [])
+                    .map((r) => DropdownMenuItem(value: r, child: Text(r.name)))
+                    .toList(),
+            onChanged: (r) => vm.selectedRegion = r,
           ),
-      
-          ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: 400.0),
-            child: GenericTypeAheadField<Locality>(
-              label: 'Suburb',
-              selected: vm.selectedLocality,
-              suggestionsCallback: vm.fetchLocalitySuggestions,
-              displayString: (loc) => loc.name,
-              onSelected: (loc) => vm.selectedLocality = loc,
-              validator:
-                  () =>
-                      vm.selectedLocality == null
-                          ? 'Please pick a locality'
-                          : null,
-            ),
+        ),
+    
+        ConstrainedBox(
+          constraints: BoxConstraints(maxWidth: 400.0),
+          child: GenericTypeAheadField<Locality>(
+            label: 'Suburb',
+            selected: vm.selectedLocality,
+            suggestionsCallback: vm.fetchLocalitySuggestions,
+            displayString: (loc) => loc.name,
+            onSelected: (loc) => vm.selectedLocality = loc,
+            validator:
+                () =>
+                    vm.selectedLocality == null
+                        ? 'Please pick a locality'
+                        : null,
           ),
-        ],
-      ),
+        ),
+    
+      ],
     ),
   ];
 }

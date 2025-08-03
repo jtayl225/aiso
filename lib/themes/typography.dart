@@ -7,13 +7,13 @@ class FontSizes {
   static const double desktopH1 = 36;
   static const double desktopH2 = 26;
   static const double desktopH3 = 20;
-  static const double desktopBody = 14;
+  static const double desktopBody = 16;
 
   // Mobile
   static const double mobileH1 = 26;
   static const double mobileH2 = 20;
-  static const double mobileH3 = 16;
-  static const double mobileBody = 12;
+  static const double mobileH3 = 18;
+  static const double mobileBody = 14;
 }
 
 /// Responsive font styles using FontSizes

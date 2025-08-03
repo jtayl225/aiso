@@ -2,7 +2,7 @@
 const double fontSizeDesktopH1 = 40;
 const double fontSizeDesktopH2 = 30;
 const double fontSizeDesktopH3 = 20;
-const double fontSizeDesktopBody = 10;
+const double fontSizeDesktopBody = 16;
 
 // misc
 const double fontSizeDesktopSmall = 10;
