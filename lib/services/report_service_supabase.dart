@@ -279,7 +279,8 @@ class ReportServiceSupabase {
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         printDebug('DEBUG: Render response: $data');
-        return data['success'] as String;
+        // return data['success'] as String;
+        return 'success';
       } else {
         printDebug('DEBUG: Render error (${response.statusCode}): ${response.body}');
         return null;
