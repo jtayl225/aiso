@@ -5,7 +5,7 @@ import 'package:aiso/models/db_timestamps_model.dart';
 import 'package:aiso/models/entity_model.dart';
 // import 'package:aiso/models/search_target_type_enum.dart';
 import 'package:aiso/widgets/row_col.dart';
-import 'package:aiso/widgets/generic_type_ahead.dart';
+import 'package:aiso/Widgets/generic_type_ahead.dart';
 import 'package:aiso/models/industry_model.dart';
 import 'package:aiso/models/location_models.dart';
 import 'package:aiso/models/search_target_model.dart';

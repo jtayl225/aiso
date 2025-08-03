@@ -2,7 +2,7 @@ import 'package:aiso/Auth/widgets/free_report_signup_details.dart';
 import 'package:aiso/Auth/widgets/free_report_signup_form.dart';
 import 'package:aiso/Store/view_models/store_view_model.dart';
 import 'package:aiso/Store/widgets/product_card_small.dart';
-import 'package:aiso/Widgets/row_col.dart';
+import 'package:aiso/widgets/row_col.dart';
 import 'package:aiso/view_models/auth_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

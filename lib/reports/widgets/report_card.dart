@@ -1,4 +1,4 @@
-import 'package:aiso/Widgets/row_col.dart';
+import 'package:aiso/widgets/row_col.dart';
 import 'package:aiso/constants/string_constants.dart';
 import 'package:aiso/utils/logger.dart';
 import 'package:flutter/material.dart';

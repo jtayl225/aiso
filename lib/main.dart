@@ -3,7 +3,7 @@ import 'package:aiso/routing/app_router.dart';
 import 'package:aiso/themes/light_mode.dart';
 import 'package:aiso/utils/logger.dart';
 import 'package:aiso/view_models/auth_view_model.dart';
-import 'package:aiso/Widgets/layout_template.dart';
+import 'package:aiso/widgets/layout_template.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:provider/provider.dart';

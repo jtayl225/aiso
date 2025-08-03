@@ -1,4 +1,4 @@
-import 'package:aiso/Widgets/row_col.dart';
+import 'package:aiso/widgets/row_col.dart';
 import 'package:aiso/free_reports/widgets/free_report_form.dart';
 import 'package:aiso/free_reports/widgets/free_report_form_details.dart';
 import 'package:flutter/material.dart';

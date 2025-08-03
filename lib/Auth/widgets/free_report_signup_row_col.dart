@@ -1,6 +1,6 @@
 import 'package:aiso/Auth/widgets/free_report_signup_details.dart';
 import 'package:aiso/Auth/widgets/free_report_signup_form.dart';
-import 'package:aiso/Widgets/row_col.dart';
+import 'package:aiso/widgets/row_col.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 

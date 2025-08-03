@@ -3,7 +3,7 @@ import 'package:aiso/Home/widgets/home_details.dart';
 import 'package:aiso/Home/widgets/home_details_2.dart';
 import 'package:aiso/Home/widgets/home_details_3.dart';
 import 'package:aiso/Home/widgets/home_details_4.dart';
-import 'package:aiso/Widgets/figure.dart';
+import 'package:aiso/widgets/figure.dart';
 import 'package:aiso/routing/app_router.dart';
 import 'package:aiso/routing/route_names.dart';
 import 'package:flutter/material.dart';

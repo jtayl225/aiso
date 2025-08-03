@@ -1,5 +1,5 @@
 import 'package:aiso/NavBar/widgets/markdown_viewer.dart';
-import 'package:aiso/Widgets/row_col.dart';
+import 'package:aiso/widgets/row_col.dart';
 import 'package:aiso/constants/string_constants.dart';
 import 'package:aiso/themes/h1_heading.dart';
 import 'package:aiso/themes/typography.dart';

@@ -2,7 +2,7 @@ import 'package:aiso/Dashboards/view_models/dash_view_model.dart';
 // import 'package:aiso/Dashboards/widgets/bar_chart_string_double.dart';
 import 'package:aiso/Dashboards/widgets/start_card.dart';
 import 'package:aiso/NavBar/widgets/markdown_viewer.dart';
-import 'package:aiso/Widgets/row_col.dart';
+import 'package:aiso/widgets/row_col.dart';
 import 'package:aiso/constants/app_colors.dart';
 import 'package:aiso/models/location_models.dart';
 import 'package:aiso/models/prompt_model.dart';

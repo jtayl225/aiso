@@ -1,4 +1,4 @@
-import 'package:aiso/Widgets/row_col.dart';
+import 'package:aiso/widgets/row_col.dart';
 import 'package:aiso/constants/string_constants.dart';
 import 'package:aiso/reports/view_models/prompt_view_model.dart';
 import 'package:aiso/reports/view_models/rank_view_model.dart';

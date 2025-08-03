@@ -1,4 +1,4 @@
-import 'package:aiso/Widgets/row_col.dart';
+import 'package:aiso/widgets/row_col.dart';
 import 'package:aiso/reports/view_models/reports_view_model.dart';
 import 'package:aiso/reports/widgets/report_card.dart';
 import 'package:aiso/routing/route_names.dart';

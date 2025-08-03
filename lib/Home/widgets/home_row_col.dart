@@ -1,8 +1,8 @@
 import 'package:aiso/Dashboards/views/iframe_view.dart';
 import 'package:aiso/Home/widgets/call_to_action.dart';
 import 'package:aiso/NavBar/widgets/markdown_viewer.dart';
-import 'package:aiso/Widgets/figure.dart';
-import 'package:aiso/Widgets/row_col.dart';
+import 'package:aiso/widgets/figure.dart';
+import 'package:aiso/widgets/row_col.dart';
 import 'package:aiso/constants/string_constants.dart';
 import 'package:aiso/free_reports/widgets/powered_by_logos.dart';
 import 'package:aiso/routing/app_router.dart';
@@ -13,7 +13,7 @@ import 'package:aiso/view_models/auth_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_builder/responsive_builder.dart';
-import 'package:aiso/Widgets/supabase_video_player.dart';
+import 'package:aiso/widgets/supabase_video_player.dart';
 
 class HomeRowCol extends StatelessWidget {
   final DeviceScreenType deviceType;
