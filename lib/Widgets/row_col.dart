@@ -56,6 +56,7 @@ class RowCol extends StatelessWidget {
   //     return children;
   //   }
   // }
+  //
 
   List<Widget> _wrapChildrenForLayout(List<Widget> children) {
     if (layoutType == RowColType.row) {

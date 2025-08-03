@@ -1,4 +1,4 @@
-import 'package:aiso/Home/widgets/centered_view.dart';
+// import 'package:aiso/Home/widgets/centered_view.dart';
 import 'package:aiso/NavBar/views/nav_bar.dart';
 import 'package:aiso/NavBar/views/nav_footer.dart';
 import 'package:aiso/NavBar/widgets/nav_draw.dart';
@@ -13,6 +13,7 @@ class LayoutTemplate extends StatelessWidget {
 
 //   @override
 //   Widget build(BuildContext context) {
+//
 
 //     final double _maxWidth = 1100.0;
 
