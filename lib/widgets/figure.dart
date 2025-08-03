@@ -22,6 +22,7 @@ class Figure extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         //
+        //
         // ClipRRect(
         //   borderRadius: BorderRadius.circular(borderRadius),
         //   child: ConstrainedBox(
