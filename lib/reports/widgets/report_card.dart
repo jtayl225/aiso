@@ -77,6 +77,7 @@ class ReportCard extends StatelessWidget {
                   if (deviceType != DeviceScreenType.desktop)
                     Wrap(
                       spacing: 8,
+                      runSpacing: 8,
                       children: [
                         ElevatedButton(
                           onPressed: onPressedRank,
