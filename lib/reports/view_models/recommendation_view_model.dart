@@ -74,13 +74,13 @@ class RecommendationViewModel extends ChangeNotifier {
       }
 
       final current = recommendations[index];
-      final newIsDone = !current.isDone;
+      final newIsDone = current.status == 'done';
 
       // Update local state
-      recommendations[index] = current.copyWith(isDone: newIsDone);
+      recommendations[index] = current.copyWith(status: newIsDone ? 'todo' : 'done');
       notifyListeners();
 
-     final _ = await _reportService.updateRecommendationStatus(current.id, current.reportRunId, newIsDone);
+     final _ = await _reportService.updateRecommendationStatus(current.id, current.reportRunId, recommendations[index].status);
 
     } catch (e, st) {
       debugPrint('❌ Error toggling isDone: $e\n$st');

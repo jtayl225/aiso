@@ -160,10 +160,6 @@ class HomeRowCol extends StatelessWidget {
           flexes: [1, 1],
           spacing: 16.0,
           children: [
-            MarkdownContent(
-              markdownText: homeMarkdown4,
-              deviceType: deviceType,
-            ),
 
             Center(
               child: Padding(
@@ -180,6 +176,21 @@ class HomeRowCol extends StatelessWidget {
         ),
 
         SizedBox(height: spacing),
+
+        RowCol(
+          layoutType: layoutType,
+          flexes: [1, 1],
+          spacing: 16.0,
+          children: [
+            MarkdownContent(
+              markdownText: homeMarkdown4,
+              deviceType: deviceType,
+            ),
+          ],
+        ),
+
+        SizedBox(height: spacing),
+
       ],
     );
   }

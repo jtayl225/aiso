@@ -91,8 +91,8 @@ class LocationServiceSupabase {
       params: {
         'lat': locality.latitude,
         'lon': locality.longitude,
-        'radius': 10000,
-        'result_limit': 10,
+        'radius': 20000,
+        'result_limit': 30,
       },
     );
 

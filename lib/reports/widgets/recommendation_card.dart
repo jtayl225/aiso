@@ -1,14 +1,17 @@
+import 'package:aiso/NavBar/widgets/markdown_viewer.dart';
 import 'package:aiso/constants/app_colors.dart';
 import 'package:aiso/models/recommendation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 
 class RecoCard extends StatelessWidget {
   final Recommendation reco;
   final VoidCallback? onTap;
   final VoidCallback? onMarkDone;
+  final DeviceScreenType deviceType;
 
-  const RecoCard({super.key, required this.reco, this.onTap, this.onMarkDone});
+  const RecoCard({super.key, required this.reco, this.onTap, this.onMarkDone, required this.deviceType});
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +33,7 @@ class RecoCard extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Text(
-                      reco.name,
+                      reco.title,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
@@ -38,10 +41,10 @@ class RecoCard extends StatelessWidget {
                   ),
                   IconButton(
                     icon: Icon(
-                      reco.isDone
+                      reco.status == 'done'
                           ? Icons.check_circle
                           : Icons.radio_button_unchecked,
-                      color: reco.isDone ? Colors.green : Colors.grey,
+                      color: reco.status == 'done' ? Colors.green : Colors.grey,
                     ),
                     onPressed: onMarkDone,
                   ),
@@ -50,14 +53,17 @@ class RecoCard extends StatelessWidget {
 
               /// Description
               const SizedBox(height: 12),
-              Text(
-                reco.description,
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
+
+              MarkdownContent(markdownText: reco.action, deviceType: deviceType),
+
+              // Text(
+              //   reco.action,
+              //   style: Theme.of(context).textTheme.bodyMedium,
+              // ),
 
               /// Optional Comment
-              if (reco.generatedComment != null &&
-                  reco.generatedComment!.isNotEmpty) ...[
+              if (reco.description != null &&
+                  reco.description!.isNotEmpty) ...[
                 const SizedBox(height: 16),
                 IntrinsicHeight(
                   child: Row(
@@ -73,7 +79,7 @@ class RecoCard extends StatelessWidget {
                       ),
                       Expanded(
                         child: Text(
-                          reco.generatedComment!,
+                          reco.description,
                           style: Theme.of(context).textTheme.bodySmall
                               ?.copyWith(fontStyle: FontStyle.italic),
                         ),
@@ -91,8 +97,8 @@ class RecoCard extends StatelessWidget {
                 children: [
                   // _Badge(label: "Category: ${reco.category}"),
                   // _Badge(label: "Cadence: ${reco.cadence}"),
-                  _Badge(label: "Effort: ${reco.effort}"),
-                  _Badge(label: "Reward: ${reco.reward}"),
+                  _Badge(label: "Effort: ${reco.effortString}"),
+                  _Badge(label: "Reward: ${reco.rewardString}"),
                   // _Badge(label: "Created: $formattedDate"),
                 ],
               ),

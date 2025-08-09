@@ -1,4 +1,6 @@
+import 'package:aiso/constants/app_colors.dart';
 import 'package:aiso/themes/typography.dart';
+import 'package:aiso/widgets/step_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
@@ -37,6 +39,15 @@ class FreeReportSignUpDetails extends StatelessWidget {
         ),
 
         SizedBox(height: 30),
+
+        StepIndicator(
+          n: 2,      // total steps
+          nth: 1,    // current step (step 2)
+          color: AppColors.color3,
+        ),
+
+        SizedBox(height: 30),
+
 
        
       ],

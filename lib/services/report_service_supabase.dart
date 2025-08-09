@@ -90,12 +90,14 @@ class ReportServiceSupabase {
     printDebug('DEBUG: Service is fetching report with ID: $reportId');
     final response = await _supabase
       .from('reports')
-      .select('*, prompts(*), search_targets(*), report_run_recommendations_vw(*)')
+      .select('*, prompts(*), search_targets(*), geomax_recommendations_vw(*)')
       .eq('id', reportId)
       .isFilter('deleted_at', null)
       .isFilter('prompts.deleted_at', null)
       .isFilter('search_targets.deleted_at', null)
       .single();
+
+    printDebug('Response: $response');
 
     final Report report = Report.fromJson(response);
     return report;
@@ -750,12 +752,12 @@ class ReportServiceSupabase {
   }
 
   // RECOMMENDATIONS
-  Future<bool> updateRecommendationStatus(String id, String reportRunId, bool isDone) async {
+  Future<bool> updateRecommendationStatus(String id, String reportRunId, String status) async {
     printDebug('DEBUG: updateRecommendationStatus.');
     try {
       final response = await _supabase
-          .from('report_run_recommendations')
-          .update({'is_done': isDone})
+          .from('geomax_recommendations')
+          .update({'status': status})
           .eq('id', id)
           .eq('report_run_id', reportRunId)
           .select(); // Add select() to get the updated data back

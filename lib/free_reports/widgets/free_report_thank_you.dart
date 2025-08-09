@@ -24,7 +24,15 @@ class FreeReportThankYou extends StatelessWidget {
           textAlign: TextAlign.center,
         ),
     
-        SizedBox(height: 30.0),
+        SizedBox(height: 16.0),
+
+        Text(
+          'This can take up to 10 minutes.',
+          style: AppTextStyles.h3(deviceType),
+          textAlign: TextAlign.center,
+        ),
+
+        SizedBox(height: 32.0),
 
         UpgradePromptCard(onSubscribe: () => appRouter.go(storeRoute)),
     

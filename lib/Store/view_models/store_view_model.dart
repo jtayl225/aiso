@@ -29,6 +29,7 @@ class StoreViewModel extends ChangeNotifier {
   bool isLoading = false;
   String? errorMessage;
   late List<Product> products = [];
+  late final Product _oneoff_access;
   late final Product _monthlySubcription;
   late final Product _yearlySubcription;
 
@@ -41,6 +42,45 @@ class StoreViewModel extends ChangeNotifier {
 
   StoreViewModel() {
 
+    _oneoff_access = Product(
+        id: '1',
+        title: 'One-off 30 Day Access',
+        description: 'Get started with 30 day access.',
+        cadence: '/ month',
+        price: 29.95,
+        // reducedFromPrice: 34.95,
+        pctDiscount: 0.0,
+        productInclusions: [
+          ProductInclusion(isIncluded: true, description: '\$2.99 / report'),
+          ProductInclusion(isIncluded: true, description: 'ChatGPT (OpenAI)'),
+          ProductInclusion(isIncluded: true, description: 'Gemini (Google)'),
+          // ProductInclusion(isIncluded: true, description: 'Only 1 report'),
+          ProductInclusion(isIncluded: false, description: 'Up to 10 reports / month'),
+          // ProductInclusion(isIncluded: false, description: 'Up to 10 prompts / report'),
+          ProductInclusion(isIncluded: false, description: 'Monthly report updates'),
+        ],
+        callToAction: 'Buy Now',
+        // onPressed: (context) => handleProductAction(context, ProductType.PURCHASE)
+        // onPressed: (context) => UrlLauncherService.launchFromAsyncSource(() {
+        //   return handleProductAction(context, ProductType.PURCHASE);
+        // }),
+         onPressed: (context) {
+        
+          final user =_authService.currentUser;
+
+          if (user != null) {
+            // ✅ Only launch if signed in
+            UrlLauncherService.launchFromAsyncSource(() {
+              return handleProductAction(context, ProductType.PURCHASE);
+            });
+          } else {
+            // ❌ Not signed in — redirect
+            handleProductAction(context, ProductType.PURCHASE);
+          }
+        },
+
+      );
+
     _monthlySubcription = Product(
         id: '2',
         highlightLabel: 'Most popular',
@@ -49,13 +89,13 @@ class StoreViewModel extends ChangeNotifier {
         cadence: '/ month',
         price: 17.95,
         // reducedFromPrice: 19.95,
-        pctDiscount: 0.3,
+        pctDiscount: 0.0,
         productInclusions: [
           ProductInclusion(isIncluded: true, description: '\$1.80 / report'),
           ProductInclusion(isIncluded: true, description: 'ChatGPT (OpenAI)'),
           ProductInclusion(isIncluded: true, description: 'Gemini (Google)'),
           ProductInclusion(isIncluded: true, description: 'Up to 10 reports / month'),
-          ProductInclusion(isIncluded: true, description: 'Up to 10 prompts / report'),
+          // ProductInclusion(isIncluded: true, description: 'Up to 10 prompts / report'),
           ProductInclusion(isIncluded: true, description: 'Monthly report updates'),
         ],
         callToAction: 'Subscribe',
@@ -84,13 +124,13 @@ class StoreViewModel extends ChangeNotifier {
         cadence: '/ year',
         price: 169.95,
         // reducedFromPrice: 199.95,
-        pctDiscount: 0.3,
+        pctDiscount: 0.0,
         productInclusions: [
           ProductInclusion(isIncluded: true, description: '\$1.40 / report'),
           ProductInclusion(isIncluded: true, description: 'ChatGPT (OpenAI)'),
           ProductInclusion(isIncluded: true, description: 'Gemini (Google)'),
           ProductInclusion(isIncluded: true, description: 'Up to 10 reports / month'),
-          ProductInclusion(isIncluded: true, description: 'Up to 10 prompts / report'),
+          // ProductInclusion(isIncluded: true, description: 'Up to 10 prompts / report'),
           ProductInclusion(isIncluded: true, description: 'Monthly report updates'),
         ],
         callToAction: 'Subscribe',
@@ -112,31 +152,7 @@ class StoreViewModel extends ChangeNotifier {
       );
 
     products = [
-      // Product(
-      //   id: '1',
-      //   title: 'Individual Report',
-      //   description: 'Get started with a single one-off report.',
-      //   cadence: '/ report',
-      //   price: 29.95,
-      //   // reducedFromPrice: 34.95,
-      //   pctDiscount: 0.0,
-      //   productInclusions: [
-      //     ProductInclusion(isIncluded: true, description: '\$24.95 / report'),
-      //     ProductInclusion(isIncluded: true, description: 'ChatGPT (OpenAI)'),
-      //     ProductInclusion(isIncluded: true, description: 'Gemini (Google)'),
-      //     // ProductInclusion(isIncluded: true, description: 'Only 1 report'),
-      //     ProductInclusion(isIncluded: false, description: 'Up to 10 reports / month'),
-      //     ProductInclusion(isIncluded: false, description: 'Up to 10 prompts / report'),
-      //     ProductInclusion(isIncluded: false, description: 'Monthly report updates'),
-      //   ],
-      //   callToAction: 'Buy Now',
-      //   onPressed: (context) => handleProductAction(context, ProductType.PURCHASE)
-      //   // onPressed: (context) => UrlLauncherService.launchFromAsyncSource(() {
-      //   //   return handleProductAction(context, ProductType.PURCHASE);
-      //   // }),
-
-      // ),
-
+      _oneoff_access,
       _monthlySubcription,
       _yearlySubcription      
     ];
@@ -189,9 +205,9 @@ class StoreViewModel extends ChangeNotifier {
 
     if (user == null) {
       switch (productType) {
-        case ProductType.PURCHASE:
-          showBuyReportDialog(context); // UI action, not a checkout URL
-          return null;
+        case ProductType.PURCHASE: selectedProduct = _oneoff_access;
+          // showBuyReportDialog(context); // UI action, not a checkout URL
+          // return null;
         case ProductType.SUBSCRIBE_MONTHLY: selectedProduct = _monthlySubcription;
         case ProductType.SUBSCRIBE_YEARLY: selectedProduct = _yearlySubcription;
     }
@@ -206,8 +222,9 @@ class StoreViewModel extends ChangeNotifier {
 
     switch (productType) {
       case ProductType.PURCHASE:
-        showBuyReportDialog(context); // UI action, not a checkout URL
-        return null;
+        // showBuyReportDialog(context); // UI action, not a checkout URL
+        // return null;
+        return _storeService.generateCheckoutUrl(productType, reportId: '');
       case ProductType.SUBSCRIBE_MONTHLY:
         return _storeService.generateCheckoutUrl(productType, reportId: '');
       case ProductType.SUBSCRIBE_YEARLY:

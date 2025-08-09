@@ -63,7 +63,7 @@ class Report {
       searchTarget: json['search_targets'] != null
         ? SearchTarget.fromJson(json['search_targets'])
         : null,
-      recommendations: (json['report_run_recommendations_vw'] as List<dynamic>?)
+      recommendations: (json['geomax_recommendations_vw'] as List<dynamic>?)
         ?.map((item) => Recommendation.fromJson(item))
         .toList() ?? [],
       dbTimestamps: DbTimestamps(

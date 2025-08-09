@@ -48,6 +48,7 @@ class NewReportViewModel extends ChangeNotifier {
       if (userId == null) return;
       searchTargets = await _reportService.fetchSearchTargets(userId);
       selectedSearchTarget = searchTargets.isNotEmpty ? searchTargets.first : null;
+      reports = await _reportService.fetchReports(userId);
 
     } catch (e) {
       errorMessage = 'Failed to initialize: $e';
@@ -70,6 +71,8 @@ class NewReportViewModel extends ChangeNotifier {
   // String promptText = '';
   bool isLoading = false;
   String? errorMessage;
+
+  List<Report> reports = [];
 
   List<Entity> _entities = [];
   List<Entity> get entities => _entities;
@@ -320,6 +323,9 @@ class NewReportViewModel extends ChangeNotifier {
 
       for (final locality in localities) {
 
+        final alreadyReported = reports.any((report) => report.localityId == locality.id);
+        if (alreadyReported) continue; // skip this locality
+
         printDebug('DEBUG: start _buildPrompt.');
         final String promptText = _buildPrompt(basePrompt, locality);
         printDebug('DEBUG: end _buildPrompt.');
@@ -347,7 +353,9 @@ class NewReportViewModel extends ChangeNotifier {
 
       }
 
-       final String? _ = await _reportService.runReport(userId, reportIds, true);
+      if (reportIds.isNotEmpty) {
+        final String? _ = await _reportService.runReport(userId, reportIds, true);
+      }
 
       // // init paid report run
       // printDebug('DEBUG: start runReport.');
@@ -462,12 +470,15 @@ class NewReportViewModel extends ChangeNotifier {
     isLoading = true;
     notifyListeners();
     try {
-      nearbyLocalities =
-          (await _locationService.fetchNearbyLocalities(locality))
-              .where(
-                (loc) => !localities.any((existing) => existing.id == loc.id),
-              )
-              .toList();
+      nearbyLocalities = (await _locationService.fetchNearbyLocalities(locality))
+        .where((loc) =>
+            // Not already in localities
+            !localities.any((existing) => existing.id == loc.id) &&
+            // Not already in reports
+            !reports.any((report) => report.localityId == loc.id)
+        )
+        .toList();
+
     } catch (e) {
       _handleError(e);
       return;

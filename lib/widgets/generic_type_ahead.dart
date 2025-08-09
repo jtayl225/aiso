@@ -187,6 +187,15 @@ class _GenericTypeAheadFieldState<T> extends State<GenericTypeAheadField<T>> {
           }
         });
         
+        // return TextFormField(
+        //   controller: controller,
+        //   focusNode: focusNode,
+        //   decoration: InputDecoration(
+        //     labelText: widget.label ?? 'Select an item',
+        //     border: const OutlineInputBorder(),
+        //   ),
+        //   validator: (_) => widget.validator?.call(),
+        // );
         return TextFormField(
           controller: controller,
           focusNode: focusNode,
@@ -195,7 +204,33 @@ class _GenericTypeAheadFieldState<T> extends State<GenericTypeAheadField<T>> {
             border: const OutlineInputBorder(),
           ),
           validator: (_) => widget.validator?.call(),
+          onFieldSubmitted: (input) async {
+            // Fetch suggestions for what the user typed
+            final suggestions = await widget.suggestionsCallback(input);
+            
+            // Try to find exact match (case-insensitive, trims spaces)
+            T? match;
+            try {
+              match = suggestions.firstWhere(
+                (s) => widget.displayString(s).toLowerCase().trim() == input.toLowerCase().trim(),
+              );
+            } catch (e) {
+              // No match found
+              match = null;
+            }
+            
+            if (match != null) {
+              // Select the matched suggestion
+              widget.onSelected(match);
+              controller.text = widget.displayString(match);
+              _suggestionsController.close();
+              // Optionally, unfocus the field
+              focusNode.unfocus();
+              // setState(() {}); // To update validation if needed
+            }
+          },
         );
+
       },
       
       emptyBuilder: (context) => const Padding(

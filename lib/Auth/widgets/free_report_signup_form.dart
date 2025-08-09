@@ -11,9 +11,12 @@ class FreeReportSignUpForm extends StatefulWidget {
 }
 
 class _FreeReportSignUpFormState extends State<FreeReportSignUpForm> {
+
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController    = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
+  bool _obscure = true;
   bool _isLoading = false;
   final double _maxWidth = 400;
 
@@ -23,6 +26,18 @@ class _FreeReportSignUpFormState extends State<FreeReportSignUpForm> {
     _passwordController.dispose();
     super.dispose();
   }
+
+  // bool get isFormValid {
+  //   final email = _emailController.text;
+  //   final password = _passwordController.text;
+  //   final confirmPassword = _confirmPasswordController.text;
+
+  //   // Your business logic:
+  //   if (email.isEmpty || !email.contains('@')) return false;
+  //   if (password.length < 6) return false;
+  //   if (password != confirmPassword) return false;
+  //   return true;
+  // }
 
   void _showErrorSnackBar(String message) {
     if (!mounted) return;
@@ -75,6 +90,7 @@ class _FreeReportSignUpFormState extends State<FreeReportSignUpForm> {
                 contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
               ),
               autofillHints: const [AutofillHints.email],
+              onChanged: (_) => setState(() {}),
               validator: (val) {
                 if (val == null || val.isEmpty) return 'Email required';
                 if (!val.contains('@')) return 'Enter a valid email';
@@ -82,17 +98,24 @@ class _FreeReportSignUpFormState extends State<FreeReportSignUpForm> {
               },
             ),
           ),
+
           const SizedBox(height: 16),
+
           ConstrainedBox(
             constraints: BoxConstraints(maxWidth: _maxWidth),
             child: TextFormField(
               controller: _passwordController,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 labelText: 'Password',
                 border: OutlineInputBorder(),
                 contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                suffixIcon: IconButton(
+                  icon: Icon(_obscure ? Icons.visibility_off : Icons.visibility),
+                  onPressed: () => setState(() => _obscure = !_obscure),
+                ),
               ),
-              obscureText: true,
+              obscureText: _obscure,
+              // onChanged: (_) => setState(() {}),
               validator: (val) {
                 if (val == null || val.isEmpty) return 'Password required';
                 if (val.length < 6) return 'Min 6 characters';
@@ -100,7 +123,35 @@ class _FreeReportSignUpFormState extends State<FreeReportSignUpForm> {
               },
             ),
           ),
+
           const SizedBox(height: 16),
+
+          ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: _maxWidth),
+            child: TextFormField(
+              controller: _confirmPasswordController,
+              decoration: InputDecoration(
+                labelText: 'Confirm Password',
+                border: OutlineInputBorder(),
+                contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                suffixIcon: IconButton(
+                  icon: Icon(_obscure ? Icons.visibility_off : Icons.visibility),
+                  onPressed: () => setState(() => _obscure = !_obscure),
+                ),
+              ),
+              obscureText: _obscure,
+              // onChanged: (_) => setState(() {}),
+              validator: (val) {
+                if (val == null || val.isEmpty) return 'Password required';
+                if (val.length < 6) return 'Min 6 characters';
+                if (val != _passwordController.text) return 'Passwords do not match';
+                return null;
+              },
+            ),
+          ),
+
+          const SizedBox(height: 16),
+
           // SizedBox(
           //   width: _maxWidth,
           //   height: 48,
@@ -108,14 +159,16 @@ class _FreeReportSignUpFormState extends State<FreeReportSignUpForm> {
             ConstrainedBox(
               constraints: BoxConstraints(minWidth: _maxWidth, minHeight: 48, maxHeight: 60),
               child: ElevatedButton(
-                onPressed: _isLoading ? null : _signUp,
+                onPressed:  _isLoading ? null : _signUp,
                 child: _isLoading
                     ? const CircularProgressIndicator(color: Colors.white)
                     : Text('Go'),
               ),
             ),
           // ),
+
           const SizedBox(height: 16),
+
         ],
       ),
     );

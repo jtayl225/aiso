@@ -39,6 +39,15 @@ class RecommendationsPaidRowCol extends StatelessWidget {
       );
     }
 
+    if (vm.recommendations.isEmpty) {
+      return const Center(
+        child: Padding(
+          padding: EdgeInsets.all(32),
+          child: Text('Your report is still processing and will be ready soon. Please try again in a few minutes (up to 10 minutes).'),
+        ),
+      );
+    }
+
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -85,6 +94,7 @@ class RecommendationsPaidRowCol extends StatelessWidget {
                 reco: reco,
                 onTap: () => debugPrint('DEBUG'),
                 onMarkDone: () => vm.toggleRecommendationDone(recommendationId: reco.id),
+                deviceType: deviceType
                 ),)
           ),
 

@@ -453,7 +453,7 @@ List<Widget> _buildLocationsChildren(NewReportViewModel vm, RowColType rowColTyp
           ),
           SizedBox(height: 14),
           Text(
-            'The locations that you wish to report on (you can select up to 10). Each location will be added to the below AI prompt.',
+            'Select up to 10 locations. We will create a seperate report for each location.',
             style: TextStyle(fontSize: 14, height: 1.7),
             textAlign: TextAlign.start,
           ),
@@ -525,12 +525,208 @@ List<Widget> _buildLocationsChildren(NewReportViewModel vm, RowColType rowColTyp
   ];
 }
 
+// void _showCreateTargetDialog(BuildContext context, NewReportViewModel vm) {
+//   final TextEditingController _businessNameController = TextEditingController();
+//   final TextEditingController _personNameController = TextEditingController();
+//   // final TextEditingController _targetDescriptionController = TextEditingController();
+//   final TextEditingController _targetUrlController = TextEditingController();
+//   // EntityType? _searchTargetType = EntityType.values.first;
+
+//   showDialog(
+//     context: context,
+//     builder: (BuildContext dialogContext) {
+//       return Dialog(
+//         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+//         child: Padding(
+//           padding: const EdgeInsets.all(24.0),
+//           child: StatefulBuilder(
+//             builder: (context, setState) {
+//               return SingleChildScrollView(
+//                 child: Column(
+//                   mainAxisSize: MainAxisSize.min,
+//                   crossAxisAlignment: CrossAxisAlignment.start,
+//                   children: [
+//                     const Text(
+//                       "Add your business details",
+//                       style: TextStyle(
+//                         fontSize: 18,
+//                         fontWeight: FontWeight.bold,
+//                       ),
+//                     ),
+//                     const SizedBox(height: 16),
+//                     const Text(
+//                       "Complete the form below to add your business details.",
+//                       style: TextStyle(fontSize: 14),
+//                     ),
+//                     const SizedBox(height: 8),
+
+//                     _buildDropdownField<Industry>(
+//                       label: 'Industry',
+//                       value: vm.selectedIndustry,
+//                       items:
+//                           vm.industries
+//                               .map(
+//                                 (i) => DropdownMenuItem(
+//                                   value: i,
+//                                   child: Text(i.name),
+//                                 ),
+//                               )
+//                               .toList(),
+//                       onChanged: (i) => vm.selectedIndustry = i,
+//                     ),
+
+//                     // DropdownButtonFormField<EntityType>(
+//                     //   value: _searchTargetType,
+//                     //   decoration: const InputDecoration(
+//                     //     labelText: 'Type',
+//                     //     border: OutlineInputBorder(),
+//                     //   ),
+//                     //   items:
+//                     //       EntityType.values.map((type) {
+//                     //         return DropdownMenuItem<EntityType>(
+//                     //           value: type,
+//                     //           child: Text(type.toValue()),
+//                     //         );
+//                     //       }).toList(),
+//                     //   onChanged: (value) {
+//                     //     setState(() {
+//                     //       _searchTargetType = value!;
+//                     //     });
+//                     //   },
+//                     // ),
+
+//                     const SizedBox(height: 8),
+
+//                     TextField(
+//                         controller: _personNameController,
+//                         decoration: const InputDecoration(
+//                           labelText: 'Agent name',
+//                           border: OutlineInputBorder(),
+//                         ),
+//                       ),
+
+//                     const SizedBox(height: 8),
+
+//                     TextField(
+//                       controller: _businessNameController,
+//                       decoration: const InputDecoration(
+//                         labelText: 'Agency name',
+//                         border: OutlineInputBorder(),
+//                       ),
+//                     ),
+
+//                     const SizedBox(height: 8),
+
+//                     // if (_searchTargetType == EntityType.person) ...[
+//                     //   TextField(
+//                     //     controller: _personNameController,
+//                     //     decoration: const InputDecoration(
+//                     //       labelText: 'Person Name',
+//                     //       border: OutlineInputBorder(),
+//                     //     ),
+//                     //   ),
+//                     //   const SizedBox(height: 8),
+//                     // ],
+
+//                     // const SizedBox(height: 8),
+
+//                     // TextField(
+//                     //   controller: _targetDescriptionController,
+//                     //   decoration: const InputDecoration(
+//                     //     labelText: 'Description',
+//                     //     border: OutlineInputBorder(),
+//                     //   ),
+//                     // ),
+
+//                     // const SizedBox(height: 8),
+//                     TextField(
+//                       controller: _targetUrlController,
+//                       decoration: const InputDecoration(
+//                         labelText: 'URL (optional)',
+//                         border: OutlineInputBorder(),
+//                       ),
+//                     ),
+
+//                     const SizedBox(height: 24),
+//                     Row(
+//                       mainAxisAlignment: MainAxisAlignment.end,
+//                       children: [
+//                         TextButton(
+//                           child: const Text("Cancel"),
+//                           onPressed: () => Navigator.of(dialogContext).pop(),
+//                         ),
+//                         const SizedBox(width: 8),
+//                         TextButton(
+//                           child: const Text("Create"),
+//                           onPressed: () {
+
+//                             final businessName = _businessNameController.text.trim();
+//                             final personName = _personNameController.text.trim();
+//                             final url = _targetUrlController.text.trim();
+//                             // final type = _searchTargetType;
+//                             final industry = vm.selectedIndustry;
+
+//                             // if (type == null) {
+//                             //   debugPrint("⚠️ Type is required");
+//                             //   return;
+//                             // }
+
+//                             // if (type == null) {
+//                             //   debugPrint("⚠️ Type is required");
+//                             //   return;
+//                             // }
+
+//                             // if (type == EntityType.business &&
+//                             //     businessName.isEmpty) {
+//                             //   debugPrint("⚠️ Business name is required");
+//                             //   return;
+//                             // }
+
+//                             // if (type == EntityType.person &&
+//                             //     (personName.isEmpty || businessName.isEmpty)) {
+//                             //   debugPrint(
+//                             //     "⚠️ Both person and business names are required",
+//                             //   );
+//                             //   return;
+//                             // }
+
+//                             final String targetName = personName.isNotEmpty ? personName : businessName;
+//                             final String targetDescription = personName.isNotEmpty ? 'Real estate agent at $businessName' : 'A real estate agency.';
+//                             final EntityType targetEntityType = personName.isNotEmpty ? EntityType.person : EntityType.business;
+
+//                             final newTarget = SearchTarget(
+//                               id: '',
+//                               userId: '', // Populate later if needed
+//                               name: targetName,
+//                               industry: industry,
+//                               entityType: targetEntityType,
+//                               description: targetDescription,
+//                               url: url,
+//                               dbTimestamps: DbTimestamps.now(),
+//                             );
+
+//                             vm.createSearchTarget(newTarget);
+//                             Navigator.of(dialogContext).pop();
+//                           },
+//                         ),
+//                       ],
+//                     ),
+//                   ],
+//                 ),
+//               );
+//             },
+//           ),
+//         ),
+//       );
+//     },
+//   );
+// }
+
 void _showCreateTargetDialog(BuildContext context, NewReportViewModel vm) {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _businessNameController = TextEditingController();
   final TextEditingController _personNameController = TextEditingController();
-  // final TextEditingController _targetDescriptionController = TextEditingController();
   final TextEditingController _targetUrlController = TextEditingController();
-  EntityType? _searchTargetType = EntityType.values.first;
 
   showDialog(
     context: context,
@@ -541,165 +737,181 @@ void _showCreateTargetDialog(BuildContext context, NewReportViewModel vm) {
           padding: const EdgeInsets.all(24.0),
           child: StatefulBuilder(
             builder: (context, setState) {
-              return SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      "Add your business details",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    const Text(
-                      "Complete the form below to add your business details.",
-                      style: TextStyle(fontSize: 14),
-                    ),
-                    const SizedBox(height: 8),
-
-                    _buildDropdownField<Industry>(
-                      label: 'Industry',
-                      value: vm.selectedIndustry,
-                      items:
-                          vm.industries
-                              .map(
-                                (i) => DropdownMenuItem(
-                                  value: i,
-                                  child: Text(i.name),
-                                ),
-                              )
-                              .toList(),
-                      onChanged: (i) => vm.selectedIndustry = i,
-                    ),
-
-                    DropdownButtonFormField<EntityType>(
-                      value: _searchTargetType,
-                      decoration: const InputDecoration(
-                        labelText: 'Type',
-                        border: OutlineInputBorder(),
-                      ),
-                      items:
-                          EntityType.values.map((type) {
-                            return DropdownMenuItem<EntityType>(
-                              value: type,
-                              child: Text(type.toValue()),
-                            );
-                          }).toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          _searchTargetType = value!;
-                        });
-                      },
-                    ),
-
-                    const SizedBox(height: 8),
-
-                    TextField(
-                      controller: _businessNameController,
-                      decoration: const InputDecoration(
-                        labelText: 'Business Name',
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
-
-                    const SizedBox(height: 8),
-
-                    if (_searchTargetType == EntityType.person) ...[
-                      TextField(
-                        controller: _personNameController,
-                        decoration: const InputDecoration(
-                          labelText: 'Person Name',
-                          border: OutlineInputBorder(),
+              return Form(
+                key: _formKey,
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        "Add your business details",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
                         ),
+                      ),
+                      const SizedBox(height: 16),
+                      const Text(
+                        "Complete the form below to add your business details.",
+                        style: TextStyle(fontSize: 14),
                       ),
                       const SizedBox(height: 8),
-                    ],
 
-                    // const SizedBox(height: 8),
-
-                    // TextField(
-                    //   controller: _targetDescriptionController,
-                    //   decoration: const InputDecoration(
-                    //     labelText: 'Description',
-                    //     border: OutlineInputBorder(),
-                    //   ),
-                    // ),
-
-                    // const SizedBox(height: 8),
-                    TextField(
-                      controller: _targetUrlController,
-                      decoration: const InputDecoration(
-                        labelText: 'URL (optional)',
-                        border: OutlineInputBorder(),
+                      // Industry Dropdown with validation
+                      DropdownButtonFormField<Industry>(
+                        value: vm.selectedIndustry,
+                        decoration: const InputDecoration(
+                          labelText: 'Industry',
+                          border: OutlineInputBorder(),
+                        ),
+                        items: vm.industries
+                            .map(
+                              (i) => DropdownMenuItem(
+                                value: i,
+                                child: Text(i.name),
+                              ),
+                            )
+                            .toList(),
+                        onChanged: (i) {
+                          setState(() {
+                            vm.selectedIndustry = i;
+                          });
+                        },
+                        validator: (value) {
+                          if (value == null) {
+                            return 'Please select an industry';
+                          }
+                          return null;
+                        },
                       ),
-                    ),
 
-                    const SizedBox(height: 24),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        TextButton(
-                          child: const Text("Cancel"),
-                          onPressed: () => Navigator.of(dialogContext).pop(),
+                      const SizedBox(height: 8),
+
+                      // Agent Name Field
+                      TextFormField(
+                        controller: _personNameController,
+                        decoration: const InputDecoration(
+                          labelText: 'Agent name',
+                          border: OutlineInputBorder(),
                         ),
-                        const SizedBox(width: 8),
-                        TextButton(
-                          child: const Text("Create"),
-                          onPressed: () {
-                            final businessName =
-                                _businessNameController.text.trim();
-                            final personName =
-                                _personNameController.text.trim();
-                            final url = _targetUrlController.text.trim();
-                            final type = _searchTargetType;
-                            final industry = vm.selectedIndustry;
+                        validator: (value) {
+                          // Agent name is optional, but if both agent and agency are empty, show error
+                          final businessName = _businessNameController.text.trim();
+                          final personName = value?.trim() ?? '';
+                          
+                          if (personName.isEmpty && businessName.isEmpty) {
+                            return 'Please enter either an agent name or agency name';
+                          }
+                          return null;
+                        },
+                        onChanged: (value) {
+                          // Trigger validation for both fields when one changes
+                          _formKey.currentState?.validate();
+                        },
+                      ),
 
-                            if (type == null) {
-                              debugPrint("⚠️ Type is required");
-                              return;
+                      const SizedBox(height: 8),
+
+                      // Agency Name Field
+                      TextFormField(
+                        controller: _businessNameController,
+                        decoration: const InputDecoration(
+                          labelText: 'Agency name',
+                          border: OutlineInputBorder(),
+                        ),
+                        validator: (value) {
+                          // Agency name is optional, but if both agent and agency are empty, show error
+                          final businessName = value?.trim() ?? '';
+                          final personName = _personNameController.text.trim();
+                          
+                          if (businessName.isEmpty && personName.isEmpty) {
+                            return 'Please enter either an agent name or agency name';
+                          }
+                          return null;
+                        },
+                        onChanged: (value) {
+                          // Trigger validation for both fields when one changes
+                          _formKey.currentState?.validate();
+                        },
+                      ),
+
+                      const SizedBox(height: 8),
+
+                      // URL Field (optional)
+                      TextFormField(
+                        controller: _targetUrlController,
+                        decoration: const InputDecoration(
+                          labelText: 'URL (optional)',
+                          border: OutlineInputBorder(),
+                        ),
+                        validator: (value) {
+                          if (value != null && value.trim().isNotEmpty) {
+                            // Basic URL validation
+                            final urlPattern = r'^https?://[^\s/$.?#].[^\s]*$';
+                            final regExp = RegExp(urlPattern, caseSensitive: false);
+                            if (!regExp.hasMatch(value.trim())) {
+                              return 'Please enter a valid URL (e.g., https://example.com)';
                             }
+                          }
+                          return null;
+                        },
+                      ),
 
-                            if (type == EntityType.business &&
-                                businessName.isEmpty) {
-                              debugPrint("⚠️ Business name is required");
-                              return;
-                            }
+                      const SizedBox(height: 24),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          TextButton(
+                            child: const Text("Cancel"),
+                            onPressed: () => Navigator.of(dialogContext).pop(),
+                          ),
+                          const SizedBox(width: 8),
+                          TextButton(
+                            child: const Text("Create"),
+                            onPressed: () {
+                              // Validate the form
+                              if (!_formKey.currentState!.validate()) {
+                                return; // Stop if validation fails
+                              }
 
-                            if (type == EntityType.person &&
-                                (personName.isEmpty || businessName.isEmpty)) {
-                              debugPrint(
-                                "⚠️ Both person and business names are required",
+                              final businessName = _businessNameController.text.trim();
+                              final personName = _personNameController.text.trim();
+                              final url = _targetUrlController.text.trim();
+                              final industry = vm.selectedIndustry;
+
+                              // At this point, validation has passed, so we know:
+                              // - Industry is selected
+                              // - At least one of personName or businessName is provided
+                              // - URL is valid if provided
+
+                              final String targetName = personName.isNotEmpty ? personName : businessName;
+                              final String targetDescription = personName.isNotEmpty 
+                                  ? 'Real estate agent at $businessName' 
+                                  : 'A real estate agency.';
+                              final EntityType targetEntityType = personName.isNotEmpty 
+                                  ? EntityType.person 
+                                  : EntityType.business;
+
+                              final newTarget = SearchTarget(
+                                id: '',
+                                userId: '', // Populate later if needed
+                                name: targetName,
+                                industry: industry!,
+                                entityType: targetEntityType,
+                                description: targetDescription,
+                                url: url.isNotEmpty ? url : null,
+                                dbTimestamps: DbTimestamps.now(),
                               );
-                              return;
-                            }
 
-                            final newTarget = SearchTarget(
-                              id: '',
-                              userId: '', // Populate later if needed
-                              name:
-                                  type == EntityType.business
-                                      ? businessName
-                                      : personName,
-                              industry: industry,
-                              entityType: type,
-                              description:
-                                  type == EntityType.business
-                                      ? 'Real estate agency.'
-                                      : 'Real estate agent at $businessName.',
-                              url: url,
-                              dbTimestamps: DbTimestamps.now(),
-                            );
-
-                            vm.createSearchTarget(newTarget);
-                            Navigator.of(dialogContext).pop();
-                          },
-                        ),
-                      ],
-                    ),
-                  ],
+                              vm.createSearchTarget(newTarget);
+                              Navigator.of(dialogContext).pop();
+                            },
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               );
             },

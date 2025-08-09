@@ -14,6 +14,8 @@ class _SignUpFormState extends State<SignUpForm> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController    = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
+  bool _obscure = true;
   bool _isLoading = false;
   final double _maxWidth = 400;
 
@@ -82,17 +84,23 @@ class _SignUpFormState extends State<SignUpForm> {
               },
             ),
           ),
+
           const SizedBox(height: 16),
+
           ConstrainedBox(
             constraints: BoxConstraints(maxWidth: _maxWidth),
             child: TextFormField(
               controller: _passwordController,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 labelText: 'Password',
                 border: OutlineInputBorder(),
                 contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                suffixIcon: IconButton(
+                  icon: Icon(_obscure ? Icons.visibility_off : Icons.visibility),
+                  onPressed: () => setState(() => _obscure = !_obscure),
+                ),
               ),
-              obscureText: true,
+              obscureText: _obscure,
               validator: (val) {
                 if (val == null || val.isEmpty) return 'Password required';
                 if (val.length < 6) return 'Min 6 characters';
@@ -100,6 +108,33 @@ class _SignUpFormState extends State<SignUpForm> {
               },
             ),
           ),
+
+          const SizedBox(height: 16),
+
+          ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: _maxWidth),
+            child: TextFormField(
+              controller: _confirmPasswordController,
+              decoration: InputDecoration(
+                labelText: 'Confirm Password',
+                border: OutlineInputBorder(),
+                contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                suffixIcon: IconButton(
+                  icon: Icon(_obscure ? Icons.visibility_off : Icons.visibility),
+                  onPressed: () => setState(() => _obscure = !_obscure),
+                ),
+              ),
+              obscureText: _obscure,
+              // onChanged: (_) => setState(() {}),
+              validator: (val) {
+                if (val == null || val.isEmpty) return 'Password required';
+                if (val.length < 6) return 'Min 6 characters';
+                if (val != _passwordController.text) return 'Passwords do not match';
+                return null;
+              },
+            ),
+          ),
+
           const SizedBox(height: 16),
           // SizedBox(
           //   width: _maxWidth,

@@ -20,11 +20,20 @@ class PromptDesktop extends StatelessWidget {
     // final vm = context.watch<PromptViewModel>();
     final vm = context.watch<RankViewModel>();
 
-    if (vm.isLoading || vm.prompt == null) {
+    if (vm.isLoading) {
       return const Center(
         child: Padding(
           padding: EdgeInsets.all(32),
           child: CircularProgressIndicator(),
+        ),
+      );
+    }
+
+    if (vm.prompt == null) {
+      return const Center(
+        child: Padding(
+          padding: EdgeInsets.all(32),
+          child: Text('Your report is still processing and will be ready soon. Please try again in a few minutes (up to 10 minutes).'),
         ),
       );
     }

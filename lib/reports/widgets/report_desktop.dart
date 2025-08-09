@@ -30,7 +30,7 @@ class ReportDesktop extends StatelessWidget {
       return const Center(
         child: Padding(
           padding: EdgeInsets.all(32),
-          child: CircularProgressIndicator(),
+          child: Text('Your report is still processing and will be ready soon. Please try again in a few minutes (up to 10 minutes).'),
         ),
       );
     }
@@ -169,7 +169,9 @@ class ReportDesktop extends StatelessWidget {
                     recommendationId: reco.id,
                     reportRunId: reco.reportRunId,
                   ),
-                ),)
+                deviceType: DeviceScreenType.desktop,
+                ),
+                )
           ),
 
           if (!canShow)

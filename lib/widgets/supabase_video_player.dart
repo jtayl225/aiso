@@ -414,18 +414,19 @@ class _SupabaseVideoPlayerState extends State<SupabaseVideoPlayer> {
       opacity: _showControls ? 1.0 : 0.0,
       duration: const Duration(milliseconds: 300),
       child: Container(
-        decoration: isPlaying ? BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Colors.black.withOpacity(0.7),
-              Colors.transparent,
-              Colors.transparent,
-              Colors.black.withOpacity(0.7),
-            ],
-          ),
-        ) : null,
+        decoration: null,
+        // decoration: isPlaying ? BoxDecoration(
+        //   gradient: LinearGradient(
+        //     begin: Alignment.topCenter,
+        //     end: Alignment.bottomCenter,
+        //     colors: [
+        //       Colors.black.withOpacity(0.7),
+        //       Colors.transparent,
+        //       Colors.transparent,
+        //       Colors.black.withOpacity(0.7),
+        //     ],
+        //   ),
+        // ) : null,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
