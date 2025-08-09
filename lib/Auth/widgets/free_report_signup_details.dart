@@ -31,7 +31,8 @@ class FreeReportSignUpDetails extends StatelessWidget {
         SizedBox(height: 30),
 
         Text(
-          'Generate a free report on us and see where your business ranks relative to your competitors.',
+          'Create your free account with your email and password to generate a complimentary report — and see exactly where your business ranks against your competitors.',
+          // 'Generate a free report on us and see where your business ranks relative to your competitors.',
           // style: TextStyle(fontSize: fontSizeDesktopMedium, height: 1.7),
           style: AppTextStyles.h3(deviceType),
           textAlign: TextAlign.center,
