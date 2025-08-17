@@ -12,10 +12,11 @@ import 'package:aiso/NavBar/views/terms_and_conditions_view.dart';
 import 'package:aiso/free_reports/views/free_report_confirmation_view.dart';
 import 'package:aiso/free_reports/views/free_report_view.dart';
 import 'package:aiso/free_reports/views/report_rank_free_view.dart';
+import 'package:aiso/recommendations/views/recommendations_view.dart';
 import 'package:aiso/reports/views/paid_report_confirmation.dart';
 import 'package:aiso/reports/views/prompt_view.dart';
 import 'package:aiso/reports/views/report_rank_paid_view.dart';
-import 'package:aiso/reports/views/report_recommendations_paid_view.dart';
+import 'package:aiso/recommendations/views/report_recommendations_paid_view.dart';
 import 'package:aiso/view_models/auth_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -118,6 +119,12 @@ final GoRouter appRouter = GoRouter(
         final reportId = state.uri.queryParameters['report_id']!;
         return NoTransitionPage(child: RecommendationsPaidView(reportId: reportId)); 
       },
+      redirect: authGuard,
+    ),
+
+    GoRoute(
+      path: recommendationsRoute, 
+      pageBuilder: (context, state) => NoTransitionPage(child: const RecommendationsView()),
       redirect: authGuard,
     ),
 

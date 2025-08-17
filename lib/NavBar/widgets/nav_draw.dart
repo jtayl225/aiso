@@ -37,7 +37,7 @@ class MyNavigationDrawer extends StatelessWidget {
 
           NavDrawItem(
             'Reports',
-            Icons.document_scanner,
+            Icons.article_outlined,
             onTap: () {
               Scaffold.of(context).closeDrawer();
               appRouter.go(reportsRoute);

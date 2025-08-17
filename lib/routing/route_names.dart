@@ -15,6 +15,8 @@ const String verifyEmailRoute = '/verify-email';
 
 const String getStartedRoute = '/get-started';
 
+const String recommendationsRoute = "/recommendations";
+
 const String reportsRoute = "/reports";
 const String newReportRoute = "/reports/new";
 const String reportRoute = "/reports/report";

@@ -7,6 +7,7 @@ import 'package:aiso/models/location_models.dart';
 import 'package:aiso/models/prompt_model.dart';
 import 'package:aiso/models/prompt_template_model.dart';
 import 'package:aiso/models/purchase_enum.dart';
+import 'package:aiso/models/recommendation.dart';
 import 'package:aiso/models/report_run_results_model.dart';
 import 'package:aiso/reports/models/report_model.dart';
 import 'package:aiso/models/report_results.dart';
@@ -641,6 +642,25 @@ class ReportServiceSupabase {
     return locality;
   }
 
+  Future<List<Locality>> fetchLocalities(List<String> localityIds) async {
+    if (localityIds.isEmpty) {
+      return [];
+    }
+
+    printDebug('DEBUG: Service is fetching localities for IDs: $localityIds');
+
+    final data = await _supabase
+        .from('localities')
+        .select()
+        .inFilter('id', localityIds);
+
+    final localities = (data as List)
+        .map((json) => Locality.fromJson(json))
+        .toList();
+
+    return localities;
+  }
+
   Future<Locality?> fetchLocalityFromHash(String localityHash) async {
     printDebug('DEBUG: Service is fetching locality for hash: $localityHash');
     final response = await _supabase
@@ -768,6 +788,27 @@ class ReportServiceSupabase {
       printError('ERROR: Failed to update recommendation status: $e');
       rethrow;
     }
+  }
+
+  Future<List<Recommendation>> fetchRecommendations(String userId) async {
+
+    printDebug('DEBUG: Service is fetching all recommendations for userId: $userId');
+
+    final response = await _supabase
+      .from('geomax_recommendations_vw')
+      .select('*')
+      .eq('user_id', userId)
+      .isFilter('deleted_at', null);
+
+    // Inspect the response to see its structure
+    // debugPrint('DEBUG: reports response: $response');
+
+    final List<Recommendation> recommendations = (response as List).map((item) {
+      return Recommendation.fromJson(item);
+    }).toList();
+
+    return recommendations;
+
   }
 
 

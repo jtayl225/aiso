@@ -1,3 +1,4 @@
+import 'package:aiso/recommendations/widgets/recommendations_card.dart';
 import 'package:aiso/widgets/row_col.dart';
 import 'package:aiso/reports/view_models/reports_view_model.dart';
 import 'package:aiso/reports/widgets/report_card.dart';
@@ -90,6 +91,14 @@ class ReportsRowCol extends StatelessWidget {
             ),
       
             SizedBox(height: 50),
+
+            RecommendationCard(
+              title: 'Recommendations to improve your visibility in AI tools',
+              onPressed: () => appRouter.go(recommendationsRoute),
+              deviceType: deviceType
+            ),
+
+            SizedBox(height: 50),
       
             ...reports.map((report) {
               return Padding(
@@ -105,14 +114,14 @@ class ReportsRowCol extends StatelessWidget {
                     );
                     appRouter.go(uri.toString());
                   },
-                  onPressedRecommendations: () {
-                    final uri = Uri(
-                      // path: report.isPaid ? reportRoute : freeReportRoute,
-                      path: recoPaidRoute,
-                      queryParameters: {'report_id': report.id},
-                    );
-                    appRouter.go(uri.toString());
-                  },
+                  // onPressedRecommendations: () {
+                  //   final uri = Uri(
+                  //     // path: report.isPaid ? reportRoute : freeReportRoute,
+                  //     path: recoPaidRoute,
+                  //     queryParameters: {'report_id': report.id},
+                  //   );
+                  //   appRouter.go(uri.toString());
+                  // },
                   lastRunAt: report.dbTimestamps.updatedAt,
                   deviceType: deviceType
                 ),

@@ -10,7 +10,7 @@ class ReportCard extends StatelessWidget {
   final String title;
   final DateTime lastRunAt;
   final VoidCallback? onPressedRank;
-  final VoidCallback? onPressedRecommendations;
+  // final VoidCallback? onPressedRecommendations;
   final VoidCallback? onTap;
   final DeviceScreenType deviceType;
 
@@ -20,7 +20,7 @@ class ReportCard extends StatelessWidget {
     required this.title,
     required this.lastRunAt,
     this.onPressedRank,
-    this.onPressedRecommendations,
+    // this.onPressedRecommendations,
     this.onTap,
     required this.deviceType,
   });
@@ -82,24 +82,24 @@ class ReportCard extends StatelessWidget {
                         ElevatedButton(
                           onPressed: onPressedRank,
                           child: Text(
-                            'Rank',
+                            'Reports',
                             style: Theme.of(
                               context,
                             ).textTheme.bodyMedium?.copyWith(color: Colors.white),
                           ),
                         ),
-                        ElevatedButton(
-                          onPressed: onPressedRecommendations,
-                          child: Text(
-                            // deviceType == DeviceScreenType.desktop
-                            //     ? 'Recommendations'
-                            //     : 'Recos',
-                            'Recommendations',
-                            style: Theme.of(
-                              context,
-                            ).textTheme.bodyMedium?.copyWith(color: Colors.white),
-                          ),
-                        ),
+                        // ElevatedButton(
+                        //   onPressed: onPressedRecommendations,
+                        //   child: Text(
+                        //     // deviceType == DeviceScreenType.desktop
+                        //     //     ? 'Recommendations'
+                        //     //     : 'Recos',
+                        //     'Recommendations',
+                        //     style: Theme.of(
+                        //       context,
+                        //     ).textTheme.bodyMedium?.copyWith(color: Colors.white),
+                        //   ),
+                        // ),
                       ],
                     ),
 
@@ -144,23 +144,23 @@ class ReportCard extends StatelessWidget {
                   ElevatedButton(
                     onPressed: onPressedRank,
                     child: Text(
-                      'Rank',
+                      'Reports',
                       style: Theme.of(
                         context,
                       ).textTheme.bodyMedium?.copyWith(color: Colors.white),
                     ),
                   ),
-                  ElevatedButton(
-                    onPressed: onPressedRecommendations,
-                    child: Text(
-                      deviceType == DeviceScreenType.desktop
-                          ? 'Recommendations'
-                          : 'Recos',
-                      style: Theme.of(
-                        context,
-                      ).textTheme.bodyMedium?.copyWith(color: Colors.white),
-                    ),
-                  ),
+                  // ElevatedButton(
+                  //   onPressed: onPressedRecommendations,
+                  //   child: Text(
+                  //     deviceType == DeviceScreenType.desktop
+                  //         ? 'Recommendations'
+                  //         : 'Recos',
+                  //     style: Theme.of(
+                  //       context,
+                  //     ).textTheme.bodyMedium?.copyWith(color: Colors.white),
+                  //   ),
+                  // ),
                 ],
               ),
 

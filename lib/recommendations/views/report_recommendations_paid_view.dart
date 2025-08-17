@@ -1,5 +1,5 @@
-import 'package:aiso/reports/view_models/recommendation_view_model.dart';
-import 'package:aiso/reports/widgets/recommendations_paid_rowcol.dart';
+import 'package:aiso/recommendations/view_models/recommendation_view_model.dart';
+import 'package:aiso/recommendations/widgets/recommendations_paid_rowcol.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_builder/responsive_builder.dart';

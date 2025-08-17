@@ -45,10 +45,16 @@ SELECT
   a.updated_at,
   a.deleted_at,
 
-  b.report_id
+  b.report_id,
+
+  c.locality_id,
+  c.user_id
 
 FROM geomax_recommendations AS a
 INNER JOIN report_runs AS b
   ON a.report_run_id = b.id
-WHERE b.status = 'completed'
+INNER JOIN reports AS c
+  ON b.report_id = c.id
+WHERE
+  b.status = 'completed'
 ;

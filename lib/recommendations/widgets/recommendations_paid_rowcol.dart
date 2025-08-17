@@ -1,6 +1,6 @@
 import 'package:aiso/Dashboards/views/dashboard_menu.dart';
 import 'package:aiso/reports/models/report_run_model.dart';
-import 'package:aiso/reports/view_models/recommendation_view_model.dart';
+import 'package:aiso/recommendations/view_models/recommendation_view_model.dart';
 import 'package:aiso/reports/view_models/report_view_model.dart';
 import 'package:aiso/reports/widgets/prompt_card.dart';
 import 'package:aiso/reports/widgets/recommendation_card.dart';

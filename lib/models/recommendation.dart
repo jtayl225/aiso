@@ -32,6 +32,7 @@ class Recommendation {
   final String id;
   final String reportId;
   final String reportRunId;
+  final String? localityId;
   final String title;
   final String action;
   final String description;
@@ -54,6 +55,7 @@ class Recommendation {
     required this.id,
     required this.reportId,
     required this.reportRunId,
+    this.localityId,
     required this.title,
     required this.action,
     required this.description,
@@ -99,6 +101,7 @@ class Recommendation {
       id: json['id'] as String,
       reportId: json['report_id'] as String,
       reportRunId: json['report_run_id'] as String,
+      localityId: json['locality_id'] as String?,
       title: json['title'] as String,
       action: json['action'] as String,
       description: json['description'] as String,
@@ -121,6 +124,7 @@ class Recommendation {
       'id': id,
       'report_id': reportId,
       'report_run_id': reportRunId,
+      'locality_id': localityId,
       'title': title,
       'action': action,
       'description': description,

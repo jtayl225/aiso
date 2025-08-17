@@ -18,6 +18,25 @@ class RecommendationViewModel extends ChangeNotifier {
 
   Report? report;
   List<Recommendation> recommendations = [];
+  List<Recommendation> get sortedRecommendations {
+  return [...recommendations]..sort((a, b) {
+    // Primary sort: completion status (incomplete first, completed last)
+    final aCompleted = a.status.toLowerCase() == 'completed';
+    final bCompleted = b.status.toLowerCase() == 'completed';
+    
+    if (!aCompleted && bCompleted) return -1;  // a (incomplete) comes before b (completed)
+    if (aCompleted && !bCompleted) return 1;   // b (incomplete) comes before a (completed)
+    
+    // Secondary sort: effort * reward score (higher scores first)
+    final aScore = a.effort * a.reward;
+    final bScore = b.effort * b.reward;
+    final scoreComparison = bScore.compareTo(aScore);
+    if (scoreComparison != 0) return scoreComparison;
+    
+    // Tertiary sort: timestamp (earlier createdAt first)
+    return a.createdAt.compareTo(b.createdAt);
+  });
+}
 
   Future<void> _init() async {
     // Mark as loading
