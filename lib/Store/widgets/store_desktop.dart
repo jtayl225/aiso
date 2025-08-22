@@ -1,4 +1,6 @@
+import 'package:aiso/Store/models/product_model.dart';
 import 'package:aiso/Store/view_models/store_view_model.dart';
+import 'package:aiso/Store/widgets/inclusions_card.dart';
 import 'package:aiso/Store/widgets/product_card.dart';
 import 'package:aiso/Store/widgets/store_details.dart';
 import 'package:aiso/constants/app_colors.dart';
@@ -11,48 +13,61 @@ class StoreDesktop extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
+    
     final storeViewModel = context.watch<StoreViewModel>();
     final products = storeViewModel.products;
+    final productInclusions = storeViewModel.productInclusions;
 
-    return SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.center,
-    mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            StoreDetails(deviceType: DeviceScreenType.desktop),
-            const SizedBox(height: 16),
-            Container(
-              decoration: BoxDecoration(
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        StoreDetails(deviceType: DeviceScreenType.desktop),
+
+        const SizedBox(height: 16),
+
+        ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 800),
+          child: Container(
+            decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16),
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: [
                   AppColors.color6,
-                  AppColors.color5, 
-                  AppColors.color4, 
-                  AppColors.color3, 
-                  AppColors.color2, 
-                  AppColors.color1, 
+                  AppColors.color5,
+                  AppColors.color4,
+                  AppColors.color3,
+                  AppColors.color2,
+                  AppColors.color1,
                   // Colors.white,
                 ],
               ),
             ),
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: products.map((product) => Padding(
-                    padding: const EdgeInsets.all(4),
-                    child: ProductCard(product),
-                  )).toList(),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children:
+                      products
+                          .map(
+                            (product) => ProductCard(product),
+                          )
+                          .toList(),
                 ),
-              ),
+          
+                ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 600),
+                  child: 
+                  InclusionsCard(inclusions: productInclusions),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
-      );
+      ],
+    );
   }
 }

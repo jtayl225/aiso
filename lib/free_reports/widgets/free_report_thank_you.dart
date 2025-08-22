@@ -1,4 +1,5 @@
 import 'package:aiso/reports/widgets/upgrade_prompt_card.dart';
+import 'package:aiso/reports/widgets/upgrade_prompt_card_v2.dart';
 import 'package:aiso/routing/app_router.dart';
 import 'package:aiso/routing/route_names.dart';
 import 'package:aiso/themes/typography.dart';
@@ -34,7 +35,9 @@ class FreeReportThankYou extends StatelessWidget {
 
         SizedBox(height: 32.0),
 
-        UpgradePromptCard(onSubscribe: () => appRouter.go(storeRoute)),
+        // UpgradePromptCard(onSubscribe: () => appRouter.go(storeRoute)),
+
+        UpgradePromptCardV2(deviceType: deviceType, onSubscribe: () => appRouter.go(storeRoute))
     
       ],
     );

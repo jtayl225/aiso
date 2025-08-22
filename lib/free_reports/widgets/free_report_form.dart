@@ -33,6 +33,7 @@ class _FreeReportFormState extends State<FreeReportForm> {
   }
 
   final _formKey = GlobalKey<FormState>();
+  bool _checked = true; // start with checked
 
   void _updateField(String value, void Function(String) updateFn) {
     setState(() {
@@ -121,6 +122,23 @@ class _FreeReportFormState extends State<FreeReportForm> {
                     
                     // _buildTextField("Suburb", (val) => _updateField(val, (v) => localityName = v)),
                     
+                    const SizedBox(height: 20),
+
+                    Row(
+                      children: [
+                        Checkbox(
+                          value: _checked,
+                          onChanged: (_) => setState(() => _checked = !_checked),
+                        ),
+                        Expanded(
+                          child: Text(
+                            'By supplying my contact information, I authorise GEOMAX to contact me with personalised communications about GEOMAX services and products.',
+                            softWrap: true,
+                            ),
+                        ),
+                      ],
+                    ),
+
                     const SizedBox(height: 20),
                 
                     Column(

@@ -1,3 +1,4 @@
+import 'package:aiso/reports/widgets/upgrade_prompt_card_v2.dart';
 import 'package:aiso/widgets/row_col.dart';
 import 'package:aiso/constants/string_constants.dart';
 import 'package:aiso/reports/view_models/prompt_view_model.dart';
@@ -63,7 +64,8 @@ class RankFreeRowCol extends StatelessWidget {
           children: [
 
             if (!isDesktop)
-              UpgradePromptCard(onSubscribe: () => appRouter.go(storeRoute)),
+              // UpgradePromptCard(onSubscribe: () => appRouter.go(storeRoute)),
+              UpgradePromptCardV2(deviceType: deviceType, onSubscribe: () => appRouter.go(storeRoute)),
 
             Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -142,7 +144,8 @@ class RankFreeRowCol extends StatelessWidget {
             ),
         
             if (isDesktop)
-              UpgradePromptCard(onSubscribe: () => appRouter.go(storeRoute)),
+              // UpgradePromptCard(onSubscribe: () => appRouter.go(storeRoute)),
+              UpgradePromptCardV2(deviceType: deviceType, onSubscribe: () => appRouter.go(storeRoute)),
         
           ],
         ),

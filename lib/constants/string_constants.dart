@@ -4,6 +4,8 @@ const String smallLogoImage = "assets/GEOMAX_G_logo.png";
 const String logoChatGPT = "assets/OpenAI-black-monoblossom.png";
 const String logoGemini = 'assets/gemini_icon.png';
 
+const String slogan = 'Be Found. Gain Trust. Get Leads.';
+
 const String newsTabLink = 'https://medium.com/generative-engine-optimization'; // 'https://medium.com/generative-engine-optimization/generative-engine-optimization-geo-2d78a01f8313';
 const String youTubeLink = 'https://youtu.be/EPkQ0VVyCbo';
 const String supabaseVideoUrl = 'https://evekbdfpapkdsmsxnhcc.supabase.co/storage/v1/object/public/public-videos//GEOMAX%20Introduction.mp4';

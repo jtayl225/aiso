@@ -26,7 +26,7 @@ class ProductCard extends StatelessWidget {
               width: 2,           // border thickness
             ),
           ),
-          margin: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 24.0),
+          margin: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 12.0),
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
@@ -87,47 +87,47 @@ class ProductCard extends StatelessWidget {
                 //   ),
                 // ),
 
-                SizedBox(height: 8.0,),
+                SizedBox(height: 4.0,),
         
-                // dotted horizontal line
-                const Divider(color: AppColors.color1),
+                // // dotted horizontal line
+                // const Divider(color: AppColors.color1),
         
-                // list of inclusions - an inclusion is a row(icon, decription)
-                ConstrainedBox(
-                  constraints: const BoxConstraints(
-                    maxHeight: 200,
-                  ),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: product.productInclusions.map((inclusion) => Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 4.0),
-                        child: Row(
-                          children: [
-                            Icon(
-                              inclusion.isIncluded ? Icons.check_circle : Icons.cancel,
-                              color: inclusion.isIncluded ? Colors.green : Colors.red,
-                              size: 20,
-                            ),
-                            const SizedBox(width: 8),
-                            Expanded(
-                              child: Text(
-                                inclusion.description,
-                                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                    color: Colors.black, // or any color you want
-                                  ),
-                              )
-                            ),
-                          ],
-                        ),
-                      )).toList(),
-                    ),
-                  ),
-                ),
+                // // list of inclusions - an inclusion is a row(icon, decription)
+                // ConstrainedBox(
+                //   constraints: const BoxConstraints(
+                //     maxHeight: 200,
+                //   ),
+                //   child: SingleChildScrollView(
+                //     child: Column(
+                //       children: product.productInclusions.map((inclusion) => Padding(
+                //         padding: const EdgeInsets.symmetric(vertical: 4.0),
+                //         child: Row(
+                //           children: [
+                //             Icon(
+                //               inclusion.isIncluded ? Icons.check_circle : Icons.cancel,
+                //               color: inclusion.isIncluded ? Colors.green : Colors.red,
+                //               size: 20,
+                //             ),
+                //             const SizedBox(width: 8),
+                //             Expanded(
+                //               child: Text(
+                //                 inclusion.description,
+                //                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                //                     color: Colors.black, // or any color you want
+                //                   ),
+                //               )
+                //             ),
+                //           ],
+                //         ),
+                //       )).toList(),
+                //     ),
+                //   ),
+                // ),
       
-                // const SizedBox(height: 16),
+                // // const SizedBox(height: 16),
         
-                // dotted horizontal line
-                const Divider(color: AppColors.color1),
+                // // dotted horizontal line
+                // const Divider(color: AppColors.color1),
         
                 // const Spacer(),
 
@@ -164,7 +164,7 @@ class ProductCard extends StatelessWidget {
         // highlight label
         if (product.highlightLabel != null && product.highlightLabel!.isNotEmpty)
           Positioned(
-              top: 24 + 4,
+              top: 12 + 4,
               left: 12 + 4,
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),

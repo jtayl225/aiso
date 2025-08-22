@@ -40,6 +40,20 @@ class StoreViewModel extends ChangeNotifier {
     notifyListeners(); // ✅ Trigger UI rebuild
   }
 
+  List<ProductInclusion> productInclusions = [
+          ProductInclusion(isIncluded: true, description: 'Personalised recommendations to increase your visibility on AI tools'),
+          ProductInclusion(isIncluded: true, description: 'Your ranking on ChatGPT and Google Gemini'),
+          ProductInclusion(isIncluded: true, description: 'Top 10 competitor ranking report each month'),
+          ProductInclusion(isIncluded: true, description: 'Up to 10 new suburb reports each month'),
+          ProductInclusion(isIncluded: true, description: 'Exclusive access to weekly GEOMAX training content'),
+          ProductInclusion(isIncluded: true, description: '\$1.80 per report'),
+          ProductInclusion(isIncluded: true, description: 'Monthly report updates'),
+          ProductInclusion(isIncluded: true, description: 'Visibility tracker by AI tool (ChatGPT and Google Gemini)'),
+          ProductInclusion(isIncluded: true, description: 'Discounts on GEOMAX partner services'),
+          ProductInclusion(isIncluded: true, description: 'GEOMAX certification program (coming soon)'),
+        ];
+
+
   StoreViewModel() {
 
     _oneoff_access = Product(
