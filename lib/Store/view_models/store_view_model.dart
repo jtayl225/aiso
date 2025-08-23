@@ -49,7 +49,7 @@ class StoreViewModel extends ChangeNotifier {
           ProductInclusion(isIncluded: true, description: '\$1.80 per report'),
           ProductInclusion(isIncluded: true, description: 'Monthly report updates'),
           ProductInclusion(isIncluded: true, description: 'Visibility tracker by AI tool (ChatGPT and Google Gemini)'),
-          ProductInclusion(isIncluded: true, description: 'Discounts on GEOMAX partner services'),
+          // ProductInclusion(isIncluded: true, description: 'Discounts on GEOMAX partner services'), -- not offered
           ProductInclusion(isIncluded: true, description: 'GEOMAX certification program (coming soon)'),
         ];
 
