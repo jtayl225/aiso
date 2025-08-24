@@ -50,9 +50,9 @@ class UpgradePromptCardV2 extends StatelessWidget {
 
               const SizedBox(height: 4),
 
-              Text('to', style: AppTextStyles.body(deviceType)),
+              // Text('to', style: AppTextStyles.body(deviceType)),
 
-              const SizedBox(height: 4),
+              // const SizedBox(height: 4),
 
               Text(
                 slogan,

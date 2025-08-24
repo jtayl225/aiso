@@ -136,7 +136,7 @@ class HomeRowCol extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  "The GEOMAX AI visibility tool is for you if…",
+                  "The GEOMAX AI visibility tool is for you if you are:",
                   style: AppTextStyles.h2(deviceType).copyWith(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
@@ -158,9 +158,9 @@ class HomeRowCol extends StatelessWidget {
 //               deviceType: deviceType,
 //             )
                 Text(
-                  "• You’re the market leader and you want to stay ahead\n"
-                  "• You’re an underperforming agent looking for a competitive advantage\n"
-                  "• You’re new to real estate and you want to be a future market leader",
+                  "• The market leader and you want to stay ahead\n"
+                  "• An underperforming agent looking for a competitive advantage\n"
+                  "• A new real estate agent with big ambitions",
                   style: AppTextStyles.body(deviceType).copyWith(color: Colors.white),
                 ),
               ],

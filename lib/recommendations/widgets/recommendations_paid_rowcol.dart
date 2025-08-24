@@ -100,7 +100,7 @@ class RecommendationsPaidRowCol extends StatelessWidget {
 
           if (!canShow)
             // Text('Upgrade to see recommendations.'),
-            UpgradePromptCard(onSubscribe: () => appRouter.go(storeRoute)),
+            UpgradePromptCardV2(onSubscribe: () => appRouter.go(storeRoute)),
 
           SizedBox(height: 20.0,),    
           
