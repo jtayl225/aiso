@@ -31,7 +31,12 @@ class _SignInFormState extends State<SignInForm> {
   }
 
   Future<void> _signIn() async {
+
     if (!_formKey.currentState!.validate()) return;
+
+    // Save autofill data before signing in
+    TextInput.finishAutofillContext(shouldSave: true);
+
     setState(() => _isLoading = true);
 
     try {
@@ -65,75 +70,75 @@ class _SignInFormState extends State<SignInForm> {
 
   @override
   Widget build(BuildContext context) {
-    return AutofillGroup(
-      child: Form(
-        key: _formKey,
-        child: AutofillGroup(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-
+    return Form(
+      key: _formKey,
+      child: AutofillGroup(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+    
+            ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: _maxWidth),
+              child: TextFormField(
+                controller: _emailController,
+                decoration: const InputDecoration(
+                  labelText: 'Email',
+                  border: OutlineInputBorder(),
+                  contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                ),
+                keyboardType: TextInputType.emailAddress,
+                textInputAction: TextInputAction.next,
+                autofillHints: const [AutofillHints.email],
+                validator: (val) {
+                  if (val == null || val.isEmpty) return 'Email required';
+                  if (!val.contains('@')) return 'Enter a valid email';
+                  return null;
+                },
+              ),
+            ),
+        
+            const SizedBox(height: 16),
+            
+            ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: _maxWidth),
+              child: TextFormField(
+                controller: _passwordController,
+                decoration: const InputDecoration(
+                  labelText: 'Password',
+                  border: OutlineInputBorder(),
+                  contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                ),
+                obscureText: true,
+                textInputAction: TextInputAction.done,
+                autofillHints: const [AutofillHints.password],
+                onFieldSubmitted: (_) => _signIn(),
+                validator: (val) {
+                  if (val == null || val.isEmpty) return 'Password required';
+                  if (val.length < 6) return 'Min 6 characters';
+                  return null;
+                },
+              ),
+            ),
+            const SizedBox(height: 16),
+            // SizedBox(
+            //   width: _maxWidth,
+            //   height: 48,
+              // child: 
               ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: _maxWidth),
-                child: TextFormField(
-                  controller: _emailController,
-                  decoration: const InputDecoration(
-                    labelText: 'Email',
-                    border: OutlineInputBorder(),
-                    contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-                  ),
-                  keyboardType: TextInputType.emailAddress,
-                  autofillHints: const [AutofillHints.email],
-                  validator: (val) {
-                    if (val == null || val.isEmpty) return 'Email required';
-                    if (!val.contains('@')) return 'Enter a valid email';
-                    return null;
-                  },
+                constraints: BoxConstraints(minWidth: _maxWidth, minHeight: 48, maxHeight: 60),
+                child: ElevatedButton(
+                  onPressed: _isLoading ? null : _signIn,
+                  // style: ElevatedButton.styleFrom(
+                  //   padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 25),
+                  // ),
+                  child: _isLoading
+                      ? const CircularProgressIndicator(color: Colors.white)
+                      : Text('Go'),
                 ),
               ),
-          
-              const SizedBox(height: 16),
-              
-              ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: _maxWidth),
-                child: TextFormField(
-                  controller: _passwordController,
-                  decoration: const InputDecoration(
-                    labelText: 'Password',
-                    border: OutlineInputBorder(),
-                    contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-                  ),
-                  obscureText: true,
-                  autofillHints: const [AutofillHints.password],
-                  onEditingComplete: () => TextInput.finishAutofillContext(),
-                  validator: (val) {
-                    if (val == null || val.isEmpty) return 'Password required';
-                    if (val.length < 6) return 'Min 6 characters';
-                    return null;
-                  },
-                ),
-              ),
-              const SizedBox(height: 16),
-              // SizedBox(
-              //   width: _maxWidth,
-              //   height: 48,
-                // child: 
-                ConstrainedBox(
-                  constraints: BoxConstraints(minWidth: _maxWidth, minHeight: 48, maxHeight: 60),
-                  child: ElevatedButton(
-                    onPressed: _isLoading ? null : _signIn,
-                    // style: ElevatedButton.styleFrom(
-                    //   padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 25),
-                    // ),
-                    child: _isLoading
-                        ? const CircularProgressIndicator(color: Colors.white)
-                        : Text('Go'),
-                  ),
-                ),
-              // ),
-              const SizedBox(height: 16),
-            ],
-          ),
+            // ),
+            const SizedBox(height: 16),
+          ],
         ),
       ),
     );

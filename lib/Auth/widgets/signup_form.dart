@@ -1,3 +1,4 @@
+import 'package:aiso/constants/app_colors.dart';
 import 'package:aiso/routing/route_names.dart';
 import 'package:aiso/view_models/auth_view_model.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +25,7 @@ class _SignUpFormState extends State<SignUpForm> {
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    _confirmPasswordController.dispose();
     super.dispose();
   }
 
@@ -32,8 +34,23 @@ class _SignUpFormState extends State<SignUpForm> {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
   }
 
+  void _showSuccessSnackBar(String message) {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: AppColors.color3,
+      ),
+    );
+  }
+
   Future<void> _signUp() async {
+
     if (!_formKey.currentState!.validate()) return;
+
+    // Save autofill data before signing in
+    TextInput.finishAutofillContext(shouldSave: true);
+
     setState(() => _isLoading = true);
 
     try {
@@ -45,12 +62,13 @@ class _SignUpFormState extends State<SignUpForm> {
 
       final success = await authVm.signUp(email, password);
       // appRouter.go(verifyEmailRoute);
-      appRouter.go(reportsRoute);
+      // appRouter.go(reportsRoute);
       
       if (!mounted) return;
 
       if (success) {
-        _showErrorSnackBar('Signup successful! Check your email to verify.');
+        _showSuccessSnackBar('Signup successful! Check your email to verify.');
+        appRouter.go(reportsRoute);
       } else {
         _showErrorSnackBar(authVm.errorMessage ?? 'Signup failed.');
       }
@@ -104,7 +122,8 @@ class _SignUpFormState extends State<SignUpForm> {
                     onPressed: () => setState(() => _obscure = !_obscure),
                   ),
                 ),
-                autofillHints: const [AutofillHints.password],
+                autofillHints: const [AutofillHints.newPassword],
+                textInputAction: TextInputAction.next,
                 obscureText: _obscure,
                 validator: (val) {
                   if (val == null || val.isEmpty) return 'Password required';
@@ -129,9 +148,11 @@ class _SignUpFormState extends State<SignUpForm> {
                     onPressed: () => setState(() => _obscure = !_obscure),
                   ),
                 ),
-                autofillHints: const [AutofillHints.password],
+                autofillHints: const [AutofillHints.newPassword],
+                textInputAction: TextInputAction.done,
                 obscureText: _obscure,
-                onEditingComplete: () => TextInput.finishAutofillContext(),
+                // onEditingComplete: () => TextInput.finishAutofillContext(),
+                onFieldSubmitted: (_) => _signUp(),
                 // onChanged: (_) => setState(() {}),
                 validator: (val) {
                   if (val == null || val.isEmpty) return 'Password required';

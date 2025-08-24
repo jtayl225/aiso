@@ -1,4 +1,5 @@
 import 'package:aiso/Dashboards/views/iframe_view.dart';
+import 'package:aiso/Home/widgets/animated_gradient_card.dart';
 import 'package:aiso/Home/widgets/call_to_action.dart';
 import 'package:aiso/NavBar/widgets/markdown_viewer.dart';
 import 'package:aiso/constants/app_colors.dart';
@@ -115,7 +116,11 @@ class HomeRowCol extends StatelessWidget {
                 constraints: const BoxConstraints(maxWidth: 700),
                 child: AspectRatio(
                   aspectRatio: 16 / 9,
-                  child: SupabaseVideoPlayer(videoUrl: supabaseVideoUrl),
+                  child: SupabaseVideoPlayer(
+                    videoUrl: supabaseVideoUrl,
+                    thumbnailUrl: supabaseThumbnailUrl,
+                    showThumbnailUntilPlay: true,
+                    ),
                 ),
               ),
             ),
@@ -124,49 +129,88 @@ class HomeRowCol extends StatelessWidget {
           ],
         ),
 
-        Card(
-          color: AppColors.color5, // green background
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          margin: const EdgeInsets.all(12),
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  "The GEOMAX AI visibility tool is for you if you are:",
-                  style: AppTextStyles.h2(deviceType).copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  )
-                ),
+//         Card(
+//           color: AppColors.color5, // green background
+//           shape: RoundedRectangleBorder(
+//             borderRadius: BorderRadius.circular(16),
+//           ),
+//           margin: const EdgeInsets.all(12),
+//           child: Padding(
+//             padding: const EdgeInsets.all(16.0),
+//             child: Column(
+//               crossAxisAlignment: CrossAxisAlignment.center,
+//               children: [
+//                 Text(
+//                   "The GEOMAX AI visibility tool is for you if you are:",
+//                   style: AppTextStyles.h2(deviceType).copyWith(
+//                     color: Colors.white,
+//                     fontWeight: FontWeight.bold,
+//                   )
+//                 ),
 
-                const SizedBox(height: 12),
+//                 const SizedBox(height: 12),
 
-//                 MarkdownContent(
-//               markdownText: 
-//                '''
-// - **You’re the market leader** and you want to stay ahead
+// //                 MarkdownContent(
+// //               markdownText: 
+// //                '''
+// // - **You’re the market leader** and you want to stay ahead
 
-// - **You’re an underperforming agent** looking for a competitive advantage
+// // - **You’re an underperforming agent** looking for a competitive advantage
 
-// - **You’re new to real estate** and you want to be a future market leader
-// '''
-//                   ,
-//               deviceType: deviceType,
-//             )
-                Text(
-                  "• The market leader and you want to stay ahead\n"
-                  "• An underperforming agent looking for a competitive advantage\n"
-                  "• A new real estate agent with big ambitions",
-                  style: AppTextStyles.body(deviceType).copyWith(color: Colors.white),
-                ),
-              ],
-            ),
-          ),
+// // - **You’re new to real estate** and you want to be a future market leader
+// // '''
+// //                   ,
+// //               deviceType: deviceType,
+// //             )
+//                 Text(
+//                   "• The market leader and you want to stay ahead\n"
+//                   "• An underperforming agent looking for a competitive advantage\n"
+//                   "• A new real estate agent with big ambitions",
+//                   style: AppTextStyles.body(deviceType).copyWith(color: Colors.white),
+//                 ),
+//               ],
+//             ),
+//           ),
+//         ),
+
+AnimatedGradientCard(
+  colors: [
+    AppColors.color1,
+    AppColors.color2, 
+    AppColors.color3,
+    AppColors.color4,
+    AppColors.color5,
+    AppColors.color6,
+    // AppColors.color5,
+    // AppColors.color4,
+    // AppColors.color3,
+    // AppColors.color2, 
+    // AppColors.color1, // Loop back for seamless animation
+  ],
+  margin: const EdgeInsets.all(12),
+  padding: const EdgeInsets.all(16.0),
+  borderRadius: BorderRadius.circular(16),
+  duration: const Duration(seconds: 6), // Adjust speed as needed
+  child: Column(
+    crossAxisAlignment: CrossAxisAlignment.center,
+    children: [
+      Text(
+        "The GEOMAX AI visibility tool is for you if you are:",
+        style: AppTextStyles.h2(deviceType).copyWith(
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
         ),
+      ),
+      const SizedBox(height: 12),
+      Text(
+        "• The market leader and you want to stay ahead\n"
+        "• An underperforming agent looking for a competitive advantage\n"
+        "• A new real estate agent with big ambitions",
+        style: AppTextStyles.body(deviceType).copyWith(color: Colors.white),
+      ),
+    ],
+  ),
+),
 
         RowCol(
           layoutType: layoutType,
