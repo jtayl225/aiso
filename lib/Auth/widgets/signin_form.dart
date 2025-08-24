@@ -1,6 +1,7 @@
 import 'package:aiso/routing/route_names.dart';
 import 'package:aiso/view_models/auth_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:aiso/routing/app_router.dart';
 
@@ -67,65 +68,72 @@ class _SignInFormState extends State<SignInForm> {
     return AutofillGroup(
       child: Form(
         key: _formKey,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ConstrainedBox(
-              constraints: BoxConstraints(maxWidth: _maxWidth),
-              child: TextFormField(
-                controller: _emailController,
-                decoration: const InputDecoration(
-                  labelText: 'Email',
-                  border: OutlineInputBorder(),
-                  contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-                ),
-                keyboardType: TextInputType.emailAddress,
-                autofillHints: const [AutofillHints.email],
-                validator: (val) {
-                  if (val == null || val.isEmpty) return 'Email required';
-                  if (!val.contains('@')) return 'Enter a valid email';
-                  return null;
-                },
-              ),
-            ),
-            const SizedBox(height: 16),
-            ConstrainedBox(
-              constraints: BoxConstraints(maxWidth: _maxWidth),
-              child: TextFormField(
-                controller: _passwordController,
-                decoration: const InputDecoration(
-                  labelText: 'Password',
-                  border: OutlineInputBorder(),
-                  contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-                ),
-                obscureText: true,
-                validator: (val) {
-                  if (val == null || val.isEmpty) return 'Password required';
-                  if (val.length < 6)               return 'Min 6 characters';
-                  return null;
-                },
-              ),
-            ),
-            const SizedBox(height: 16),
-            // SizedBox(
-            //   width: _maxWidth,
-            //   height: 48,
-              // child: 
+        child: AutofillGroup(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+
               ConstrainedBox(
-                constraints: BoxConstraints(minWidth: _maxWidth, minHeight: 48, maxHeight: 60),
-                child: ElevatedButton(
-                  onPressed: _isLoading ? null : _signIn,
-                  // style: ElevatedButton.styleFrom(
-                  //   padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 25),
-                  // ),
-                  child: _isLoading
-                      ? const CircularProgressIndicator(color: Colors.white)
-                      : Text('Go'),
+                constraints: BoxConstraints(maxWidth: _maxWidth),
+                child: TextFormField(
+                  controller: _emailController,
+                  decoration: const InputDecoration(
+                    labelText: 'Email',
+                    border: OutlineInputBorder(),
+                    contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                  ),
+                  keyboardType: TextInputType.emailAddress,
+                  autofillHints: const [AutofillHints.email],
+                  validator: (val) {
+                    if (val == null || val.isEmpty) return 'Email required';
+                    if (!val.contains('@')) return 'Enter a valid email';
+                    return null;
+                  },
                 ),
               ),
-            // ),
-            const SizedBox(height: 16),
-          ],
+          
+              const SizedBox(height: 16),
+              
+              ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: _maxWidth),
+                child: TextFormField(
+                  controller: _passwordController,
+                  decoration: const InputDecoration(
+                    labelText: 'Password',
+                    border: OutlineInputBorder(),
+                    contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                  ),
+                  obscureText: true,
+                  autofillHints: const [AutofillHints.password],
+                  onEditingComplete: () => TextInput.finishAutofillContext(),
+                  validator: (val) {
+                    if (val == null || val.isEmpty) return 'Password required';
+                    if (val.length < 6) return 'Min 6 characters';
+                    return null;
+                  },
+                ),
+              ),
+              const SizedBox(height: 16),
+              // SizedBox(
+              //   width: _maxWidth,
+              //   height: 48,
+                // child: 
+                ConstrainedBox(
+                  constraints: BoxConstraints(minWidth: _maxWidth, minHeight: 48, maxHeight: 60),
+                  child: ElevatedButton(
+                    onPressed: _isLoading ? null : _signIn,
+                    // style: ElevatedButton.styleFrom(
+                    //   padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 25),
+                    // ),
+                    child: _isLoading
+                        ? const CircularProgressIndicator(color: Colors.white)
+                        : Text('Go'),
+                  ),
+                ),
+              // ),
+              const SizedBox(height: 16),
+            ],
+          ),
         ),
       ),
     );

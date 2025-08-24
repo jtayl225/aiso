@@ -1,6 +1,7 @@
 import 'package:aiso/routing/route_names.dart';
 import 'package:aiso/view_models/auth_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:aiso/routing/app_router.dart';
 
@@ -77,99 +78,104 @@ class _FreeReportSignUpFormState extends State<FreeReportSignUpForm> {
   Widget build(BuildContext context) {
     return Form(
       key: _formKey,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: _maxWidth),
-            child: TextFormField(
-              controller: _emailController,
-              decoration: const InputDecoration(
-                labelText: 'Email',
-                border: OutlineInputBorder(),
-                contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-              ),
-              autofillHints: const [AutofillHints.email],
-              onChanged: (_) => setState(() {}),
-              validator: (val) {
-                if (val == null || val.isEmpty) return 'Email required';
-                if (!val.contains('@')) return 'Enter a valid email';
-                return null;
-              },
-            ),
-          ),
+      child: AutofillGroup(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
 
-          const SizedBox(height: 16),
-
-          ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: _maxWidth),
-            child: TextFormField(
-              controller: _passwordController,
-              decoration: InputDecoration(
-                labelText: 'Password',
-                border: OutlineInputBorder(),
-                contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-                suffixIcon: IconButton(
-                  icon: Icon(_obscure ? Icons.visibility_off : Icons.visibility),
-                  onPressed: () => setState(() => _obscure = !_obscure),
-                ),
-              ),
-              obscureText: _obscure,
-              // onChanged: (_) => setState(() {}),
-              validator: (val) {
-                if (val == null || val.isEmpty) return 'Password required';
-                if (val.length < 6) return 'Min 6 characters';
-                return null;
-              },
-            ),
-          ),
-
-          const SizedBox(height: 16),
-
-          ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: _maxWidth),
-            child: TextFormField(
-              controller: _confirmPasswordController,
-              decoration: InputDecoration(
-                labelText: 'Confirm Password',
-                border: OutlineInputBorder(),
-                contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-                suffixIcon: IconButton(
-                  icon: Icon(_obscure ? Icons.visibility_off : Icons.visibility),
-                  onPressed: () => setState(() => _obscure = !_obscure),
-                ),
-              ),
-              obscureText: _obscure,
-              // onChanged: (_) => setState(() {}),
-              validator: (val) {
-                if (val == null || val.isEmpty) return 'Password required';
-                if (val.length < 6) return 'Min 6 characters';
-                if (val != _passwordController.text) return 'Passwords do not match';
-                return null;
-              },
-            ),
-          ),
-
-          const SizedBox(height: 16),
-
-          // SizedBox(
-          //   width: _maxWidth,
-          //   height: 48,
-          //   child: 
             ConstrainedBox(
-              constraints: BoxConstraints(minWidth: _maxWidth, minHeight: 48, maxHeight: 60),
-              child: ElevatedButton(
-                onPressed:  _isLoading ? null : _signUp,
-                child: _isLoading
-                    ? const CircularProgressIndicator(color: Colors.white)
-                    : Text('Go'),
+              constraints: BoxConstraints(maxWidth: _maxWidth),
+              child: TextFormField(
+                controller: _emailController,
+                decoration: const InputDecoration(
+                  labelText: 'Email',
+                  border: OutlineInputBorder(),
+                  contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                ),
+                autofillHints: const [AutofillHints.email],
+                onChanged: (_) => setState(() {}),
+                validator: (val) {
+                  if (val == null || val.isEmpty) return 'Email required';
+                  if (!val.contains('@')) return 'Enter a valid email';
+                  return null;
+                },
               ),
             ),
-          // ),
-
-          const SizedBox(height: 16),
-
-        ],
+        
+            const SizedBox(height: 16),
+        
+            ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: _maxWidth),
+              child: TextFormField(
+                controller: _passwordController,
+                decoration: InputDecoration(
+                  labelText: 'Password',
+                  border: OutlineInputBorder(),
+                  contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                  suffixIcon: IconButton(
+                    icon: Icon(_obscure ? Icons.visibility_off : Icons.visibility),
+                    onPressed: () => setState(() => _obscure = !_obscure),
+                  ),
+                ),
+                obscureText: _obscure,
+                // onChanged: (_) => setState(() {}),
+                validator: (val) {
+                  if (val == null || val.isEmpty) return 'Password required';
+                  if (val.length < 6) return 'Min 6 characters';
+                  return null;
+                },
+              ),
+            ),
+        
+            const SizedBox(height: 16),
+        
+            ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: _maxWidth),
+              child: TextFormField(
+                controller: _confirmPasswordController,
+                decoration: InputDecoration(
+                  labelText: 'Confirm Password',
+                  border: OutlineInputBorder(),
+                  contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                  suffixIcon: IconButton(
+                    icon: Icon(_obscure ? Icons.visibility_off : Icons.visibility),
+                    onPressed: () => setState(() => _obscure = !_obscure),
+                  ),
+                ),
+                autofillHints: const [AutofillHints.password],
+                obscureText: _obscure,
+                // onChanged: (_) => setState(() {}),
+                onEditingComplete: () => TextInput.finishAutofillContext(),
+                validator: (val) {
+                  if (val == null || val.isEmpty) return 'Password required';
+                  if (val.length < 6) return 'Min 6 characters';
+                  if (val != _passwordController.text) return 'Passwords do not match';
+                  return null;
+                },
+              ),
+            ),
+        
+            const SizedBox(height: 16),
+        
+            // SizedBox(
+            //   width: _maxWidth,
+            //   height: 48,
+            //   child: 
+              ConstrainedBox(
+                constraints: BoxConstraints(minWidth: _maxWidth, minHeight: 48, maxHeight: 60),
+                child: ElevatedButton(
+                  onPressed:  _isLoading ? null : _signUp,
+                  child: _isLoading
+                      ? const CircularProgressIndicator(color: Colors.white)
+                      : Text('Go'),
+                ),
+              ),
+            // ),
+        
+            const SizedBox(height: 16),
+        
+          ],
+        ),
       ),
     );
   }
