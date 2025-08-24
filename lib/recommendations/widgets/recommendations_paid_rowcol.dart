@@ -6,6 +6,7 @@ import 'package:aiso/reports/widgets/prompt_card.dart';
 import 'package:aiso/reports/widgets/recommendation_card.dart';
 import 'package:aiso/reports/widgets/search_target_card.dart';
 import 'package:aiso/reports/widgets/upgrade_prompt_card.dart';
+import 'package:aiso/reports/widgets/upgrade_prompt_card_v2.dart';
 import 'package:aiso/routing/app_router.dart';
 import 'package:aiso/routing/route_names.dart';
 import 'package:aiso/themes/h1_heading.dart';
@@ -100,7 +101,7 @@ class RecommendationsPaidRowCol extends StatelessWidget {
 
           if (!canShow)
             // Text('Upgrade to see recommendations.'),
-            UpgradePromptCardV2(onSubscribe: () => appRouter.go(storeRoute)),
+            UpgradePromptCardV2(deviceType: deviceType, onSubscribe: () => appRouter.go(storeRoute)),
 
           SizedBox(height: 20.0,),    
           
